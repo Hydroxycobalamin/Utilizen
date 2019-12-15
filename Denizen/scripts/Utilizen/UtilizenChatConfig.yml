@@ -1,0 +1,39 @@
+#This is the Chatformat Section from Utilizen.
+#You should follow this format to make your own formatting
+#NEVER EVER touch the else part
+#Put the highest group first, and the lowest group last, OP's always get the highest permissionw
+#Feel free to use following tags
+#<player.chat_prefix.parse_color> to get the prefix from your permission plugin, parsed with colors
+#<player.list_name> to get the nickname from the player, you need that if you use nicknames from Utilizen
+#<player.name> to get the player's original name
+#<text> to get the chat output - you need that in any format: part
+#put colors in a <> like <&a>
+UtilizenChat:
+    type: world
+    debug: false
+    events:
+        on player chats:
+        - if <player.has_permission[utilizen.group.admin]>:
+          - determine FORMAT:UtilizenFormatAdmin
+        - if <player.has_permission[utilizen.group.moderator]>:
+          - determine FORMAT:UtilizenFormatModerator
+        - if <player.has_permission[utilizen.group.member]>:
+          - determine FORMAT:UtilizenFormatMember
+        - else:
+          - determine FORMAT:UtilizenFormatDefault
+UtilizenFormatDefault:
+    type: format
+    debug: false
+    format: <player.chat_prefix.parse_color> <&r><player.list_name><&r> > <text>
+UtilizenFormatAdmin:
+    type: format
+    debug: false
+    format: <&a>[Admin] <&r><player.list_name><&r> > <text>
+UtilizenFormatModerator:
+    type: format
+    debug: false
+    format: <&1>[Moderator] <&r><player.list_name><&r> > <text>
+UtilizenFormatMember:
+    type: format
+    debug: false
+    format: <&2>[Member] <&r><player.list_name><&r> > <text>

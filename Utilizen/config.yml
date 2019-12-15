@@ -1,0 +1,28 @@
+#Hi! Here is everything documented! (I hope)
+
+#Possible Language: en_US
+lang: 'en_US'
+
+#Allow bedspawn?
+allow-bed: 'true'
+
+#Allow max homes define a list here. The player will need the permission "utilizen.group.[groupname]"
+#to be allowed to set homes. Operators are allowed to have unlimited homes.
+#Set as much groups you want to put here
+homes:
+  admin: '7'
+  moderator: '5'
+  member: '4'
+
+#If the player doesnt have the permission, set default homes here
+default: '3'
+
+#You can use following Tags here:
+#<player.list_name> returns player's nickname
+#<player.name> returns player's Minecraft name
+#<server.list_online_players.size> returns the number of online players
+#<server.max_players> returns the number of max players allowed on this server
+motd:
+  - "&3Welcome &b<player.list_name>&3!"
+  - "&3You are looking good today!"
+  - "&3There are &b<server.list_online_players.size>&3/&b<server.max_players> &3people Online!"
