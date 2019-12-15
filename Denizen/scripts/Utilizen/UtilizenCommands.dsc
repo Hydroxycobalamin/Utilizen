@@ -417,7 +417,7 @@ UtilizenUnJailCommand:
     debug: false
     name: unjail
     description: unjail a player
-    usage: /unjail [Spieler]
+    usage: /unjail [Player]
     permission: utilizen.unjail
     permission message: <&3>[Permission] You need the permission <&b><permission>
     tab complete:
@@ -571,7 +571,7 @@ UtilizenSpawnCommand:
     name: spawn
     description: teleport to spawn
     usage: /spawn
-    permission: Utilizen.spawn
+    permission: utilizen.spawn
     permission message: <&3>[Permission] You need the permission <&b><permission>
     tab complete:
     - if !<context.server>:
@@ -585,7 +585,7 @@ UtilizenBackCommand:
     name: back
     description: back to back!
     usage: /back
-    permission: Utilizen.
+    permission: utilizen.back
     permission message: <&3>[Permission] You need the permission <&b><permission>
     tab complete:
     - if !<context.server>:
@@ -601,7 +601,7 @@ UtilizenFlyCommand:
     name: fly
     description: fly!
     usage: /fly
-    permission: Utilizen.fly
+    permission: utilizen.fly
     permission message: <&3>[Permission] You need the permission <&b><permission>
     tab complete:
     - if !<context.server>:
@@ -633,7 +633,7 @@ UtilizenBurnCommand:
     name: burn
     description: burn some player!
     usage: /burn [Player] [Duration]
-    permission: Utilizen.burn
+    permission: utilizen.burn
     permission message: <&3>[Permission] You need the permission <&b><permission>
     tab complete:
     - if <context.args.size> < 1:
@@ -659,8 +659,8 @@ UtilizenHealCommand:
     debug: false
     name: heal
     description: heals you
-    usage: /heal (Spieler)
-    permission: Utilizen.heal
+    usage: /heal (Player)
+    permission: utilizen.heal
     permission message: <&3>[Permission] You need the permission <&b><permission>
     tab complete:
     - if <context.args.size> < 1:
@@ -683,8 +683,8 @@ UtilizenFeedCommand:
     debug: false
     name: feed
     description: feed someone!
-    usage: /feed (Spieler)
-    permission: Utilizen.feed
+    usage: /feed (Player)
+    permission: utilizen.feed
     permission message: <&3>[Permission] You need the permission <&b><permission>
     tab complete:
     - if <context.args.size> < 1:
@@ -711,8 +711,8 @@ UtilizenMuteCommand:
     debug: false
     name: mute
     description: mute a player!
-    usage: /mute [Spieler] [Dauer]
-    permission: Utilizen.mute
+    usage: /mute [Player] [Duration]
+    permission: utilizen.mute
     permission message: <&3>[Permission] You need the permission <&b><permission>
     tab complete:
     - if <context.args.size> < 1:
@@ -728,25 +728,25 @@ UtilizenMuteCommand:
                 - if <context.args.size> >= 2:
                     - if <duration[<context.args.get[2]>]||null> != null:
                         - flag <server.match_player[<context.args.first>]> mute:true duration:<context.args.get[2].as_duration>
-                        - narrate "<&3>[Mute] Du hast <&b><server.match_player[<context.args.first>].list_name> <&3>für <&b><duration[<context.args.get[2]>].formatted> <&3>gemuted"
-                        - narrate "<&3>[Mute] Du wurdest von <&b><player.list_name> <&3>für <&b><duration[<context.args.get[2]>].formatted> <&3>gemuted"
+                        - narrate "<yaml[UtilizenLang].read[muteadmin].parsed.parse_color>"
+                        - narrate "<yaml[UtilizenLang].read[mutewasmuted].parsed.parse_color>"
                     - else:
-                        - narrate "<&3>[Mute] Ungültige Zeitangabe"
+                        - narrate "<yaml[UtilizenLang].read[muteinvalidduration].parsed.parse_color>"
                 - else:
-                    - narrate "<&3>[Mute] Es wurde keine Dauer angegeben"
+                    - narrate "<yaml[UtilizenLang].read[mutenoduration].parsed.parse_color>"
             - else:
-                - narrate "<&3>[Mute] Der Spieler ist bereits gemuted
+                - narrate "<yaml[UtilizenLang].read[mutealreadymute].parsed.parse_color>"
         - else:
-            - narrate "<&3>[Mute] Dieser Spieler existiert nicht"
+            - narrate "<yaml[UtilizenLang].read[muteplnotexist].parsed.parse_color>"
     - else:
-        - narrate "<&3>[Mute] Die Syntax lautet: <&b>/mute [Spieler] [Dauer]
+        - narrate "<yaml[UtilizenLang].read[mutesyntax].parsed.parse_color>"
 UtilizenUnmuteCommand:
     type: command
     debug: false
     name: unmute
     description: unmute a player
-    usage: /unmute [Spieler]
-    permission: Utilizen.unmute
+    usage: /unmute [Player]
+    permission: utilizen.unmute
     permission message: <&3>[Permission] You need the permission <&b><permission>
     tab complete:
     - if <context.args.size> < 1:
@@ -759,18 +759,18 @@ UtilizenUnmuteCommand:
             - if <server.match_player[<context.args.first>].has_flag[mute]>:
                 - flag <server.match_player[<context.args.first>]> mute:!
             - else:
-                - narrate "<&3>[Unmute] Dieser Spieler ist nicht gemuted"
+                - narrate "<&3>[Unmute] Dieser Player ist nicht gemuted"
         - else:
-            - narrate "<&3>[Unmute] Dieser Spieler existiert nicht"
+            - narrate "<&3>[Unmute] Dieser Player existiert nicht"
     - else:
-        - narrate "<&3>[Unmute] Die Syntax lautet <&b>/unmute [Spieler]"
+        - narrate "<&3>[Unmute] Die Syntax lautet <&b>/unmute [Player]"
 UtilizenBanCommand:
     type: command
     debug: false
     name: ban
     description: Bans a player
-    usage: /ban [Spieler] (Grund) (Dauer)
-    permission: Utilizen.ban
+    usage: /ban [Player] (Grund) (Duration)
+    permission: utilizen.ban
     permission message: <&3>[Permission] You need the permission <&b><permission>
     tab complete:
     - if <context.args.size> < 1:
@@ -802,7 +802,7 @@ UtilizenUnbanCommand:
     name: unban
     description: unban a player
     usage: /unban [Name]
-    permission: Utilizen.unban
+    permission: utilizen.unban
     permission message: <&3>[Permission] You need the permission <&b><permission>
     tab complete:
     - if <context.args.size> < 1:
@@ -826,8 +826,8 @@ UtilizenKickCommand:
     debug: false
     name: kick
     description: kick a player
-    usage: /kick [Spieler] (Grund)
-    permission: Utilizen.kick
+    usage: /kick [Player] (Grund)
+    permission: utilizen.kick
     permission message: <&3>[Permission] You need the permission <&b><permission>
     tab complete:
     - if <context.args.size> < 1:
@@ -854,7 +854,7 @@ UtilizenKickallCommand:
     name: kickall
     description: kick everyone
     usage: /kickall
-    permission: Utilizen.kickall
+    permission: utilizen.kickall
     permission message: <&3>[Permission] You need the permission <&b><permission>
     tab complete:
         - if !<context.server>:
@@ -866,10 +866,10 @@ UtilizenGamemodeCommand:
     debug: false
     name: gamemode
     description: changes gamemode
-    usage: /gamemode [Typ] (Spieler)
+    usage: /gamemode [Typ] (Player)
     aliases:
     - gm
-    permission: Utilizen.gamemode
+    permission: utilizen.gamemode
     permission message: <&3>[Permission] You need the permission <&b><permission>
     tab complete:
     - if <context.args.size> < 1:
@@ -968,7 +968,7 @@ UtilizenWeatherCommand:
     name: weather
     description: change the weather
     usage: /weather [Type]
-    permission: Utilizen.weather
+    permission: utilizen.weather
     permission message: <&3>[Permission] You need the permission <&b><permission>
     tab complete:
     - if <context.args.size> <= 1 && "!<context.raw_args.ends_with[ ]>":
@@ -992,7 +992,7 @@ UtilizenTimeCommand:
     name: time
     description: change time
     usage: /time [day|night|set] (Zeit)
-    permission: Utilizen.set
+    permission: utilizen.set
     permission message: <&3>[Permission] You need the permission <&b><permission>
     tab complete:
     - if <context.args.size> <= 1 && "!<context.raw_args.ends_with[ ]>":
@@ -1019,8 +1019,8 @@ UtilizenTeleportCommand:
     debug: false
     name: tp
     description: teleporting!
-    usage: /tp [X Y Z|X Y Z World|Spieler] (Spieler)
-    permission: Utilizen.tp
+    usage: /tp [X Y Z|X Y Z World|Player] (Player)
+    permission: utilizen.tp
     permission message: <&3>[Permission] You need the permission <&b><permission>
     tab complete:
     - if <context.args.size> < 2:
@@ -1063,7 +1063,7 @@ UtilizenTphereCommand:
     name: tphere
     description: teleport a player to you
     usage: /tphere [Player]
-    permission: Utilizen.tphere
+    permission: utilizen.tphere
     permission message: <&3>[Permission] You need the permission <&b><permission>
     tab complete:
     - if <context.args.size> < 1:
@@ -1085,7 +1085,7 @@ UtilizenGodCommand:
     name: god
     description: activate godmode
     usage: /god
-    permission: Utilizen.tphere
+    permission: utilizen.tphere
     permission message: <&3>[Permission] You need the permission <&b><permission>
     tab complete:
     - if !<context.server>:
@@ -1109,8 +1109,8 @@ UtilizenInvseeCommand:
     debug: false
     name: invsee
     description: open player inventory
-    usage: /invsee [Spieler]
-    permission: Utilizen.invsee
+    usage: /invsee [Player]
+    permission: utilizen.invsee
     permission message: <&3>You need the permission <&b><permission>
     tab complete:
     - if <context.args.size> < 1:
@@ -1131,7 +1131,7 @@ UtilizenClearinventoryCommand:
     name: clearinventory
     description: delete your inventory
     usages: /clearinventory
-    permission: Utilizen.clearinventory
+    permission: utilizen.clearinventory
     permisson message: <&3>You need the permission <&b><permission>
     tab complete:
     - if <context.args.size> < 1:
@@ -1155,7 +1155,7 @@ UtilizenGCCommand:
     name: gc
     description: shows server information
     usage: /gc
-    permission: Utilizen.gc
+    permission: utilizen.gc
     permisson message: <&3>You need the permission <&b><permission>
     tab complete:
     - if !<context.server>:
