@@ -1,5 +1,11 @@
 # Utilizen
-TODO
+Utilizen is an dScript which provides you with several commands and options for your own Minecraft Server.
+## Requirements
+To make Utilizen work, you need the following plugins 
+* [Denizen](https://www.spigotmc.org/resources/denizen.21039/)
+* [LuckPerms](https://www.spigotmc.org/resources/luckperms-an-advanced-permissions-plugin.28140/) (recommended)
+* [Vault](https://www.spigotmc.org/resources/vault.34315/)
+
 ## Permissions
 **utilizen.afk**
 **utilizen.back**
