@@ -1,4 +1,3 @@
-#Hi
 UtilizenCommandAFK:
     type: command
     debug: false
@@ -995,7 +994,7 @@ UtilizenTimeCommand:
     name: time
     description: change time
     usage: /time [day|night|set] (Zeit)
-    permission: utilizen.set
+    permission: utilizen.time
     permission message: <&3>[Permission] You need the permission <&b><permission>
     tab complete:
     - if <context.args.size> <= 1 && "!<context.raw_args.ends_with[ ]>":
