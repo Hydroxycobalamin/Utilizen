@@ -886,49 +886,49 @@ UtilizenGamemodeCommand:
     - if <context.args.size> == 1:
         - choose <context.args.first>:
             - case "survival":
-                - if <player.has_permission[Utilizen.gamemode.survival]>:
+                - if <player.has_permission[utilizen.gamemode.survival]>:
                     - adjust <player> gamemode:survival
                     - narrate "<yaml[UtilizenLang].read[gamemodechanged].parsed.parse_color>"
                 - else:
                     - narrate "<yaml[UtilizenLang].read[gamemodeneedpermsurvival].parsed.parse_color>"
             - case "0":
-                - if <player.has_permission[Utilizen.gamemode.survival]>:
+                - if <player.has_permission[utilizen.gamemode.survival]>:
                     - adjust <player> gamemode:survival
                     - narrate "<yaml[UtilizenLang].read[gamemodechanged].parsed.parse_color>"
                 - else:
                     - narrate "<yaml[UtilizenLang].read[gamemodeneedpermsurvival].parsed.parse_color>"
             - case "creative":
-                - if <player.has_permission[Utilizen.gamemode.creative]>:
+                - if <player.has_permission[utilizen.gamemode.creative]>:
                     - adjust <player> gamemode:creative
                     - narrate "<yaml[UtilizenLang].read[gamemodechanged].parsed.parse_color>"
                 - else:
                     - narrate "<yaml[UtilizenLang].read[gamemodeneedpermcreative].parsed.parse_color>"
             - case "1":
-                - if <player.has_permission[Utilizen.gamemode.creative]>:
+                - if <player.has_permission[utilizen.gamemode.creative]>:
                     - adjust <player> gamemode:creative
                     - narrate "<yaml[UtilizenLang].read[gamemodechanged].parsed.parse_color>"
                 - else:
                     - narrate "<yaml[UtilizenLang].read[gamemodeneedpermcreative].parsed.parse_color>"
             - case "adventure":
-                - if <player.has_permission[Utilizen.gamemode.adventure]>:
+                - if <player.has_permission[utilizen.gamemode.adventure]>:
                     - adjust <player> gamemode:adventure
                     - narrate "<yaml[UtilizenLang].read[gamemodechanged].parsed.parse_color>"
                 - else:
                     - narrate "<yaml[UtilizenLang].read[gamemodeneedpermadventure].parsed.parse_color>"
             - case "2":
-                - if <player.has_permission[Utilizen.gamemode.adventure]>:
+                - if <player.has_permission[utilizen.gamemode.adventure]>:
                     - adjust <player> gamemode:adventure
                     - narrate "<yaml[UtilizenLang].read[gamemodechanged].parsed.parse_color>"
                 - else:
                     - narrate "<yaml[UtilizenLang].read[gamemodeneedpermadventure].parsed.parse_color>"
             - case "spectator":
-                - if <player.has_permission[Utilizen.gamemode.spectator]>:
+                - if <player.has_permission[utilizen.gamemode.spectator]>:
                     - adjust <player> gamemode:spectator
                     - narrate "<yaml[UtilizenLang].read[gamemodechanged].parsed.parse_color>"
                 - else:
                     - narrate "<yaml[UtilizenLang].read[gamemodeneedpermspectator].parsed.parse_color>"
             - case "3":
-                - if <player.has_permission[Utilizen.gamemode.spectator]>:
+                - if <player.has_permission[utilizen.gamemode.spectator]>:
                     - adjust <player> gamemode:spectator
                     - narrate "<yaml[UtilizenLang].read[gamemodechanged].parsed.parse_color>"
                 - else:
@@ -936,7 +936,7 @@ UtilizenGamemodeCommand:
         - stop
     - if <context.args.size> > 1:
         - if <server.player_is_valid[<context.args.get[2]>]>:
-            - if <player.has_permission[Utilizen.gamemode.others]>:
+            - if <player.has_permission[utilizen.gamemode.others]>:
                 - choose <context.args.first>:
                     - case "0":
                         - adjust <server.match_player[<context.args.get[2]>]> gamemode:survival
