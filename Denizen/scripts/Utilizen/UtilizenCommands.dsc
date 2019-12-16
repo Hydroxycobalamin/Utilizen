@@ -21,6 +21,7 @@ UtilizenCommandAFK:
             - permission remove smoothsleep.ignore
 UtilizenCommandMail:
     type: command
+    debug: false
     name: mail
     description: Read and Send mails!
     usage: /mail [send|read|remove] (Player) (Message)
@@ -68,6 +69,7 @@ UtilizenCommandMail:
         - narrate "<yaml[UtilizenLang].read[mailallarguments].parsed.parse_color>"
 UtilizenMeCommand:
     type: command
+    debug: false
     name: me
     description: Me
     usage: /me [Message]
@@ -84,6 +86,7 @@ UtilizenMeCommand:
         - narrate "<yaml[UtilizenLang].read[meempty].parsed.parse_color>"
 UtilizenMSGCommand:
     type: command
+    debug: false
     name: msg
     description: send private messages
     usage: /msg [Player] [Message]
@@ -316,7 +319,7 @@ UtilizenWarpCommand:
         - narrate "<yaml[UtilizenLang].read[warplist].parsed.parse_color>"
 UtilizenJailCommand:
     type: command
-    debug: true
+    debug: false
     name: jail
     description: jail someone
     usage: /jail [Player] [Duration]
@@ -438,7 +441,7 @@ UtilizenUnJailCommand:
         - narrate "<yaml[UtilizenLang].read[jailnoplayer].parsed.parse_color>"
 UtilizenJailQuitWorld:
     type: world
-    debug: true
+    debug: false
     events:
         on player quits:
         - if <player.has_flag[jail]>:
@@ -615,8 +618,8 @@ UtilizenFlyCommand:
         - narrate "<yaml[UtilizenLang].read[flydeactivated].parsed.parse_color>"
 UtilizenVanishCommand:
     type: command
-    name: vanish
     debug: false
+    name: vanish
     description: makes you invisible
     usage: /vanish
     permission: Utilizen.vanish
