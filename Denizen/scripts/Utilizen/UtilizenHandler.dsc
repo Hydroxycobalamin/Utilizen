@@ -63,7 +63,7 @@ UtilizenMuteHandler:
     events:
         on player chats priority:-1:
         - if <player.has_flag[mute]>:
-            - narrate "<&3>[Mute] Du bist gemuted"
+            - narrate "<yaml[UtilizenLang].read[muteyouremuted].parse.parse_color>"
             - determine passively cancelled
 UtilizenGodHandler:
     type: world
@@ -77,5 +77,5 @@ UtilizenJailHandler:
     debug: false
     events:
         on player teleports flagged:jailed:
-        - narrate "<yaml[UtilizenLang].read[jailnopermission]>"
+        - narrate "<yaml[UtilizenLang].read[jailnopermission].parse.parse_color>"
         - determine cancelled
