@@ -12,8 +12,8 @@ UtilizenChat:
     type: world
     debug: false
     events:
-        on player chats priority:
-        - if <player.has_flag[jailed]:
+        on player chats:
+        - if <player.has_flag[jailed]>:
           - determine FORMAT:UtilizenFormatJailed
         - if <player.has_permission[utilizen.group.admin]>:
           - determine FORMAT:UtilizenFormatAdmin
