@@ -3,12 +3,11 @@ UtilizenAFKHandler:
     debug: false
     events:
         on player walks flagged:afk:
-        - if <player.has_flag[afk]>:
-            - narrate "<yaml[UtilizenLang].read[afkback].parsed>" targets:<server.list_online_players>
-            - flag player afk:!
-            - permission remove smoothsleep.ignore
+        - narrate <yaml[UtilizenLang].read[afkback].parsed> targets:<server.list_online_players>
+        - flag player afk:!
+        - permission remove smoothsleep.ignore
         on player chats flagged:afk:
-        - narrate "<yaml[UtilizenLang].read[afkback].parsed>" targets:<server.list_online_players>
+        - narrate <yaml[UtilizenLang].read[afkback].parsed> targets:<server.list_online_players>
         - flag player afk:!
         - permission remove smoothsleep.ignore
 UtilizenBedSpawnHandler:
