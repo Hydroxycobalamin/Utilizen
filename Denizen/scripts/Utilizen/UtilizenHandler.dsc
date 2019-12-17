@@ -74,6 +74,7 @@ UtilizenGodHandler:
             - determine cancelled
 UtilizenJailHandler:
     type: world
+    debug: false
     events:
         on player teleports flagged:jailed:
         - determine passively cancelled
