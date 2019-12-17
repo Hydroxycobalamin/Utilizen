@@ -23,6 +23,6 @@ default: '3'
 #<server.list_online_players.size> returns the number of online players
 #<server.max_players> returns the number of max players allowed on this server
 motd:
-  - "&3Welcome &b<player.list_name>&3!"
-  - "&3You are looking good today!"
-  - "&3There are &b<server.list_online_players.size>&3/&b<server.max_players> &3people Online!"
+  - "<&3>Welcome <&b><player.list_name><&3>!"
+  - "<&3>You are looking good today!"
+  - "<&3>There are <&b><server.list_online_players.size><&3>/<&b><server.max_players> <&3>people Online!"
