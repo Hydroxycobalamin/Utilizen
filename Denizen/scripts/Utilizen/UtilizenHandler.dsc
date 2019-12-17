@@ -71,11 +71,15 @@ UtilizenGodHandler:
         on player damaged:
         - if <player.has_flag[god]>:
             - determine cancelled
+
+#temp fix for broken uncancellable teleport event
 UtilizenJailHandler:
     type: world
     debug: false
     events:
         on player teleports flagged:jailed:
-        - determine passively cancelled
+        - flag player jailed:!
+        - teleport <context.origin>
+        - flag player jailed
         - ratelimit <player> 1t
         - narrate "<yaml[UtilizenLang].read[jailnopermission].parsed>"
