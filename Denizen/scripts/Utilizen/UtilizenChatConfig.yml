@@ -12,7 +12,9 @@ UtilizenChat:
     type: world
     debug: false
     events:
-        on player chats:
+        on player chats priority:
+        - if <player.has_flag[jailed]:
+          - determine FORMAT:UtilizenFormatJailed
         - if <player.has_permission[utilizen.group.admin]>:
           - determine FORMAT:UtilizenFormatAdmin
         - if <player.has_permission[utilizen.group.moderator]>:
@@ -37,3 +39,7 @@ UtilizenFormatMember:
     type: format
     debug: false
     format: <&2>[Member] <&r><player.list_name><&r> > <text>
+UtilizenFormatJailed:
+    type: format
+    debug: false
+    format: <&6>[Jailed] <&e><player.list_name><&r> > <text>

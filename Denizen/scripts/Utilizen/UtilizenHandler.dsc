@@ -72,3 +72,10 @@ UtilizenGodHandler:
         on player damaged:
         - if <player.has_flag[god]>:
             - determine cancelled
+UtilizenJailHandler:
+    type: world
+    debug: false
+    events:
+        on player teleports flagged:jailed:
+        - narrate "<yaml[UtilizenLang].read[jailnopermission]>"
+        - determine cancelled

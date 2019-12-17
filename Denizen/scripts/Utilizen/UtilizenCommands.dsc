@@ -345,9 +345,7 @@ UtilizenJailCommand:
                         - if <context.args.size> == 3:
                             - if <duration[<context.args.get[3]>]||null> != null:
                                 - yaml id:UtilizenPlayerdata set <server.match_player[<context.args.first>].uuid>.jail.location:<[playerlocation]>
-                                - yaml id:UtilizenPlayerdata set <server.match_player[<context.args.first>].uuid>.jail.group:<server.match_player[<context.args.first>].groups.first>
                                 - yaml savefile:../Utilizen/playerdata.yml id:UtilizenPlayerdata
-                                - group set jailed player:<server.match_player[<context.args.first>]>
                                 - teleport <server.match_player[<context.args.first>]> <yaml[UtilizenServerdata].read[jailname.<context.args.get[2]>]>
                                 - flag <server.match_player[<context.args.first>]> jail:true d:<context.args.get[3].as_duration>
                                 - narrate "<yaml[UtilizenLang].read[jailjailedadmin].parsed.parse_color>"
@@ -356,7 +354,6 @@ UtilizenJailCommand:
                                     - if <server.match_player[<context.args.first>]||null> == null:
                                         - stop
                                     - teleport <server.match_player[<context.args.first>]> <[playerlocation]>
-                                    - group set <yaml[UtilizenPlayerdata].read[<server.match_player[<context.args.first>].uuid>.jail.group]> player:<server.match_player[<context.args.first>]>
                                     - narrate "<yaml[UtilizenLang].read[jailexit].parsed.parse_color>" targets:<server.match_player[<context.args.first>]>
                                     - stop
                             - else:
@@ -457,7 +454,6 @@ UtilizenJailQuitWorld:
                 - if <server.match_player[<player.name>]||null> == null:
                     - stop
                 - teleport <player> <yaml[UtilizenPlayerdata].read[<player.uuid>.jail.location]>
-                - group set <yaml[UtilizenPlayerdata].read[<player.uuid>.jail.group]>
                 - yaml id:UtilizenPlayerdata set <player.uuid>.jail:!
                 - yaml savefile:../Utilizen/playerdata.yml id:UtilizenPlayerdata
                 - narrate "<yaml[UtilizenLang].read[jailexit].parsed.parse_color>"
