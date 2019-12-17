@@ -2,7 +2,7 @@ UtilizenCommandAFK:
     type: command
     debug: false
     name: afk
-    description: toggles afk
+    description: Toggles AFK-Mode
     usage: /afk
     permission: utilizen.afk
     permission message: <&3>[Permission] You need the permission <&b><permission>
@@ -10,14 +10,17 @@ UtilizenCommandAFK:
     - if !<context.server>:
         - stop
     script:
-        - if !<player.has_flag[afk]>:
-            - narrate "<yaml[UtilizenLang].read[afk].parsed>" targets:<server.list_online_players>
-            - flag player afk
-            - permission add smoothsleep.ignore
-        - else:
-            - narrate "<yaml[UtilizenLang].read[afkback].parsed>" targets:<server.list_online_players>
-            - flag player afk:!
-            - permission remove smoothsleep.ignore
+    - if <context.server>:
+        - announce to_console "[Utilizen] This command can not be executed from console"
+        - stop
+    - if !<player.has_flag[afk]>:
+        - narrate <yaml[UtilizenLang].read[afk].parsed> targets:<server.list_online_players>
+        - flag player afk
+        - permission add smoothsleep.ignore
+    - else:
+        - narrate <yaml[UtilizenLang].read[afkback].parsed> targets:<server.list_online_players>
+        - flag player afk:!
+        - permission remove smoothsleep.ignore
 UtilizenCommandMail:
     type: command
     debug: false
