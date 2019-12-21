@@ -7,16 +7,17 @@ To make Utilizen work, you need the following plugins
 * [Vault](https://www.spigotmc.org/resources/vault.34315/)
 
 ## Permissions
-**utilizen.afk**
-**utilizen.back**
-**utilizen.ban**
-**utilizen.burn**
-**utilizen.clearinventory**
-**utilizen.delhome**
-**utilizen.delhome.other**
-**utilizen.deljail**
-**utilizen.delwarp**
-**utilizen.feed**
+| Permission | Description |
+| **utilizen.afk** | Changes AFK-Mode |
+| **utilizen.back**| Let player's teleports to the last location, before they were teleported |
+| **utilizen.ban**| Ban players |
+| **utilizen.burn**| Burn players |
+| **utilizen.clearinventory**| Clear inventories from players |
+| **utilizen.delhome**| Delete your own homes | 
+| **utilizen.delhome.other** | Delete homes from others |
+|**utilizen.deljail**
+|**utilizen.delwarp**
+|**utilizen.feed**
 **utilizen.fly**
 **utilizen.gamemode**
 **utilizen.gamemode.others**
