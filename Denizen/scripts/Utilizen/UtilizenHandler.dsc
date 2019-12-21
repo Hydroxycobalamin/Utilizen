@@ -71,7 +71,7 @@ UtilizenGodHandler:
         on player damaged:
         - if <player.has_flag[god]>:
             - determine cancelled
-
+            
 #temp fix for broken uncancellable teleport event
 UtilizenJailHandler:
     type: world

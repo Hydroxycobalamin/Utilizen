@@ -30,7 +30,7 @@ UtilizenCommandMail:
     permission: utilizen.mail
     permission message: <&3>[Permission] You need the permission <&b><permission>
     tab complete:
-    - if <context.args.size> < 1:
+    - if <context.args.is_empty>:
         - determine <list[send|read|remove]>
     - if <context.args.size> == 1 && "!<context.raw_args.ends_with[ ]>":
         - determine <list[send|read|remove].filter[starts_with[<context.args.first>]]>
@@ -39,7 +39,7 @@ UtilizenCommandMail:
     - if <context.args.size> == 2 && "!<context.raw_args.ends_with[ ]>":
         - determine <server.list_online_players.parse[name].filter[starts_with[<context.args.get[2]>]]>
     script:
-    - if <context.args.size> >= 1:
+    - if <context.args.size> == 1:
         - choose <context.args.first>:
             - case send:
                 - if <context.args.size> >= 2:
@@ -48,27 +48,27 @@ UtilizenCommandMail:
                             - flag server msgcnt:++
                             - yaml id:UtilizenPlayerdata set <server.match_offline_player[<context.args.get[2]>].uuid>.msg<server.flag[msgcnt]>:<list[<player.uuid>|<context.args.remove[1|2].space_separated>]>
                             - yaml savefile:../Utilizen/playerdata.yml id:UtilizenPlayerdata
-                            - narrate "<yaml[UtilizenLang].read[mailsend].parsed>"
+                            - narrate <yaml[UtilizenLang].read[mailsend].parsed>
                         - else:
-                            - narrate "<yaml[UtilizenLang].read[mailempty].parsed>"
+                            - narrate <yaml[UtilizenLang].read[mailempty].parsed>
                     - else:
-                        - narrate "<yaml[UtilizenLang].read[mailplnoexist].parsed>"
+                        - narrate <yaml[UtilizenLang].read[mailplnotexist].parsed>
                 - else:
-                    - narrate "<yaml[UtilizenLang].read[mailneedplayer].parsed>"
+                    - narrate <yaml[UtilizenLang].read[mailneedplayer].parsed>
             - case read:
                 - if <yaml[UtilizenPlayerdata].list_keys[<player.uuid>]||null> == null:
-                    - narrate "<yaml[UtilizenLang].read[mailboxempty].parsed>"
+                    - narrate <yaml[UtilizenLang].read[mailboxempty].parsed>
                     - stop
                 - foreach <yaml[UtilizenPlayerdata].list_keys[<player.uuid>]>:
-                    - narrate "<yaml[UtilizenLang].read[mailread].parsed>"
+                    - narrate <yaml[UtilizenLang].read[mailread].parsed>
             - case remove:
                 - yaml id:UtilizenPlayerdata set <player.uuid>:!
                 - yaml savefile:../Utilizen/playerdata.yml id:UtilizenPlayerdata
-                - narrate "<yaml[UtilizenLang].read[maildelete].parsed>"
+                - narrate <yaml[UtilizenLang].read[maildelete].parsed>
             - default:
-                - narrate "<yaml[UtilizenLang].read[mailarguments].parsed>"
+                - narrate <yaml[UtilizenLang].read[mailarguments].parsed>
     - else:
-        - narrate "<yaml[UtilizenLang].read[mailallarguments].parsed>"
+        - narrate <yaml[UtilizenLang].read[mailallarguments].parsed>
 UtilizenMeCommand:
     type: command
     debug: false
@@ -76,152 +76,151 @@ UtilizenMeCommand:
     description: Me
     usage: /me [Message]
     permission: utilizen.me
-    permission message: <&3>[Permission] You need the permission <&b>Utilizen.me
-
+    permission message: <&3>[Permission] You need the permission <&b><permission>
     tab complete:
     - if !<context.server>:
         - stop
     script:
-    - if <context.args.size> > 0:
-        - narrate "<yaml[UtilizenLang].read[me].parsed>" targets:<server.list_online_players>
+    - if !<context.args.is_empty>:
+        - narrate <yaml[UtilizenLang].read[me].parsed> targets:<server.list_online_players>
     - else:
-        - narrate "<yaml[UtilizenLang].read[meempty].parsed>"
+        - narrate <yaml[UtilizenLang].read[meempty].parsed>
 UtilizenMSGCommand:
     type: command
     debug: false
     name: msg
-    description: send private messages
+    description: Send private Messages
     usage: /msg [Player] [Message]
     permission: utilizen.msg
-    permission message: <&3>[Permission] You need the permission <&b>Utilizen.msg
+    permission message: <&3>[Permission] You need the permission <&b>utilizen.msg
     tab complete:
-    - if <context.args.size> < 1:
+    - if <context.args.is_empty>:
         - determine <server.list_online_players.parse[name]>
     - if <context.args.size> == 1 && "!<context.raw_args.ends_with[ ]>":
         - determine <server.list_online_players.parse[name].filter[starts_with[<context.args.first>]]>
     script:
     - if !<context.args.is_empty>:
-        - if <server.player_is_valid[<context.args.first>]>:
+        - if <server.match_player[<context.args.first>].is_online>:
             - if <context.args.size> != 1:
                 - if <context.args.size> > 1:
-                    - narrate "<yaml[UtilizenLang].read[msgsent].parsed>" targets:<player>|<server.match_player[<context.args.first>]>
+                    - narrate <yaml[UtilizenLang].read[msgsent].parsed> targets:<player>|<server.match_player[<context.args.first>]>
             - else:
-                - narrate "<yaml[UtilizenLang].read[msgempty].parsed>"
+                - narrate <yaml[UtilizenLang].read[msgempty].parsed>
         - else:
-            - narrate "<yaml[UtilizenLang].read[msgplnotexist].parsed>"
+            - narrate <yaml[UtilizenLang].read[msgplnotonline].parsed>
     - else:
-        - narrate "<yaml[UtilizenLang].read[msgsyntax].parsed>"
+        - narrate <yaml[UtilizenLang].read[msgsyntax].parsed>
 UtilizenNickColor:
     type: command
     debug: false
     name: nickcolor
-    description: changes nickcolor
+    description: Changes your own nickcolor
     usage: /nickcolor
     permission: utilizen.nickcolor
     permission message: <&3>[Permission] You need the permission <&b><permission>
     tab complete:
-    - if <context.args.size> < 1:
-        - determine <list[aqua|black|blue|darkaqua|darkblue|darkgray|darkgreen|darkpurple|darkred|gold|gray|green|lightpurple|red|white|yellow]>
+    - if <context.args.is_empty>:
+        - determine <list[aqua|black|blue|dark_aqua|dark_blue|dark_gray|dark_green|dark_purple|dark_red|gold|gray|green|lightpurple|red|white|yellow]>
     - if <context.args.size> == 1 && "!<context.raw_args.ends_with[ ]>":
-        - determine <list[aqua|black|blue|darkaqua|darkblue|darkgray|darkgreen|darkpurple|darkred|gold|gray|green|lightpurple|red|white|yellow].filter[starts_with[<context.args.first>]]>
+        - determine <list[aqua|black|blue|dark_aqua|dark_blue|dark_gray|dark_green|dark_purple|dark_red|gold|gray|green|lightpurple|red|white|yellow].filter[starts_with[<context.args.first>]]>
     script:
     - if <context.args.size> >= 1:
-        - if <list[aqua|black|blue|darkaqua|darkblue|darkgray|darkgreen|darkpurple|darkred|gold|gray|green|lightpurple|red|white|yellow].contains[<context.args.first>]>:
+        - if <list[aqua|black|blue|dark_aqua|dark_blue|dark_gray|dark_green|dark_purple|dark_red|gold|gray|green|lightpurple|red|white|yellow].contains[<context.args.first>]>:
             - choose <context.args.first>:
-                - case "aqua":
-                    - narrate "<yaml[UtilizenLang].read[nickcolorchanged].parsed>"
+                - case aqua:
+                    - narrate <yaml[UtilizenLang].read[nickcolorchanged].parsed>
                     - yaml id:UtilizenPlayerdata set <player.uuid>.nickname:<&b><player.name>
                     - yaml savefile:../Utilizen/playerdata.yml id:UtilizenPlayerdata
                     - adjust <player> player_list_name:<&b><player.name>
-                - case "black":
+                - case black:
                     - adjust <player> player_list_name:<&0><player.name>
-                    - narrate "<yaml[UtilizenLang].read[nickcolorchanged].parsed>"
+                    - narrate <yaml[UtilizenLang].read[nickcolorchanged].parsed>
                     - yaml id:UtilizenPlayerdata set <player.uuid>.nickname:<&0><player.name>
                     - yaml savefile:../Utilizen/playerdata.yml id:UtilizenPlayerdata
-                - case "blue":
+                - case blue:
                     - adjust <player> player_list_name:<&9><player.name>
-                    - narrate "<yaml[UtilizenLang].read[nickcolorchanged].parsed>"
+                    - narrate <yaml[UtilizenLang].read[nickcolorchanged].parsed>
                     - yaml id:UtilizenPlayerdata set <player.uuid>.nickname:<&9><player.name>
                     - yaml savefile:../Utilizen/playerdata.yml id:UtilizenPlayerdata
-                - case "darkaqua":
+                - case dark_aqua:
                     - adjust <player> player_list_name:<&3><player.name>
-                    - narrate "<yaml[UtilizenLang].read[nickcolorchanged].parsed>"
+                    - narrate <yaml[UtilizenLang].read[nickcolorchanged].parsed>
                     - yaml id:UtilizenPlayerdata set <player.uuid>.nickname:<&3><player.name>
                     - yaml savefile:../Utilizen/playerdata.yml id:UtilizenPlayerdata
-                - case "darkblue":
+                - case dark_blue:
                     - adjust <player> player_list_name:<&1><player.name>
-                    - narrate "<yaml[UtilizenLang].read[nickcolorchanged].parsed>"
+                    - narrate <yaml[UtilizenLang].read[nickcolorchanged].parsed>
                     - yaml id:UtilizenPlayerdata set <player.uuid>.nickname:<&1><player.name>
                     - yaml savefile:../Utilizen/playerdata.yml id:UtilizenPlayerdata
-                - case "darkgray":
+                - case dark_gray:
                     - adjust <player> player_list_name:<&8><player.name>
-                    - narrate "<yaml[UtilizenLang].read[nickcolorchanged].parsed>"
+                    - narrate <yaml[UtilizenLang].read[nickcolorchanged].parsed>
                     - yaml id:UtilizenPlayerdata set <player.uuid>.nickname:<&8><player.name>
                     - yaml savefile:../Utilizen/playerdata.yml id:UtilizenPlayerdata
-                - case "darkgreen":
+                - case dark_green:
                     - adjust <player> player_list_name:<&2><player.name>
-                    - narrate "<yaml[UtilizenLang].read[nickcolorchanged].parsed>"
+                    - narrate <yaml[UtilizenLang].read[nickcolorchanged].parsed>
                     - yaml id:UtilizenPlayerdata set <player.uuid>.nickname:<&2><player.name>
                     - yaml savefile:../Utilizen/playerdata.yml id:UtilizenPlayerdata
-                - case "darkpurple":
+                - case dark_purple:
                     - adjust <player> player_list_name:<&5><player.name>
-                    - narrate "<yaml[UtilizenLang].read[nickcolorchanged].parsed>"
+                    - narrate <yaml[UtilizenLang].read[nickcolorchanged].parsed>
                     - yaml id:UtilizenPlayerdata set <player.uuid>.nickname:<&5><player.name>
                     - yaml savefile:../Utilizen/playerdata.yml id:UtilizenPlayerdata
-                - case "darkred":
+                - case dark_red:
                     - adjust <player> player_list_name:<&4><player.name>
-                    - narrate "<yaml[UtilizenLang].read[nickcolorchanged].parsed>"
+                    - narrate <yaml[UtilizenLang].read[nickcolorchanged].parsed>
                     - yaml id:UtilizenPlayerdata set <player.uuid>.nickname:<&4><player.name>
                     - yaml savefile:../Utilizen/playerdata.yml id:UtilizenPlayerdata
-                - case "gold":
+                - case gold:
                     - adjust <player> player_list_name:<&6><player.name>
-                    - narrate "<yaml[UtilizenLang].read[nickcolorchanged].parsed>"
+                    - narrate <yaml[UtilizenLang].read[nickcolorchanged].parsed>
                     - yaml id:UtilizenPlayerdata set <player.uuid>.nickname:<&6><player.name>
                     - yaml savefile:../Utilizen/playerdata.yml id:UtilizenPlayerdata
-                - case "gray":
+                - case gray:
                     - adjust <player> player_list_name:<&7><player.name>
-                    - narrate "<yaml[UtilizenLang].read[nickcolorchanged].parsed>"
+                    - narrate <yaml[UtilizenLang].read[nickcolorchanged].parsed>
                     - yaml id:UtilizenPlayerdata set <player.uuid>.nickname:<&7><player.name>
                     - yaml savefile:../Utilizen/playerdata.yml id:UtilizenPlayerdata
-                - case "green":
+                - case green:
                     - adjust <player> player_list_name:<&a><player.name>
-                    - narrate "<yaml[UtilizenLang].read[nickcolorchanged].parsed>"
+                    - narrate <yaml[UtilizenLang].read[nickcolorchanged].parsed>
                     - yaml id:UtilizenPlayerdata set <player.uuid>.nickname:<&a><player.name>
                     - yaml savefile:../Utilizen/playerdata.yml id:UtilizenPlayerdata
-                - case "lightpurple":
+                - case lightpurple:
                     - adjust <player> player_list_name:<&d><player.name>
-                    - narrate "<yaml[UtilizenLang].read[nickcolorchanged].parsed>"
+                    - narrate <yaml[UtilizenLang].read[nickcolorchanged].parsed>
                     - yaml id:UtilizenPlayerdata set <player.uuid>.nickname:<&d><player.name>
                     - yaml savefile:../Utilizen/playerdata.yml id:UtilizenPlayerdata
-                - case "red":
+                - case red:
                     - adjust <player> player_list_name:<&c><player.name>
-                    - narrate "<yaml[UtilizenLang].read[nickcolorchanged].parsed>"
+                    - narrate <yaml[UtilizenLang].read[nickcolorchanged].parsed>
                     - yaml id:UtilizenPlayerdata set <player.uuid>.nickname:<&c><player.name>
                     - yaml savefile:../Utilizen/playerdata.yml id:UtilizenPlayerdata
-                - case "white"
+                - case white:
                     - adjust <player> player_list_name:<player.name>
-                    - narrate "<yaml[UtilizenLang].read[nickcolorchanged].parsed>"
+                    - narrate <yaml[UtilizenLang].read[nickcolorchanged].parsed>
                     - yaml id:UtilizenPlayerdata set <player.uuid>.nickname:<player.name>
                     - yaml savefile:../Utilizen/playerdata.yml id:UtilizenPlayerdata
-                - case "yellow"
+                - case yellow:
                     - adjust <player> player_list_name:<&e><player.name>
-                    - narrate "<yaml[UtilizenLang].read[nickcolorchanged].parsed>"
+                    - narrate <yaml[UtilizenLang].read[nickcolorchanged].parsed>
                     - yaml id:UtilizenPlayerdata set <player.uuid>.nickname:<&e><player.name>
                     - yaml savefile:../Utilizen/playerdata.yml id:UtilizenPlayerdata
         - else:
-            - narrate "<yaml[UtilizenLang].read[nickcolorwrong].parsed>"
+            - narrate <yaml[UtilizenLang].read[nickcolorwrong].parsed>
     - else:
-      - narrate "<yaml[UtilizenLang].read[nickcolornocolor].parsed>"
+      - narrate <yaml[UtilizenLang].read[nickcolornocolor].parsed>
 UtilizenNickCommand:
     type: command
     debug: false
     name: nick
-    description: nick people
+    description: Nick people
     usage: /nick
-    permission: Utilizen.nick
+    permission: utilizen.nick
     permission message: <&3>[Permission] You need the permission <&b><permission>
     tab complete:
-    - if <context.args.size> < 1:
+    - if <context.args.is_empty>:
         - determine <server.list_online_players.parse[name]>
     - if <context.args.size> == 1 && "!<context.raw_args.ends_with[ ]>":
         - determine <server.list_online_players.parse[name].filter[starts_with[<context.args.first>]]>
@@ -229,34 +228,54 @@ UtilizenNickCommand:
     - if <context.args.size> >= 1:
         - if <server.player_is_valid[<context.args.first>]>:
             - if <context.args.size> != 1:
-                - define and:<context.args.get[2].to_list.replace[&].with[<&ss>]>
-                - adjust <server.match_player[<context.args.first>]> player_list_name:<[and].unseparated>
-                - narrate "<yaml[UtilizenLang].read[nicksuccess].parsed>"
-                - narrate "<yaml[UtilizenLang].read[nickchanged].parsed>"
-                - yaml id:UtilizenPlayerdata set <player.uuid>.nickname:<[and].unseparated>
+                - define nick:<context.args.get[2].parse_color>
+                - adjust <server.match_player[<context.args.first>]> player_list_name:<[nick]>
+                - narrate <yaml[UtilizenLang].read[nicksuccess].parsed>
+                - narrate <yaml[UtilizenLang].read[nickchanged].parsed>
+                - yaml id:UtilizenPlayerdata set <player.uuid>.nickname:<context.args.get[2]>
                 - yaml savefile:../Utilizen/playerdata.yml id:UtilizenPlayerdata
-                - stop
             - else:
                 - adjust <server.match_player[<context.args.first>]> player_list_name:
-                - narrate "<yaml[UtilizenLang].read[nickdelete].parsed>"
+                - narrate <yaml[UtilizenLang].read[nickdelete].parsed>
                 - yaml id:UtilizenPlayerdata set <player.uuid>.nickname:!
                 - yaml savefile:../Utilizen/playerdata.yml id:UtilizenPlayerdata
         - else:
-            - narrate "<yaml[UtilizenLang].read[nickplnotexist].parsed>"
+            - narrate <yaml[UtilizenLang].read[nickplnotexist].parsed>
     - else:
-        - narrate "<yaml[UtilizenLang].read[nicksyntax].parsed>"
+        - narrate <yaml[UtilizenLang].read[nicksyntax].parsed>
+UtilizenShowNickCommand:
+    type: command
+    name: shownick
+    description: Shows the original name from nicked players
+    usage: /shownick [Nickname]
+    permission: utilizen.shownick
+    permission message: <&3>[Permission] You need the permission <&b><permission>
+    tab complete:
+    - foreach <yaml[UtilizenPlayerdata].list_keys[]>:
+        - define nicklist:->:<yaml[Utilizenplayerdata].read[<[value]>.nickname]>
+    - determine <[nicklist]>
+    script:
+    - foreach <yaml[UtilizenPlayerdata].list_keys[]>:
+        - define nicklist:->:<yaml[Utilizenplayerdata].read[<[value]>.nickname]>
+    - if <[nicklist].contains[<context.args.first>]>:
+        - foreach <yaml[UtilizenPlayerdata].list_keys[]>:
+            - if <yaml[Utilizenplayerdata].read[<[value]>.nickname]> == <context.args.first>:
+                - narrate <[value].as_player.name>
 UtilizenSetWarpCommand:
     type: command
     debug: false
     name: setwarp
     description: Creates a warp
     usage: /setwarp [Warpname]
-    permission: Utilizen.setwarp
+    permission: utilizen.setwarp
     permission message: <&3>[Permission] You need the permission <&b><permission>
     tab complete:
     - if !<context.server>:
         - stop
     script:
+    - if <context.server>:
+        - announce to_console "[Utilizen] This command can not be executed from console"
+        - stop
     - if <context.args.size> >= 1:
         - yaml id:UtilizenServerdata set warps.<context.args.first>:<player.location>
         - yaml savefile:../Utilizen/serverdata.yml id:UtilizenServerdata
