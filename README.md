@@ -8,6 +8,7 @@ To make Utilizen work, you need the following plugins
 
 ## Permissions
 | Permission | Description |
+| ------------- | ------------- |
 | **utilizen.afk** | Changes AFK-Mode |
 | **utilizen.back**| Let player's teleports to the last location, before they were teleported |
 | **utilizen.ban**| Ban players |
