@@ -16,41 +16,41 @@ To make Utilizen work, you need the following plugins
 | **utilizen.clearinventory**| Clear inventories from players |
 | **utilizen.delhome**| Delete your own homes | 
 | **utilizen.delhome.other** | Delete homes from others |
-|**utilizen.deljail**
-|**utilizen.delwarp**
-|**utilizen.feed**
-**utilizen.fly**
-**utilizen.gamemode**
-**utilizen.gamemode.others**
-**utilizen.gamemode.survival**
-**utilizen.gamemode.adventure**
-**utilizen.gamemode.creative**
-**utilizen.gamemode.spectator**
-**utilizen.gc**
-**utilizen.hat**
-**utilizen.heal**
-**utilizen.help**
-**utilizen.home**
-**utilizen.invsee**
-**utilizen.jail**
-**utilizen.kick**
-**utilizen.kickall**
-**utilizen.mail**
-**utilizen.me**
-**utilizen.msg**
-**utilizen.mute**
-**utilizen.nick**
-**utilizen.nickcolor**
-**utilizen.spawn**
-**utilizen.setwarp**
-**utilizen.setjail**
-**utilizen.sethome**
-**utilizen.time**
-**utilizen.tp**
-**utilizen.tphere**
-**utilizen.unban**
-**utilizen.unjail**
-**utilizen.unmute**
-**utilizen.vanish**
-**utilizen.warp**
-**utilizen.weather**
+| **utilizen.deljail**  | Delete Jails |
+| **utilizen.delwarp**  | Delete Warps |
+| **utilizen.feed**  | Feed yourself or other players |
+| **utilizen.fly**  | Give yourself fly-mode |
+| **utilizen.gamemode** | Main access to gamemode Command |
+| **utilizen.gamemode.others** | Access to change Gamemode from other players |
+| **utilizen.gamemode.survival** | Change yourself to survival |
+| **utilizen.gamemode.adventure** | Change yourself to adventure |
+| **utilizen.gamemode.creative** | Change yourself to creative |
+| **utilizen.gamemode.spectator** | Change yourself to spectator |
+| **utilizen.gc** | Get Server Information |
+| **utilizen.hat**| Set a block as your new fancy hat |
+| **utilizen.heal** | Heal yourself or other players |
+| **utilizen.help** | Main Command for access Utilizen |
+| **utilizen.home** | Let players teleport to their homes |
+| **utilizen.invsee** | Look into player inventories |
+| **utilizen.jail** | Jail Bad players |
+| **utilizen.kick** | Kick Bad players |
+| **utilizen.kickall** | Kick everyone |
+| **utilizen.mail** | Send Mails to players |
+| **utilizen.me** | Me Something! |
+| **utilizen.msg** | Send private messages to players |
+| **utilizen.mute** | Mute Evil players |
+| **utilizen.nick** | Nick yourself or other players |
+| **utilizen.nickcolor** | Give yourself a new color |
+| **utilizen.spawn** | Teleport to worldspawn |
+| **utilizen.setwarp** | Creates a Warp |
+| **utilizen.setjail** | Creates a Jail |
+| **utilizen.sethome** | Creates a home |
+| **utilizen.time** | Set the current time |
+| **utilizen.tp** | Teleport to players or a location |
+| **utilizen.tphere** | Teleport players to you |
+| **utilizen.unban** | Unban a player |
+| **utilizen.unjail** | Take player out of jail |
+| **utilizen.unmute** | Let players speak again |
+| **utilizen.vanish** | Makes yourself invisible |
+| **utilizen.warp** | Warp to a Warp |
+| **utilizen.weather** | Change the weather |
