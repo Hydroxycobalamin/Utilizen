@@ -37,6 +37,7 @@ To make Utilizen work, you need the following plugins
 | **utilizen.kick** | Kick Bad players |
 | **utilizen.kickall** | Kick everyone |
 | **utilizen.mail** | Send Mails to players |
+| **utilizen.mail.sendall** | Send Mails to all players |
 | **utilizen.me** | Me Something! |
 | **utilizen.msg** | Send private messages to players |
 | **utilizen.mute** | Mute Evil players |

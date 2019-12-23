@@ -42,49 +42,56 @@ UtilizenCommandMail:
     debug: false
     name: mail
     description: Read and Send mails!
-    usage: /mail [send|read|remove] (Player) (Message)
+    usage: /mail [send|read|remove|sendall] (Player) (Message)
     permission: utilizen.mail
     permission message: <&3>[Permission] You need the permission <&b><permission>
     tab complete:
     - if <context.args.is_empty>:
-        - determine <list[send|read|remove]>
+        - determine <list[send|read|remove|<tern[<player.has_permission[sendall]>].pass[sendall].fail[]>]>
     - if <context.args.size> == 1 && "!<context.raw_args.ends_with[ ]>":
-        - determine <list[send|read|remove].filter[starts_with[<context.args.first>]]>
+        - determine <list[send|read|remove|<tern[<player.has_permission[sendall]>].pass[sendall].fail[]>].filter[starts_with[<context.args.first>]]>
     - if <context.args.size> < 2 && <context.args.first> == send:
         - determine <server.list_online_players.parse[name]>
     - if <context.args.size> == 2 && "!<context.raw_args.ends_with[ ]>":
         - determine <server.list_online_players.parse[name].filter[starts_with[<context.args.get[2]>]]>
     script:
-    - if <context.args.size> == 1:
-        - choose <context.args.first>:
-            - case send:
-                - if <context.args.size> >= 2:
-                    - if <server.player_is_valid[<context.args.get[2]>]>:
-                        - if <context.args.size> > 2:
-                            - flag server msgcnt:++
-                            - yaml id:UtilizenPlayerdata set <server.match_offline_player[<context.args.get[2]>].uuid>.msg<server.flag[msgcnt]>:<list[<player.uuid>|<context.args.remove[1|2].space_separated>]>
-                            - yaml savefile:../Utilizen/playerdata.yml id:UtilizenPlayerdata
-                            - narrate <yaml[UtilizenLang].read[mailsend].parsed>
-                        - else:
-                            - narrate <yaml[UtilizenLang].read[mailempty].parsed>
+    - choose <context.args.first||null>:
+        - case send:
+            - if <context.args.size> >= 2:
+                - if <server.player_is_valid[<context.args.get[2]>]>:
+                    - if <context.args.size> > 2:
+                        - yaml id:UtilizenServerdata set msgcount:++
+                        - yaml savefile:../Utilizen/serverdata.yml id:UtilizenServerdata
+                        - yaml id:UtilizenPlayerdata set <server.match_offline_player[<context.args.get[2]>].uuid>.mailbox.msg<yaml[UtilizenServerdata].read[msgcount]||0>:<player.uuid>|<context.args.remove[1|2].space_separated>
+                        - yaml savefile:../Utilizen/playerdata.yml id:UtilizenPlayerdata
+                        - narrate <yaml[UtilizenLang].read[mailsend].parsed>
                     - else:
-                        - narrate <yaml[UtilizenLang].read[mailplnotexist].parsed>
+                        - narrate <yaml[UtilizenLang].read[mailempty].parsed>
                 - else:
-                    - narrate <yaml[UtilizenLang].read[mailneedplayer].parsed>
-            - case read:
-                - if <yaml[UtilizenPlayerdata].list_keys[<player.uuid>]||null> == null:
-                    - narrate <yaml[UtilizenLang].read[mailboxempty].parsed>
-                    - stop
-                - foreach <yaml[UtilizenPlayerdata].list_keys[<player.uuid>]>:
-                    - narrate <yaml[UtilizenLang].read[mailread].parsed>
-            - case remove:
-                - yaml id:UtilizenPlayerdata set <player.uuid>:!
-                - yaml savefile:../Utilizen/playerdata.yml id:UtilizenPlayerdata
-                - narrate <yaml[UtilizenLang].read[maildelete].parsed>
-            - default:
-                - narrate <yaml[UtilizenLang].read[mailarguments].parsed>
-    - else:
-        - narrate <yaml[UtilizenLang].read[mailallarguments].parsed>
+                    - narrate <yaml[UtilizenLang].read[mailplnotexist].parsed>
+            - else:
+                - narrate <yaml[UtilizenLang].read[mailneedplayer].parsed>
+        - case read:
+            - if <yaml[UtilizenPlayerdata].list_keys[<player.uuid>.mailbox]||true>:
+                - narrate <yaml[UtilizenLang].read[mailboxempty].parsed>
+                - stop
+            - foreach <yaml[UtilizenPlayerdata].list_keys[<player.uuid>.mailbox]>:
+                - narrate <yaml[UtilizenLang].read[mailread].parsed>
+        - case remove:
+            - yaml id:UtilizenPlayerdata set <player.uuid>.mailbox:!
+            - yaml savefile:../Utilizen/playerdata.yml id:UtilizenPlayerdata
+            - narrate <yaml[UtilizenLang].read[maildelete].parsed>
+        - case sendall:
+            - if <player.has_permission[utilizen.mail.sendall]>:
+                - if <context.args.size> > 1:
+                    - foreach <server.list_players.parse[uuid]>:
+                        - yaml id:UtilizenServerdata set msgcount:++
+                        - yaml id:UtilizenPlayerdata set <[value]>.mailbox.msg<yaml[UtilizenServerdata].read[msgcount]||0>:<player.uuid>|<context.args.remove[1].space_separated>
+                    - yaml savefile:../Utilizen/serverdata.yml id:UtilizenServerdata
+                    - yaml savefile:../Utilizen/playerdata.yml id:UtilizenPlayerdata
+                    - narrate <yaml[UtilizenLang].read[mailsendall]>
+        - default:
+            - narrate <yaml[UtilizenLang].read[mailallarguments].parsed>
 UtilizenMeCommand:
     type: command
     debug: false
