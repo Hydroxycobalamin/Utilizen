@@ -1,6 +1,6 @@
 UtilizenCommandAFK:
     type: command
-    debug: true
+    debug: false
     name: afk
     description: Toggles AFK-Mode
     usage: /afk (Player)
@@ -9,6 +9,8 @@ UtilizenCommandAFK:
     tab complete:
     - if <player.has_permission[utilizen.afk.other]>:
         - determine <server.list_online_players.parse[name]>
+    - else:
+        - stop
     script:
     - if <context.server>:
         - announce to_console "[Utilizen] This command can not be executed from console"
