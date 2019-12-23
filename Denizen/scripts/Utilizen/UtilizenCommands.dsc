@@ -47,9 +47,9 @@ UtilizenCommandMail:
     permission message: <&3>[Permission] You need the permission <&b><permission>
     tab complete:
     - if <context.args.is_empty>:
-        - determine <list[send|read|remove|<tern[<player.has_permission[sendall]>].pass[sendall].fail[]>]>
+        - determine <list[send|read|remove|<tern[<player.has_permission[utilizen.mail.sendall]>].pass[sendall].fail[]>]>
     - if <context.args.size> == 1 && "!<context.raw_args.ends_with[ ]>":
-        - determine <list[send|read|remove|<tern[<player.has_permission[sendall]>].pass[sendall].fail[]>].filter[starts_with[<context.args.first>]]>
+        - determine <list[send|read|remove|<tern[<player.has_permission[utilizen.mail.sendall]>].pass[sendall].fail[]>].filter[starts_with[<context.args.first>]]>
     - if <context.args.size> < 2 && <context.args.first> == send:
         - determine <server.list_online_players.parse[name]>
     - if <context.args.size> == 2 && "!<context.raw_args.ends_with[ ]>":
