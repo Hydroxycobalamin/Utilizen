@@ -1,18 +1,32 @@
 UtilizenCommandAFK:
     type: command
-    debug: false
+    debug: true
     name: afk
     description: Toggles AFK-Mode
-    usage: /afk
+    usage: /afk (Player)
     permission: utilizen.afk
     permission message: <&3>[Permission] You need the permission <&b><permission>
     tab complete:
-    - if !<context.server>:
-        - stop
+    - if <player.has_permission[utilizen.afk.other]>:
+        - determine <server.list_online_players.parse[name]>
     script:
     - if <context.server>:
         - announce to_console "[Utilizen] This command can not be executed from console"
         - stop
+    - if <player.has_permission[utilizen.afk.other]> && <context.args.size> == 1:
+        - if <server.match_player[<context.args.get[1]>].is_online>:
+            - if !<server.match_player[<context.args.get[1]>].has_flag[afk]>:
+                - narrate <yaml[UtilizenLang].read[afkother].parsed> targets:<server.list_online_players>
+                - flag <server.match_player[<context.args.get[1]>]> afk
+                - permission add smoothsleep.ignore players:<server.match_player[<context.args.get[1]>]>
+                - stop
+            - else:
+                - narrate <yaml[UtilizenLang].read[afkotherback].parsed> targets:<server.list_online_players>
+                - flag <server.match_player[<context.args.get[1]>]> afk:!
+                - permission remove smoothsleep.ignore players:<server.match_player[<context.args.get[1]>]>
+                - stop
+        - else:
+            - narrate <yaml[UtilizenLang].read[afkplnotonline].parsed> targets:<server.list_online_players>
     - if !<player.has_flag[afk]>:
         - narrate <yaml[UtilizenLang].read[afk].parsed> targets:<server.list_online_players>
         - flag player afk

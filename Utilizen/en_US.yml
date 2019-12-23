@@ -1,5 +1,8 @@
 afk: '<&7>* <&r><player.list_name> <&7>went afk'
 afkback: '<&7>* <&r><player.list_name> <&7>is back'
+afkplnotonline: '<&3>[AFK] This player is not online'
+afkother: '<&7>* <&r><server.match_player[<context.args.get[1]>].list_name> <&7>went afk'
+afkotherback: '<&7>* <&r><server.match_player[<context.args.get[1]>].list_name> <&7>went afk'
 bedspawnset: '<&3>[Bed] Your <&b>Bedspawn <&3>has been set!'
 comnobedspawn: '<&3>[Compass] Your <&b>Bedspawn <&3>is not set yet'
 comspawn: '<&3>[Compass] Your compass now points to the <&b>Spawn'
