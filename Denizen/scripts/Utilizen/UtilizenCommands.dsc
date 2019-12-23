@@ -296,7 +296,7 @@ UtilizenSetWarpCommand:
     type: command
     debug: false
     name: setwarp
-    description: Creates a warp
+    description: Create a Warp
     usage: /setwarp [Warpname]
     permission: utilizen.setwarp
     permission message: <&3>[Permission] You need the permission <&b><permission>
@@ -307,22 +307,22 @@ UtilizenSetWarpCommand:
     - if <context.server>:
         - announce to_console "[Utilizen] This command can not be executed from console"
         - stop
-    - if <context.args.size> >= 1:
+    - if <context.args.size> == 1:
         - yaml id:UtilizenServerdata set warps.<context.args.first>:<player.location>
         - yaml savefile:../Utilizen/serverdata.yml id:UtilizenServerdata
-        - narrate "<yaml[UtilizenLang].read[warpcreate].parsed>"
+        - narrate <yaml[UtilizenLang].read[warpcreate].parsed>
     - else:
-        - narrate "<yaml[UtilizenLang].read[warpnoname].parsed>"
+        - narrate <yaml[UtilizenLang].read[warpnoname].parsed>
 UtilizenDelWarpCommand:
     type: command
     debug: false
     name: delwarp
-    description: delete warps
-    usage: /delwarp [Name]
-    permission: Utilizen.delwarp
+    description: Delete Warps
+    usage: /delwarp [Warpname]
+    permission: utilizen.delwarp
     permission message: <&3>[Permission] You need the permission <&b><permission>
     tab complete:
-    - if <context.args.size> < 1:
+    - if <context.args.is_empty>:
         - determine <yaml[UtilizenServerdata].list_keys[warps]>
     - if <context.args.size> == 1 && "!<context.raw_args.ends_with[ ]>":
         - determine <yaml[UtilizenServerdata].list_keys[warps].filter[starts_with[<context.args.first>]]>
@@ -331,44 +331,46 @@ UtilizenDelWarpCommand:
         - if <yaml[UtilizenServerdata].contains[<context.args.first>]>:
             - yaml id:UtilizenServerdata set <context.args.first>:!
             - yaml savefile:../Utilizen/serverdata.yml id:UtilizenServerdata
-            - narrate "<yaml[UtilizenLang].read[warpdelete].parsed>"
+            - narrate <yaml[UtilizenLang].read[warpdelete].parsed>
         - else:
-            - narrate "<yaml[UtilizenLang].read[warpnotexist].parsed>"
+            - narrate <yaml[UtilizenLang].read[warpnotexist].parsed>
     - else:
-        - narrate "<yaml[UtilizenLang].read[warpnoarg].parsed>"
+        - narrate <yaml[UtilizenLang].read[warpnoarg].parsed>
 UtilizenWarpCommand:
     type: command
     debug: false
     name: warp
-    description: warp to warp!
-    usage: /warp [Name]
+    description: Teleport to a Warppoint
+    usage: /warp [Warpname] (Player)
     permission: utilizen.warp
     permission message: <&3>[Permission] You need the permission <&b><permission>
     tab complete:
-    - if <context.args.size> < 1:
-        - determine <yaml[UtilizenServerdata].list_keys[warps]>
-    - if <context.args.size> == 1 && "!<context.raw_args.ends_with[ ]>":
+    - if <context.args.is_empty>:
+        - determine <tern[<element[<yaml[UtilizenServerdata].list_keys[warps]||null>].is[!=].to[null]>].pass[<yaml[UtilizenServerdata].list_keys[warps]>].fail[]>
+    - else if <context.args.size> == 1 && "!<context.raw_args.ends_with[ ]>":
         - determine <yaml[UtilizenServerdata].list_keys[warps].filter[starts_with[<context.args.first>]]>
-    - if <context.args.size> < 2:
-        - determine <server.list_online_players.parse[name]>
-    - if <context.args.size> == 2 && "!<context.raw_args.ends_with[ ]>":
-        - determine <server.list_online_players.parse[name].filter[starts_with[<context.args.first>]]>
+    - if <player.has_permission[utilizen.warp.other]>:
+        - if <context.args.size> < 2:
+            - determine <server.list_online_players.parse[name]>
+        - else if <context.args.size> == 2 && "!<context.raw_args.ends_with[ ]>":
+            - determine <server.list_online_players.parse[name].filter[starts_with[<context.args.first>]]>
     script:
+    - if <context.server>:
+        - announce to_console "[Utilizen] This command can not be executed from console"
+        - stop
     - if <context.args.size> >= 1:
         - if <yaml[UtilizenServerdata].contains[warps.<context.args.first>]>:
-            - if <context.args.size> == 1:
+            - if <context.args.size> == 2 && <player.has_permission[utilizen.warp.other]>:
+                - teleport <server.match_player[<context.args.get[2]>]> <yaml[UtilizenServerdata].read[warps.<context.args.first>]>
+                - narrate <yaml[UtilizenLang].read[warpedbyadmin].parsed> targets:<server.match_player[<context.args.get[2]>]>
+                - narrate <yaml[UtilizenLang].read[warpedplayer].parsed>
+            - else:
                 - teleport <player> <yaml[UtilizenServerdata].read[warps.<context.args.first>]>
-                - narrate "<yaml[UtilizenLang].read[warpsuccess].parsed>"
-                - stop
-            - if <context.args.size> == 2:
-                - if <server.player_is_valid[<context.args.get[2]>]>:
-                    - teleport <server.match_player[<context.args.get[2]>]> <yaml[UtilizenServerdata].read[warps.<context.args.first>]>
-                    - narrate "<yaml[UtilizenLang].read[warpedbyadmin].parsed>" targets:<server.match_player[<context.args.get[2]>]>
-                    - narrate "<yaml[UtilizenLang].read[warpedplayer].parsed>"
+                - narrate <yaml[UtilizenLang].read[warpsuccess].parsed>
         - else:
-            - narrate "<yaml[UtilizenLang].read[warpnotexist].parsed>"
+            - narrate <yaml[UtilizenLang].read[warpnotexist].parsed>
     - else:
-        - narrate "<yaml[UtilizenLang].read[warplist].parsed>"
+        - narrate <yaml[UtilizenLang].read[warplist].parsed>
 UtilizenJailCommand:
     type: command
     debug: false

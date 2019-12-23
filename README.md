@@ -56,4 +56,5 @@ To make Utilizen work, you need the following plugins
 | **utilizen.unmute** | Let players speak again |
 | **utilizen.vanish** | Makes yourself invisible |
 | **utilizen.warp** | Warp to a Warp |
+| **utilizen.warp.other** | Warp other players to a warp |
 | **utilizen.weather** | Change the weather |
