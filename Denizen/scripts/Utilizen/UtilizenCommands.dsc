@@ -250,7 +250,11 @@ UtilizenNickCommand:
     script:
     - if <context.args.size> >= 1:
         - if <server.player_is_valid[<context.args.first>]>:
-            - if <context.args.size> != 1:
+            - if <context.args.size> == 2:
+                - foreach <list[<yaml[UtilizenPlayerdata].list_deep_keys[].filter[contains[nickname]]>|<player.uuid>.nickname].combine>:
+                    - if <server.list_players.parse[name].contains[<context.args.get[2]>]> || <yaml[UtilizenPlayerdata].read[<[value]>]||<player.name>> == <context.args.get[2]>:
+                        - narrate <yaml[UtilizenLang].read[nickinuse].parsed>
+                        - stop
                 - define nick:<context.args.get[2].parse_color>
                 - adjust <server.match_player[<context.args.first>]> player_list_name:<[nick]>
                 - narrate <yaml[UtilizenLang].read[nicksuccess].parsed>
@@ -268,21 +272,25 @@ UtilizenNickCommand:
         - narrate <yaml[UtilizenLang].read[nicksyntax].parsed>
 UtilizenShowNickCommand:
     type: command
+    debug: false
     name: shownick
     description: Shows the original name from nicked players
     usage: /shownick [Nickname]
     permission: utilizen.shownick
     permission message: <&3>[Permission] You need the permission <&b><permission>
     tab complete:
-    - foreach <yaml[UtilizenPlayerdata].list_keys[]>:
-        - define nicklist:->:<yaml[Utilizenplayerdata].read[<[value]>.nickname]>
-    - determine <[nicklist]>
+    - foreach <yaml[UtilizenPlayerdata].list_deep_keys[].filter[contains[nickname]]>:
+        - define nicklist:->:<yaml[UtilizenPlayerdata].read[<[value]>]>
+    - if <[nicklist].is_empty||true>:
+        - stop
+    - else:
+        - determine <[nicklist]>
     script:
-    - foreach <yaml[UtilizenPlayerdata].list_keys[]>:
-        - define nicklist:->:<yaml[Utilizenplayerdata].read[<[value]>.nickname]>
-    - if <[nicklist].contains[<context.args.first>]>:
-        - foreach <yaml[UtilizenPlayerdata].list_keys[]>:
-            - if <yaml[Utilizenplayerdata].read[<[value]>.nickname]> == <context.args.first>:
+    - foreach <yaml[UtilizenPlayerdata].list_deep_keys[].filter[contains[nickname]]>:
+        - define nicklist:->:<yaml[Utilizenplayerdata].read[<[value]>]>
+    - if <[nicklist].contains[<context.args.first>]||false>:
+        - foreach <yaml[UtilizenPlayerdata].list_deep_keys[].filter[contains[nickname]]>:
+            - if <yaml[UtilizenPlayerdata].read[<[value]>]> == <context.args.first>:
                 - narrate <[value].as_player.name>
 UtilizenSetWarpCommand:
     type: command

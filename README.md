@@ -47,6 +47,7 @@ To make Utilizen work, you need the following plugins
 | **utilizen.setwarp** | Creates a Warp |
 | **utilizen.setjail** | Creates a Jail |
 | **utilizen.sethome** | Creates a home |
+| **utilizen.shownick** | Returns the original name of a nicked player |
 | **utilizen.time** | Set the current time |
 | **utilizen.tp** | Teleport to players or a location |
 | **utilizen.tphere** | Teleport players to you |
