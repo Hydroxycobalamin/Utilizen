@@ -375,9 +375,9 @@ UtilizenJailCommand:
     type: command
     debug: false
     name: jail
-    description: jail someone
-    usage: /jail [Player] [Duration]
-    permission: Utilizen.jail
+    description: Jail people
+    usage: /jail [Player] [Jailname] [Duration]
+    permission: utilizen.jail
     permission message: <&3>[Permission] You need the permission <&b><permission>
     tab complete:
     - if <context.args.size> < 1:
@@ -385,15 +385,15 @@ UtilizenJailCommand:
     - if <context.args.size> == 1 && "!<context.raw_args.ends_with[ ]>":
         - determine <server.list_online_players.parse[name].filter[starts_with[<context.args.first>]]>
     - if <context.args.size> < 2:
-        - determine <yaml[UtilizenServerdata].list_keys[jailname]>
+        - determine <yaml[UtilizenServerdata].list_keys[jailname]||Create_a_Jail_first>
     - if <context.args.size> == 2 && "!<context.raw_args.ends_with[ ]>":
-        - determine <yaml[UtilizenServerdata].list_keys[jailname].filter[starts_with[<context.args.get[2]>]]>
-    - if <context.args.size> == 3 && "!<context.raw_args.ends_with[ ]>":
+        - determine <yaml[UtilizenServerdata].list_keys[jailname].filter[starts_with[<context.args.get[2]>]]||Create_a_Jail_first>
+    - if <context.args.size> == 3 && "!<context.raw_args.ends_with[ ]>" && !<context.args.get[3].to_list.contains_any[s|m|h|d]>:
         - determine <list[<context.args.get[3]>s|<context.args.get[3]>m|<context.args.get[3]>h|<context.args.get[3]>d]>
     script:
     - if <context.args.size> >= 1:
         - if <server.player_is_valid[<context.args.first>]>:
-            - if !<server.match_player[<context.args.first>].has_flag[jail]>:
+            - if !<server.match_player[<context.args.first>].has_flag[jailed]>:
                 - if <context.args.size> >= 2:
                     - define playerlocation:<server.match_player[<context.args.first>].location>
                     - if <yaml[UtilizenServerdata].contains[jailname.<context.args.get[2]>]>:
@@ -402,75 +402,75 @@ UtilizenJailCommand:
                                 - yaml id:UtilizenPlayerdata set <server.match_player[<context.args.first>].uuid>.jail.location:<[playerlocation]>
                                 - yaml savefile:../Utilizen/playerdata.yml id:UtilizenPlayerdata
                                 - teleport <server.match_player[<context.args.first>]> <yaml[UtilizenServerdata].read[jailname.<context.args.get[2]>]>
-                                - flag <server.match_player[<context.args.first>]> jail:true d:<context.args.get[3].as_duration>
-                                - narrate "<yaml[UtilizenLang].read[jailjailedadmin].parsed>"
+                                - wait 1t
+                                - flag <server.match_player[<context.args.first>]> jailed d:<context.args.get[3].as_duration>
+                                - narrate <yaml[UtilizenLang].read[jailjailedadmin].parsed>
                                 - if <server.match_player[<context.args.first>].is_online> && <server.match_player[<context.args.first>]||null> != null:
-                                    - waituntil rate:20t !<server.match_player[<context.args.first>].has_flag[jail]||null>
+                                    - waituntil rate:20t !<server.match_player[<context.args.first>].has_flag[jailed]||null>
                                     - if <server.match_player[<context.args.first>]||null> == null:
                                         - stop
                                     - teleport <server.match_player[<context.args.first>]> <[playerlocation]>
-                                    - narrate "<yaml[UtilizenLang].read[jailexit].parsed>" targets:<server.match_player[<context.args.first>]>
-                                    - stop
+                                    - narrate <yaml[UtilizenLang].read[jailexit].parsed> targets:<server.match_player[<context.args.first>]>
                             - else:
-                                - narrate "<yaml[UtilizenLang].read[jailtimeinvalid].parsed>"
+                                - narrate <yaml[UtilizenLang].read[jailtimeinvalid].parsed>
                         - else:
-                            - narrate "<yaml[UtilizenLang].read[jailnotime].parsed>"
+                            - narrate <yaml[UtilizenLang].read[jailnotime].parsed>
                     - else:
-                        - narrate "<yaml[UtilizenLang].read[jailnotexist].parsed>"
+                        - narrate <yaml[UtilizenLang].read[jailnotexist].parsed>
                 - else:
-                    - narrate "<yaml[UtilizenLang].read[jailwrongsyntax].parsed>"
+                    - narrate <yaml[UtilizenLang].read[jailwrongsyntax].parsed>
             - else:
-                - narrate "<yaml[UtilizenLang].read[jailalreadyjailed].parsed>"
+                - narrate <yaml[UtilizenLang].read[jailalreadyjailed].parsed>
         - else:
-            - narrate "<yaml[UtilizenLang].read[jailplnotexist].parsed>"
+            - narrate <yaml[UtilizenLang].read[jailplnotexist].parsed>
     - else:
-        - narrate "<yaml[UtilizenLang].read[jailsyntax].parsed>"
+        - narrate <yaml[UtilizenLang].read[jailsyntax].parsed>
 UtilizenSetJailCommand:
     type: command
     debug: false
     name: setjail
-    description: creates a jail
-    usage: /setjail [Name]
-    permission: Utilizen.setjail
+    description: Create a Jail
+    usage: /setjail [Jailname]
+    permission: utilizen.setjail
     permission message: <&3>[Permission] You need the permission <&b><permission>
     tab complete:
     - if !<context.server>:
         - stop
     script:
-    - if <context.args.size> >= 1:
+    - if <context.args.size> == 1:
         - yaml id:UtilizenServerdata set jailname.<context.args.first>:<player.location>
         - yaml savefile:../Utilizen/serverdata.yml id:UtilizenServerdata
-        - narrate "<yaml[UtilizenLang].read[jailcreate].parsed>"
+        - narrate <yaml[UtilizenLang].read[jailcreate].parsed>
     - else:
-        - narrate "<yaml[UtilizenLang].read[jailnoname].parsed>"
+        - narrate <yaml[UtilizenLang].read[jailnoname].parsed>
 UtilizenDelJailCommand:
     type: command
     debug: false
     description: delete a jail
     usage: /deljail [Name]
     name: deljail
-    permission: Utilizen.deljail
+    permission: utilizen.deljail
     permission message: <&3>[Permission] You need the permission <&b><permission>
     tab complete:
-    - if <context.args.size> < 1:
-        - determine <yaml[UtilizenServerdata].list_keys[jailname]>
+    - if <context.args.is_empty>:
+        - determine <yaml[UtilizenServerdata].list_keys[jailname]||Create_a_Jail_first>
     - if <context.args.size> == 1 && "!<context.raw_args.ends_with[ ]>":
-        - determine <yaml[UtilizenServerdata].list_keys[jailname].filter[starts_with[<context.args.first>]]>
+        - determine <yaml[UtilizenServerdata].list_keys[jailname].filter[starts_with[<context.args.first>]]||Create_a_Jail_first>
     script:
-    - if <context.args.size> >= 1:
+    - if <context.args.size> == 1:
         - if <yaml[UtilizenServerdata].contains[jailname.<context.args.first>]>:
-            - yaml id:dEsssentialsServerdata set jailname.<context.args.first>:!
+            - yaml id:UtilizenServerdata set jailname.<context.args.first>:!
             - yaml savefile:../Utilizen/serverdata.yml id:UtilizenServerdata
-            - narrate "<yaml[UtilizenLang].read[jaildeleted].parsed>"
+            - narrate <yaml[UtilizenLang].read[jaildeleted].parsed>
         - else:
-            - narrate "<yaml[UtilizenLang].read[notexist].parsed>"
+            - narrate <yaml[UtilizenLang].read[notexist].parsed>
     - else:
-        - narrate "<yaml[UtilizenLang].read[jailnojail].parsed>"
+        - narrate <yaml[UtilizenLang].read[jailnojail].parsed>
 UtilizenUnJailCommand:
     type: command
     debug: false
     name: unjail
-    description: unjail a player
+    description: Unjail a Player
     usage: /unjail [Player]
     permission: utilizen.unjail
     permission message: <&3>[Permission] You need the permission <&b><permission>
@@ -480,39 +480,16 @@ UtilizenUnJailCommand:
     - if <context.args.size> == 1 && "!<context.raw_args.ends_with[ ]>":
         - determine <server.list_online_players.parse[name].filter[starts_with[<context.args.first>]]>
     script:
-    - if <context.args.size> >= 1:
+    - if <context.args.size> == 1:
         - if <server.player_is_valid[<context.args.first>]>:
-            - if <server.match_player[<context.args.first>].has_flag[jail]>:
-                - flag <server.match_player[<context.args.first>]> jail:!
+            - if <server.match_player[<context.args.first>].has_flag[jailed]>:
+                - flag <server.match_player[<context.args.first>]> jailed:!
             - else:
-                - narrate "<yaml[UtilizenLang].read[jailnotinjail].parsed>"
+                - narrate <yaml[UtilizenLang].read[jailnotinjail].parsed>
         - else:
-            - narrate "<yaml[UtilizenLang].read[jailplnotexist].parsed>"
+            - narrate <yaml[UtilizenLang].read[jailplnotexist].parsed>
     - else:
-        - narrate "<yaml[UtilizenLang].read[jailnoplayer].parsed>"
-UtilizenJailQuitWorld:
-    type: world
-    debug: false
-    events:
-        on player quits:
-        - if <player.has_flag[jail]>:
-            - yaml id:UtilizenPlayerdata set <player.uuid>.jail.duration:<player.flag[jail].expiration>
-            - yaml savefile:../Utilizen/playerdata.yml id:UtilizenPlayerdata
-            - flag <player> jail:!
-        on player joins:
-        - if <yaml[UtilizenPlayerdata].read[<player.uuid>.jail.duration]||null> != null:
-            - flag <player> jail:true d:<yaml[UtilizenPlayerdata].read[<player.uuid>.jail.duration]>
-            - teleport <player> <yaml[UtilizenServerdata].read[jailname.<yaml[UtilizenServerdata].list_keys[jailname].random>]>
-            - narrate "<yaml[UtilizenLang].read[jailstilljailed].parsed>"
-            - if <player.is_online> && <player[<player>]||null> != null:
-                - waituntil rate:20t !<player.has_flag[jail]||null>
-                - if <server.match_player[<player.name>]||null> == null:
-                    - stop
-                - teleport <player> <yaml[UtilizenPlayerdata].read[<player.uuid>.jail.location]>
-                - yaml id:UtilizenPlayerdata set <player.uuid>.jail:!
-                - yaml savefile:../Utilizen/playerdata.yml id:UtilizenPlayerdata
-                - narrate "<yaml[UtilizenLang].read[jailexit].parsed>"
-                - stop
+        - narrate <yaml[UtilizenLang].read[jailnoplayer].parsed>
 UtlizenSetHomeCommand:
     type: command
     debug: false

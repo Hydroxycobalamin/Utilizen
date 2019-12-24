@@ -56,7 +56,7 @@ jailwrongsyntax: '<&3>[Jail] Invalid Syntax. Syntax: <&b>/jail [Player] [Jailnam
 jailalreadyjailed: '<&3>[Jail] This player is already jailed'
 jailsyntax: '<&3>[Jail] Syntax <&b>/jail [Player] [Jailname] [Time]'
 jailstilljailed: '<&3>[Jail] You still have to serve your sentence!'
-jailnopermission: '<&3>[Jail] You are not allowed to use this command until you have served your sentence!'
+jailnopermission: '<&3>[Jail] You are not allowed to do this, until you have served your sentence!'
 hatoccupied: '<&3>[Hat] The helmet-slot is occupied'
 spawn: '<&3>[Spawn] You are at the spawn now'
 backinvalid: '<&3>[Back] You have no Back-Point'

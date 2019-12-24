@@ -78,8 +78,34 @@ UtilizenJailHandler:
     debug: false
     events:
         on player teleports flagged:jailed:
+        - ratelimit <player> 1t
+        - yaml id:UtilizenPlayerdata set <player.uuid>.jail.duration:<player.flag[jailed].expiration>
+        - yaml savefile:../Utilizen/playerdata.yml id:UtilizenPlayerdata
         - flag player jailed:!
         - teleport <context.origin>
-        - flag player jailed
-        - ratelimit <player> 1t
-        - narrate "<yaml[UtilizenLang].read[jailnopermission].parsed>"
+        - flag player jailed d:<yaml[UtilizenPlayerdata].read[<player.uuid>.jail.duration]>
+        - narrate <yaml[UtilizenLang].read[jailnopermission].parsed>
+        on player quits flagged:jailed:
+        - yaml id:UtilizenPlayerdata set <player.uuid>.jail.duration:<player.flag[jailed].expiration>
+        - yaml savefile:../Utilizen/playerdata.yml id:UtilizenPlayerdata
+        - flag player jailed:!
+        on player breaks block flagged:jailed:
+        - determine passively cancelled
+        - narrate <yaml[UtilizenLang].read[jailnopermission].parsed>
+        on player places block flagged:jailed:
+        - determine passivevly cancelled
+        - narrate <yaml[UtilizenLang].read[jailnopermission].parsed>
+        on player joins:
+        - if <yaml[UtilizenPlayerdata].contains[<player.uuid>.jail.duration]||false>:
+            - teleport <player> <yaml[UtilizenServerdata].read[jailname.<yaml[UtilizenServerdata].list_keys[jailname].random>]>
+            - wait 1t
+            - flag player jailed d:<yaml[UtilizenPlayerdata].read[<player.uuid>.jail.duration]>
+            - narrate <yaml[UtilizenLang].read[jailstilljailed].parsed>
+            - if <player.is_online> && <player[<player>]||null> != null:
+                - waituntil rate:20t !<player.has_flag[jailed]||null>
+                - if <server.match_player[<player.name>]||null> == null:
+                    - stop
+                - teleport <yaml[UtilizenPlayerdata].read[<player.uuid>.jail.location]>
+                - yaml id:UtilizenPlayerdata set <player.uuid>.jail:!
+                - yaml savefile:../Utilizen/playerdata.yml id:UtilizenPlayerdata
+                - narrate <yaml[UtilizenLang].read[jailexit].parsed>
