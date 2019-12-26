@@ -663,16 +663,27 @@ UtilizenVanishCommand:
     type: command
     debug: false
     name: vanish
-    description: makes you invisible
+    description: Be Invisible!
     usage: /vanish
-    permission: Utilizen.vanish
+    permission: utilizen.vanish
     permission message: <&3>[Permission] You need the permission <&b><permission>
     tab complete:
-        - if !<context.server>:
-            - stop
+    - if !<context.server>:
+        - stop
     script:
-    - invisible <player> toggle
-    - narrate "<yaml[UtilizenLang].read[vanishactivated].parsed>"
+    - if <context.server>:
+        - announce to_console "[Utilizen] This command can not be executed from console"
+        - stop
+    - else if !<player.has_flag[vanish]>:
+        - flag player vanish
+        - cast invisibility d:99999 hide_particles
+        - adjust <player> hide_from_players
+        - narrate <yaml[UtilizenLang].read[vanishactivated].parsed>
+    - else:
+        - flag player vanish:!
+        - cast invisibility remove
+        - adjust <player> show_to_players
+        - narrate <yaml[UtilizenLang].read[vanishdeactivated].parsed>
 UtilizenBurnCommand:
     type: command
     debug: false
