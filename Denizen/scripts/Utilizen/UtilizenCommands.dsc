@@ -653,7 +653,7 @@ UtilizenFlyCommand:
                 - adjust <server.match_player[<context.args.first>]> can_fly:false
                 - narrate <yaml[UtilizenLang].read[flydeactivatedotherpl].parsed>
                 - narrate <yaml[UtilizenLang].read[flydeactivated].parsed> targets:<server.match_player[<context.args.first>]>
-    - if !<player.can_fly>:
+    - else if !<player.can_fly>:
         - adjust <player> can_fly:true
         - narrate <yaml[UtilizenLang].read[flyactivated].parsed>
     - else:
