@@ -1,5 +1,5 @@
 # Utilizen
-Utilizen is an dScript which provides you with several commands and options for your own Minecraft Server.
+Utilizen is a Denizen Script which provides you with several commands and options for your own Minecraft Server.
 ## Requirements
 To make Utilizen work, you need the following plugins 
 * [Denizen](https://www.spigotmc.org/resources/denizen.21039/)
