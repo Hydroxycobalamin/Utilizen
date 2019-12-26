@@ -1,3 +1,13 @@
+##############################################
+#Author: Icecapade aka. Hydroxycobalamin
+#
+#You may use and modify this script for
+#your own use.
+#
+#If you want to publish your modified
+#version read the LICENSE-Terms here:
+#https://github.com/Hydroxycobalamin/Utilizen
+##############################################
 UtilizenCommandAFK:
     type: command
     debug: false

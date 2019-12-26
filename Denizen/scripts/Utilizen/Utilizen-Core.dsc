@@ -1,3 +1,13 @@
+##############################################
+#Author: Icecapade aka. Hydroxycobalamin
+#
+#You may use and modify this script for
+#your own use.
+#
+#If you want to publish your modified
+#version read the LICENSE-Terms here:
+#https://github.com/Hydroxycobalamin/Utilizen
+##############################################
 UtilizenYamlLoad:
     type: world
     debug: false
@@ -38,7 +48,7 @@ Utilizen:
         - case version:
             - narrate "Author: <script[UtilizenYamlData].yaml_key[author]>"
             - narrate "Version: <script[UtilizenYamlData].yaml_key[version]>"
-#Don't touch that!
+#Don't touch the lines below!
 UtilizenYamlData:
     type: yaml data
     version: DEV-2
