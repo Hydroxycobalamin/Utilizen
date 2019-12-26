@@ -643,6 +643,16 @@ UtilizenFlyCommand:
     - if !<context.server>:
         - stop
     script:
+    - if <player.has_permission[utilizen.fly.other]>:
+        - if <server.player_is_valid[<context.args.first>]||false>:
+            - if !<server.match_player[<context.args.first>].can_fly>:
+                - adjust <server.match_player[<context.args.first>]> can_fly:true
+                - narrate <yaml[UtilizenLang].read[flyactivatedotherpl].parsed>
+                - narrate <yaml[UtilizenLang].read[flyactivated].parsed> targets:<server.match_player[<context.args.first>]>
+            - else:
+                - adjust <server.match_player[<context.args.first>]> can_fly:false
+                - narrate <yaml[UtilizenLang].read[flydeactivatedotherpl].parsed>
+                - narrate <yaml[UtilizenLang].read[flydeactivated].parsed> targets:<server.match_player[<context.args.first>]>
     - if !<player.can_fly>:
         - adjust <player> can_fly:true
         - narrate <yaml[UtilizenLang].read[flyactivated].parsed>

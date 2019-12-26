@@ -21,6 +21,7 @@ To make Utilizen work, you need the following plugins
 | **utilizen.delwarp**  | Delete Warps |
 | **utilizen.feed**  | Feed yourself or other players |
 | **utilizen.fly**  | Give yourself fly-mode |
+| **utilizen.fly.other** | Give other fly-mode |
 | **utilizen.gamemode** | Main access to gamemode Command |
 | **utilizen.gamemode.others** | Access to change Gamemode from other players |
 | **utilizen.gamemode.survival** | Change yourself to survival |
