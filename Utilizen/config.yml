@@ -6,8 +6,8 @@ lang: 'en_US'
 #Allow bedspawn?
 allow-bed: 'true'
 
-#Allow max homes define a list here. The player will need the permission "utilizen.group.[groupname]"
-#to be allowed to set homes. Operators are allowed to have unlimited homes.
+#Allow max homes, define a list here. The player will need the permission "utilizen.group.[groupname]"
+#to be allowed to set homes.
 #Set as much groups you want to put here
 homes:
   admin: '7'
@@ -16,6 +16,9 @@ homes:
 
 #If the player doesnt have the permission, set default homes here
 default: '3'
+
+#Set the max homes allowed for OP's
+op-homes: '5'
 
 #You can use following Tags here:
 #<player.list_name> returns player's nickname

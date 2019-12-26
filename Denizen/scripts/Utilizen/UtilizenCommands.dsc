@@ -477,7 +477,7 @@ UtilizenUnJailCommand:
     tab complete:
     - if <context.args.size> < 1:
         - determine <server.list_online_players.parse[name]>
-    - if <context.args.size> == 1 && "!<context.raw_args.ends_with[ ]>":
+    - else if <context.args.size> == 1 && "!<context.raw_args.ends_with[ ]>":
         - determine <server.list_online_players.parse[name].filter[starts_with[<context.args.first>]]>
     script:
     - if <context.args.size> == 1:
@@ -492,9 +492,9 @@ UtilizenUnJailCommand:
         - narrate <yaml[UtilizenLang].read[jailnoplayer].parsed>
 UtlizenSetHomeCommand:
     type: command
-    debug: false
+    debug: true
     description: Sets your home
-    usage: /sethome [name]
+    usage: /sethome [Homename]
     name: sethome
     permission: utilizen.sethome
     permission message: <&3>[Permission] You need the permission <&b><permission>
@@ -503,34 +503,36 @@ UtlizenSetHomeCommand:
         - stop
     script:
     - if <context.args.is_empty>:
-        - narrate "<yaml[UtilizenLang].read[sethomenoargs].parsed>"
-        - stop
-    - if <context.args.size> == 1:
+        - narrate <yaml[UtilizenLang].read[sethomenoargs].parsed>
+    - else if <context.args.size> == 1:
         - if !<yaml[UtilizenPlayerdata].read[<player.uuid>.homes].get_sub_items[1].contains[<context.args.first>]>:
             - if <player.is_op>:
-                - goto a
+                - if <yaml[UtilizenPlayerdata].read[<player.uuid>.homes].size||0> <= <yaml[UtilizenConfig].read[op-homes]>:
+                        - narrate <yaml[UtilizenLang].read[sethomeset].parsed>
+                        - yaml set id:UtilizenPlayerdata <player.uuid>.homes:->:<context.args.first>/<player.location.simple>
+                        - yaml savefile:../Utilizen/playerdata.yml id:UtilizenPlayerdata
+                        - stop
             - foreach <yaml[UtilizenConfig].list_keys[homes]>:
                 - if <player.has_permission[utilizen.groups.<[value]>]>:
                     - if <yaml[UtilizenPlayerdata].read[<player.uuid>.homes].size||0> <= <yaml[UtilizenConfig].read[homes.<[value]>]>:
-                        - mark a
-                        - narrate "<yaml[UtilizenLang].read[sethomeset].parsed>"
+                        - narrate <yaml[UtilizenLang].read[sethomeset].parsed>
                         - yaml set id:UtilizenPlayerdata <player.uuid>.homes:->:<context.args.first>/<player.location.simple>
                         - yaml savefile:../Utilizen/playerdata.yml id:UtilizenPlayerdata
                         - stop
                     - else:
-                        - narrate "<yaml[UtilizenLang].read[sethometomuchhome]>"
+                        - narrate <yaml[UtilizenLang].read[sethometomuchhome]>
                         - stop
             - if <yaml[UtilizenPlayerdata].read[<player.uuid>.homes].size||0> <= <yaml[UtilizenConfig].read[default]>:
-                - narrate "<yaml[UtilizenLang].read[sethomeset].parsed>"
+                - narrate <yaml[UtilizenLang].read[sethomeset].parsed>
                 - yaml set id:UtilizenPlayerdata <player.uuid>.homes:->:<context.args.first>/<player.location.simple>
                 - yaml savefile:../Utilizen/playerdata.yml id:UtilizenPlayerdata
         - else:
-            - narrate "<yaml[UtilizenLang].read[sethomealreadyset].parsed>"
+            - narrate <yaml[UtilizenLang].read[sethomealreadyset].parsed>
 UtilizenDelHomeCommand:
     type: command
     debug: false
     description: Delete your Home
-    usage: /delhome [name]
+    usage: /delhome [name] (player)
     name: delhome
     permission: utilizen.delhome
     permission message: <&3>[Permission] You need the permission <&b><permission>
@@ -543,18 +545,18 @@ UtilizenDelHomeCommand:
     script:
     - if <player.has_permission[Utilizen.delhome.other]>:
         - if <context.args.size> == 2 && <server.player_is_valid[<context.args.get[2]>]>:
-            - if <yaml[UtilizenPlayerdata].read[<server.match_player[<context.args.get[2]>]>.homes].get_sub_items[1].contains[<context.args.first||null>]>:
+            - if <yaml[UtilizenPlayerdata].read[<server.match_player[<context.args.get[2]>].uuid>.homes].get_sub_items[1].contains[<context.args.first>]>:
                 - yaml set id:UtilizenPlayerdata set <server.match_player[<context.args.get[2]>].uuid>.homes:!|:<yaml[UtilizenPlayerdata].read[<server.match_player[<context.args.get[2]>].uuid>.homes].remove[<yaml[UtilizenPlayerdata].read[<player.uuid>.homes].get_sub_items[1].find[<context.args.first>]>]>
                 - yaml savefile:../Utilizen/playerdata.yml id:UtilizenPlayerdata
-                - narrate "<yaml[UtilizenLang].read[delhomedeleted].parsed>"
+                - narrate <yaml[UtilizenLang].read[delhomedeleted].parsed>
                 - stop
             - else:
-                - narrate "<yaml[UtilizenLang].read[delhomeothernohomexist].parsed>"
+                - narrate <yaml[UtilizenLang].read[delhomeothernohomeexist].parsed>
                 - stop
-    - if <yaml[UtilizenPlayerdata].read[<player.uuid>.homes].get_sub_items[1].contains[<context.args.first||null>]>:
+    - else if <yaml[UtilizenPlayerdata].read[<player.uuid>.homes].get_sub_items[1].contains[<context.args.first||null>]>:
         - yaml set id:UtilizenPlayerdata <player.uuid>.homes:!|:<yaml[UtilizenPlayerdata].read[<player.uuid>.homes].remove[<yaml[UtilizenPlayerdata].read[<player.uuid>.homes].get_sub_items[1].find[<context.args.first>]>]>
     - else:
-        - narrate "<yaml[UtilizenLang].read[delhomenohomeexist].parsed>"
+        - narrate <yaml[UtilizenLang].read[delhomenohomeexist].parsed>
 UtlizenHomeCommand:
     type: command
     debug: false
@@ -567,17 +569,19 @@ UtlizenHomeCommand:
     - if <yaml[UtilizenPlayerdata].contains[<player.uuid>.homes]>:
         - if <context.args.size> < 1:
             - determine <yaml[UtilizenPlayerdata].read[<player.uuid>.homes].get_sub_items[1]>
-        - if <context.args.size> == 1 && "!<context.raw_args.ends_with[ ]>":
+        - else if <context.args.size> == 1 && "!<context.raw_args.ends_with[ ]>":
             - determine <yaml[UtilizenPlayerdata].read[<player.uuid>.homes].get_sub_items[1].filter[starts_with[<context.args.first>]]>
     script:
+    - if <context.server>:
+        - announce to_console "[Utilizen] This command can not be executed from console"
+        - stop
     - if <context.args.is_empty>:
-        - if !<yaml[UtilizenPlayerdata].read[<player.uuid>.homes].size.is_empty||false>:
+        - if <yaml[UtilizenPlayerdata].read[<player.uuid>.homes].is_empty||false>:
             - teleport <location[<yaml[UtilizenPlayerdata].read[<player.uuid>.homes].get_sub_items[2].first>]>
-            - narrate "<yaml[UtilizenLang].read[homefirsthomed].parsed>"
-            - stop
-    - if <yaml[UtilizenPlayerdata].read[<player.uuid>.homes].get_sub_items[1].contains[<context.args.first>]||false>:
+            - narrate <yaml[UtilizenLang].read[homefirsthomed].parsed>
+    - else if <yaml[UtilizenPlayerdata].read[<player.uuid>.homes].get_sub_items[1].contains[<context.args.first>]||false>:
         - teleport <location[<yaml[UtilizenPlayerdata].read[<player.uuid>.homes].map_get[<context.args.first>]>]>
-        - narrate "<yaml[UtilizenLang].read[homehomed].parsed>"
+        - narrate <yaml[UtilizenLang].read[homehomed].parsed>
 UtilizenHatCommand:
     type: command
     debug: false
@@ -590,11 +594,14 @@ UtilizenHatCommand:
     - if !<context.server>:
         - stop
     script:
-    - if <player.equipment.helmet.material.name> == air:
+    - if <context.server>:
+        - announce to_console "[Utilizen] This command can not be executed from console"
+        - stop
+    - else if <player.equipment.helmet.material.name> == air:
         - equip head:<player.item_in_hand>
         - inventory set slot:<player.item_in_hand.slot> o:air
     - else:
-        - narrate "<yaml[UtilizenLang].read[hatoccupied].parsed>"
+        - narrate <yaml[UtilizenLang].read[hatoccupied].parsed>
 UtilizenSpawnCommand:
     type: command
     debug: false
@@ -607,7 +614,7 @@ UtilizenSpawnCommand:
     - if !<context.server>:
         - stop
     script:
-    - narrate "<yaml[UtilizenLang].read[spawn].parsed>"
+    - narrate <yaml[UtilizenLang].read[spawn].parsed>
     - teleport <player> <world[Test1].spawn_location>
 UtilizenBackCommand:
     type: command
@@ -623,7 +630,7 @@ UtilizenBackCommand:
     - if <yaml[UtilizenPlayerdata].contains[<player.uuid>.lastlocation]>:
         - teleport <player> <yaml[UtilizenPlayerdata].read[<player.uuid>.lastlocation]>
     - else:
-        - narrate "<yaml[UtilizenLang].read[backinvalid].parsed>"
+        - narrate <yaml[UtilizenLang].read[backinvalid].parsed>
 UtilizenFlyCommand:
     type: command
     debug: false
@@ -638,10 +645,10 @@ UtilizenFlyCommand:
     script:
     - if !<player.can_fly>:
         - adjust <player> can_fly:true
-        - narrate "<yaml[UtilizenLang].read[flyactivated].parsed>"
+        - narrate <yaml[UtilizenLang].read[flyactivated].parsed>
     - else:
         - adjust <player> can_fly:false
-        - narrate "<yaml[UtilizenLang].read[flydeactivated].parsed>"
+        - narrate <yaml[UtilizenLang].read[flydeactivated].parsed>
 UtilizenVanishCommand:
     type: command
     debug: false
