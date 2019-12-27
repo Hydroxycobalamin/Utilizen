@@ -82,7 +82,6 @@ unbaned: '<&3>[Unban] Player <server.match_offline_player[<context.args.get[1]>]
 unbannotbanned: '<&3>[Unban] This player is not banned'
 unbanplnotexist: '<&3>[Unban] This player does not exist'
 unbansyntax: '<&3>[Unban] Syntax: <&b>/unban [Player]'
-kickedstandard: 'You were kicked'
 kickwrongsyntax: '<&3>[Kick] Invalid Syntax. Syntax: <&b>/kick [Player] (Reason)'
 kickplnotexist: '<&3>[Kick] This player does not exist'
 kicksyntax: '<&3>[Kick] Syntax: <&b>/kick [Player] (Reason)'

@@ -884,8 +884,8 @@ UtilizenKickCommand:
     type: command
     debug: false
     name: kick
-    description: kick a player
-    usage: /kick [Player] (Grund)
+    description: Kick a player
+    usage: /kick [Player] (Reason)
     permission: utilizen.kick
     permission message: <&3>[Permission] You need the permission <&b><permission>
     tab complete:
@@ -898,28 +898,31 @@ UtilizenKickCommand:
         - if <server.player_is_valid[<context.args.first>]>:
             - choose <context.args.size>:
                 - case 1:
-                    - kick <server.match_player[<context.args.first>]> "reason:<yaml[UtilizenLang].read[kickedstandard]>"
+                    - kick <server.match_player[<context.args.first>]> "reason:<yaml[UtilizenConfig].read[kickreason]>"
                 - case 2:
                     - kick <server.match_player[<context.args.first>]> "reason:<context.args.get[2]>"
             - default:
-                - narrate "<yaml[UtilizenLang].read[kickwrongsyntax].parsed>"
+                - narrate <yaml[UtilizenLang].read[kickwrongsyntax].parsed>
         - else:
-            - narrate "<yaml[UtilizenLang].read[kickplnotexist].parsed>"
+            - narrate <yaml[UtilizenLang].read[kickplnotexist].parsed>
     - else:
-        - narrate "<yaml[UtilizenLang].read[kicksyntax].parsed>"
+        - narrate <yaml[UtilizenLang].read[kicksyntax].parsed>
 UtilizenKickallCommand:
     type: command
     debug: false
     name: kickall
-    description: kick everyone
+    description: Kick everyone
     usage: /kickall
     permission: utilizen.kickall
     permission message: <&3>[Permission] You need the permission <&b><permission>
     tab complete:
-        - if !<context.server>:
-            - stop
+    - if !<context.server>:
+        - stop
     script:
-    - kick <server.list_online_players> "reason:<yaml[UtilizenLang].read[kickedstandard]>"
+    - if <yaml[UtilizenConfig].read[kickops]>:
+        - kick <server.list_online_players.exclude[<player>]> "reason:<yaml[UtilizenConfig].read[kickreason]>"
+    - else:
+        - kick <server.list_online_players.filter[is_op.not].exclude[<player>]> "reason:<yaml[UtilizenConfig].read[kickreason]>"
 UtilizenGamemodeCommand:
     type: command
     debug: false

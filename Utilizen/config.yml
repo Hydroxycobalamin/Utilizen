@@ -20,8 +20,14 @@ default: '3'
 #Set the max homes allowed for OP's
 op-homes: '5'
 
-#Set the standard ban reason, if no reason is speficied
+#Set the standard ban reason, if no reason is specified
 banreason: 'You were banned'
+
+#Set the standard kick reason, if no reason is specified
+kickreason: 'You were kicked'
+
+#Should OP's be kicked on /kickall?
+kickops: 'false'
 
 #You can use following Tags here:
 #<player.list_name> returns player's nickname
