@@ -23,7 +23,7 @@ To make Utilizen work, you need the following plugins
 | **utilizen.fly**  | Give yourself fly-mode |
 | **utilizen.fly.other** | Give other fly-mode |
 | **utilizen.gamemode** | Main access to gamemode Command |
-| **utilizen.gamemode.others** | Access to change Gamemode from other players |
+| **utilizen.gamemode.other** | Access to change Gamemode from other players |
 | **utilizen.gamemode.survival** | Change yourself to survival |
 | **utilizen.gamemode.adventure** | Change yourself to adventure |
 | **utilizen.gamemode.creative** | Change yourself to creative |

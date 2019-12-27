@@ -934,96 +934,74 @@ UtilizenGamemodeCommand:
     permission: utilizen.gamemode
     permission message: <&3>[Permission] You need the permission <&b><permission>
     tab complete:
-    - if <context.args.size> < 1:
+    - if <context.args.is_empty>:
         - determine <list[0|1|2|3|survival|creative|adventure|spectator]>
-    - if <context.args.size> == 1 && "!<context.raw_args.ends_with[ ]>":
+    - else if <context.args.size> == 1 && "!<context.raw_args.ends_with[ ]>":
         - determine <list[0|1|2|3|survival|creative|adventure|spectator].filter[starts_with[<context.args.first>]]>
-    - if <context.args.size> < 2:
-        - determine <server.list_online_players.parse[name]>
-    - if <context.args.size> == 2 && "!<context.raw_args.ends_with[ ]>":
-        - determine <server.list_online_players.parse[name].filter[starts_with[<context.args.get[2]>]]>
+    - else if <player.has_permission[utilizen.gamemode.other]>:
+        - if <context.args.size> < 2:
+            - determine <server.list_online_players.parse[name]>
+        - else if <context.args.size> == 2 && "!<context.raw_args.ends_with[ ]>":
+            - determine <server.list_online_players.parse[name].filter[starts_with[<context.args.get[2]>]]>
     script:
     - if <context.args.size> == 1:
-        - choose <context.args.first>:
-            - case "survival":
-                - if <player.has_permission[utilizen.gamemode.survival]>:
-                    - adjust <player> gamemode:survival
-                    - narrate "<yaml[UtilizenLang].read[gamemodechanged].parsed>"
-                - else:
-                    - narrate "<yaml[UtilizenLang].read[gamemodeneedpermsurvival].parsed>"
-            - case "0":
-                - if <player.has_permission[utilizen.gamemode.survival]>:
-                    - adjust <player> gamemode:survival
-                    - narrate "<yaml[UtilizenLang].read[gamemodechanged].parsed>"
-                - else:
-                    - narrate "<yaml[UtilizenLang].read[gamemodeneedpermsurvival].parsed>"
-            - case "creative":
-                - if <player.has_permission[utilizen.gamemode.creative]>:
-                    - adjust <player> gamemode:creative
-                    - narrate "<yaml[UtilizenLang].read[gamemodechanged].parsed>"
-                - else:
-                    - narrate "<yaml[UtilizenLang].read[gamemodeneedpermcreative].parsed>"
-            - case "1":
-                - if <player.has_permission[utilizen.gamemode.creative]>:
-                    - adjust <player> gamemode:creative
-                    - narrate "<yaml[UtilizenLang].read[gamemodechanged].parsed>"
-                - else:
-                    - narrate "<yaml[UtilizenLang].read[gamemodeneedpermcreative].parsed>"
-            - case "adventure":
-                - if <player.has_permission[utilizen.gamemode.adventure]>:
-                    - adjust <player> gamemode:adventure
-                    - narrate "<yaml[UtilizenLang].read[gamemodechanged].parsed>"
-                - else:
-                    - narrate "<yaml[UtilizenLang].read[gamemodeneedpermadventure].parsed>"
-            - case "2":
-                - if <player.has_permission[utilizen.gamemode.adventure]>:
-                    - adjust <player> gamemode:adventure
-                    - narrate "<yaml[UtilizenLang].read[gamemodechanged].parsed>"
-                - else:
-                    - narrate "<yaml[UtilizenLang].read[gamemodeneedpermadventure].parsed>"
-            - case "spectator":
-                - if <player.has_permission[utilizen.gamemode.spectator]>:
-                    - adjust <player> gamemode:spectator
-                    - narrate "<yaml[UtilizenLang].read[gamemodechanged].parsed>"
-                - else:
-                    - narrate "<yaml[UtilizenLang].read[gamemodeneedpermspectator].parsed>"
-            - case "3":
-                - if <player.has_permission[utilizen.gamemode.spectator]>:
-                    - adjust <player> gamemode:spectator
-                    - narrate "<yaml[UtilizenLang].read[gamemodechanged].parsed>"
-                - else:
-                    - narrate "<yaml[UtilizenLang].read[gamemodeneedpermspectator].parsed>"
-        - stop
-    - if <context.args.size> > 1:
-        - if <server.player_is_valid[<context.args.get[2]>]>:
-            - if <player.has_permission[utilizen.gamemode.others]>:
-                - choose <context.args.first>:
-                    - case "0":
-                        - adjust <server.match_player[<context.args.get[2]>]> gamemode:survival
-                        - narrate "<yaml[UtilizenLang].read[gamemodechangedother].parsed>"
-                        - narrate "<yaml[UtilizenLang].read[gamemodechanged].parsed>" targets:<server.match_player[<context.args.get[2]>]>
-                    - case "1":
-                        - adjust <server.match_player[<context.args.get[2]>]> gamemode:creative
-                        - narrate "<yaml[UtilizenLang].read[gamemodechangedother].parsed>"
-                        - narrate "<yaml[UtilizenLang].read[gamemodechanged].parsed>" targets:<server.match_player[<context.args.get[2]>]>
-                    - case "2":
-                        - adjust <server.match_player[<context.args.get[2]>]> gamemode:adventure
-                        - narrate "<yaml[UtilizenLang].read[gamemodechangedother].parsed>"
-                        - narrate "<yaml[UtilizenLang].read[gamemodechanged].parsed>" targets:<server.match_player[<context.args.get[2]>]>
-                    - case "3":
-                        - adjust <server.match_player[<context.args.get[2]>]> gamemode:spectator
-                        - narrate "<yaml[UtilizenLang].read[gamemodechangedother].parsed>"
-                        - narrate "<yaml[UtilizenLang].read[gamemodechanged].parsed>" targets:<server.match_player[<context.args.get[2]>]>
-                    - default:
-                        - narrate "<yaml[UtilizenLang].read[gamemodenotexist].parsed>"
-                - stop
-            - else:
-                - narrate "<yaml[UtilizenLang].read[gamemodeneedpermother].parsed>"
+        - if <context.args.first.is_integer>:
+            - choose <context.args.first>:
+                - case 0:
+                    - inject UtilizenGamemodeHandlerNumber
+                - case 1:
+                    - inject UtilizenGamemodeHandlerNumber
+                - case 2:
+                    - inject UtilizenGamemodeHandlerNumber
+                - case 3:
+                    - inject UtilizenGamemodeHandlerNumber
+                - default:
+                    - narrate <yaml[UtilizenLang].read[gamemodevalidnumber].parsed>
         - else:
-            - narrate "<yaml[UtilizenLang].read[gamemodeplnotexist].parsed>"
-            - stop
-    - if <context.args.size> != 1 || <context.args.size> != 2:
-        - narrate "<yaml[UtilizenLang].read[gamemodesyntax].parsed>"
+            - choose <context.args.first>:
+                - case survival:
+                    - inject UtilizenGamemodeHandler
+                - case creative:
+                    - inject UtilizenGamemodeHandler
+                - case adventure:
+                    - inject UtilizenGamemodeHandler
+                - case spectator:
+                    - inject UtilizenGamemodeHandler
+                - default:
+                    - narrate <yaml[UtilizenLang].read[gamemodevalidmode].parsed>
+    - else if <context.args.size> == 2:
+        - if <server.player_is_valid[<context.args.get[2]>]>:
+            - if <player.has_permission[utilizen.gamemode.other]>:
+                - if <context.args.first.is_integer>:
+                    - choose <context.args.first>:
+                        - case 0:
+                            - inject UtilizenGamemodeHandlerNumber
+                        - case 1:
+                            - inject UtilizenGamemodeHandlerNumber
+                        - case 2:
+                            - inject UtilizenGamemodeHandlerNumber
+                        - case 3:
+                            - inject UtilizenGamemodeHandlerNumber
+                        - default:
+                            - narrate <yaml[UtilizenLang].read[gamemodevalidnumber].parsed>
+                - else:
+                    - choose <context.args.first>:
+                        - case survival:
+                            - inject UtilizenGamemodeHandler
+                        - case creative:
+                            - inject UtilizenGamemodeHandler
+                        - case adventure:
+                            - inject UtilizenGamemodeHandler
+                        - case spectator:
+                            - inject UtilizenGamemodeHandler
+                        - default:
+                            - narrate <yaml[UtilizenLang].read[gamemodevalidmode].parsed>
+            - else:
+                - narrate <yaml[UtilizenLang].read[gamemodeneedpermother].parsed>
+        - else:
+            - narrate <yaml[UtilizenLang].read[gamemodeplnotexist].parsed>
+    - else:
+        - narrate <yaml[UtilizenLang].read[gamemodesyntax].parsed>
 UtilizenWeatherCommand:
     type: command
     debug: false
