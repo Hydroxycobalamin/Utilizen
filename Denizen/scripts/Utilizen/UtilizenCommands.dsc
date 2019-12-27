@@ -828,7 +828,7 @@ UtilizenBanCommand:
     debug: false
     name: ban
     description: Bans a player
-    usage: /ban [Player] (Grund) (Duration)
+    usage: /ban [Player] (Reason) (Duration)
     permission: utilizen.ban
     permission message: <&3>[Permission] You need the permission <&b><permission>
     tab complete:
@@ -843,18 +843,18 @@ UtilizenBanCommand:
         - if <server.player_is_valid[<context.args.first>]>:
             - choose <context.args.size>:
                 - case 1:
-                    - ban add <server.match_player[<context.args.first>]> "reason:<yaml[UtilizenLang].read[banstandard]>"
+                    - ban add <server.match_player[<context.args.first>]> "reason:<yaml[UtilizenConfig].read[banreason]>"
                 - case 2:
                     - ban add <server.match_player[<context.args.first>]> "reason:<context.args.get[2]>"
                 - case 3:
                     - if <duration[<context.args.get[3]>]||null> != null:
                         - ban add <server.match_player[<context.args.first>]> "reason:<context.args.get[2]>" duration:<context.args.get[3].as_duration>
                     - else:
-                        - narrate "<yaml[UtilizenLang].read[bantimeinvalid].parsed>"
+                        - narrate <yaml[UtilizenLang].read[bantimeinvalid].parsed>
         - else:
-            - narrate "<yaml[UtilizenLang].read[plnotexist].parsed>"
+            - narrate <yaml[UtilizenLang].read[plnotexist].parsed>
     - else:
-        - narrate "<yaml[UtilizenLang].read[bansyntax].parsed>"
+        - narrate <yaml[UtilizenLang].read[bansyntax].parsed>
 UtilizenUnbanCommand:
     type: command
     debug: false
@@ -873,13 +873,13 @@ UtilizenUnbanCommand:
         - if <server.player_is_valid[<context.args.first>]>:
             - if <server.match_offline_player[<context.args.first>].is_banned>
                 - ban remove <server.match_offline_player[<context.args.first>]>
-                - narrate "<yaml[UtilizenLang].read[unbaned].parsed>" targets:<server.list_online_players.filter[has_permission[Utilizen.ban]]>
+                - narrate <yaml[UtilizenLang].read[unbaned].parsed> targets:<server.list_online_players.filter[has_permission[Utilizen.ban]]>
             - else:
-                - narrate "<yaml[UtilizenLang].read[unbannotbanned].parsed>"
+                - narrate <yaml[UtilizenLang].read[unbannotbanned].parsed>
         - else:
-            - narrate "<yaml[UtilizenLang].read[unbanplnotexist].parsed>t"
+            - narrate <yaml[UtilizenLang].read[unbanplnotexist].parsed>
     - else:
-        - narrate "<yaml[UtilizenLang].read[unbansyntax].parsed>"
+        - narrate <yaml[UtilizenLang].read[unbansyntax].parsed>
 UtilizenKickCommand:
     type: command
     debug: false
