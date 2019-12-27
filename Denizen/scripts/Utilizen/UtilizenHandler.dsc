@@ -70,10 +70,9 @@ UtilizenMuteHandler:
     type: world
     debug: false
     events:
-        on player chats priority:-1:
-        - if <player.has_flag[mute]>:
-            - narrate "<yaml[UtilizenLang].read[muteyouremuted].parsed>"
-            - determine passively cancelled
+        on player chats flagged:mute:
+        - narrate <yaml[UtilizenLang].read[muteyouremuted].parsed>
+        - determine cancelled
 UtilizenGodHandler:
     type: world
     debug: false

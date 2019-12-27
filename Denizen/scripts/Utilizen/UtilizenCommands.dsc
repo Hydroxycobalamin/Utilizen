@@ -769,16 +769,16 @@ UtilizenMuteCommand:
     type: command
     debug: false
     name: mute
-    description: mute a player!
+    description: Mute a player!
     usage: /mute [Player] [Duration]
     permission: utilizen.mute
     permission message: <&3>[Permission] You need the permission <&b><permission>
     tab complete:
     - if <context.args.size> < 1:
         - determine <server.list_online_players.parse[name]>
-    - if <context.args.size> == 1 && "!<context.raw_args.ends_with[ ]>":
+    - else if <context.args.size> == 1 && "!<context.raw_args.ends_with[ ]>":
         - determine <server.list_online_players.parse[name].filter[starts_with[<context.args.first>]]>
-    - if <context.args.size> == 2 && "!<context.raw_args.ends_with[ ]>":
+    - else if <context.args.size> == 2 && "!<context.raw_args.ends_with[ ]>" && !<context.args.get[2].to_list.contains_any[s|m|h|d]>:
         - determine <list[<context.args.get[2]>s|<context.args.get[2]>m|<context.args.get[2]>h|<context.args.get[2]>d]>
     script:
     - if <context.args.size> >= 1:
@@ -786,43 +786,43 @@ UtilizenMuteCommand:
             - if !<server.match_player[<context.args.first>].has_flag[mute]>:
                 - if <context.args.size> >= 2:
                     - if <duration[<context.args.get[2]>]||null> != null:
-                        - flag <server.match_player[<context.args.first>]> mute:true duration:<context.args.get[2].as_duration>
-                        - narrate "<yaml[UtilizenLang].read[muteadmin].parsed>"
-                        - narrate "<yaml[UtilizenLang].read[mutewasmuted].parsed>"
+                        - flag <server.match_player[<context.args.first>]> mute duration:<context.args.get[2].as_duration>
+                        - narrate <yaml[UtilizenLang].read[muteadmin].parsed>
+                        - narrate <yaml[UtilizenLang].read[mutewasmuted].parsed>
                     - else:
-                        - narrate "<yaml[UtilizenLang].read[muteinvalidduration].parsed>"
+                        - narrate <yaml[UtilizenLang].read[muteinvalidduration].parsed>
                 - else:
-                    - narrate "<yaml[UtilizenLang].read[mutenoduration].parsed>"
+                    - narrate <yaml[UtilizenLang].read[mutenoduration].parsed>
             - else:
-                - narrate "<yaml[UtilizenLang].read[mutealreadymute].parsed>"
+                - narrate <yaml[UtilizenLang].read[mutealreadymute].parsed>
         - else:
-            - narrate "<yaml[UtilizenLang].read[muteplnotexist].parsed>"
+            - narrate <yaml[UtilizenLang].read[muteplnotexist].parsed>
     - else:
-        - narrate "<yaml[UtilizenLang].read[mutesyntax].parsed>"
+        - narrate <yaml[UtilizenLang].read[mutesyntax].parsed>
 UtilizenUnmuteCommand:
     type: command
     debug: false
     name: unmute
-    description: unmute a player
+    description: Unmute a player
     usage: /unmute [Player]
     permission: utilizen.unmute
     permission message: <&3>[Permission] You need the permission <&b><permission>
     tab complete:
     - if <context.args.size> < 1:
-        - determine <server.list_online_players.parse[name]>
+        - determine <server.list_online_players.filter[has_flag[mute]].parse[name]>
     - if <context.args.size> == 1 && "!<context.raw_args.ends_with[ ]>":
-        - determine <server.list_online_players.parse[name].filter[starts_with[<context.args.first>]]>
+        - determine <server.list_online_players.filter[has_flag[mute]].parse[name].filter[starts_with[<context.args.first>]]>
     script:
     - if <context.args.size> >= 1:
         - if <server.player_is_valid[<context.args.first>]>:
             - if <server.match_player[<context.args.first>].has_flag[mute]>:
                 - flag <server.match_player[<context.args.first>]> mute:!
             - else:
-                - narrate "<&3>[Unmute] Dieser Player ist nicht gemuted"
+                - narrate <yaml[UtilizenLang].read[unmutenomute]>
         - else:
-            - narrate "<&3>[Unmute] Dieser Player existiert nicht"
+            - narrate <yaml[UtilizenLang].read[muteplnotexist]>
     - else:
-        - narrate "<&3>[Unmute] Die Syntax lautet <&b>/unmute [Player]"
+        - narrate <yaml[UtilizenLang].read[unmutesyntax]>
 UtilizenBanCommand:
     type: command
     debug: false
