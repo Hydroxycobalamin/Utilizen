@@ -502,7 +502,7 @@ UtilizenUnJailCommand:
         - narrate <yaml[UtilizenLang].read[jailnoplayer].parsed>
 UtlizenSetHomeCommand:
     type: command
-    debug: true
+    debug: false
     description: Sets your home
     usage: /sethome [Homename]
     name: sethome
@@ -629,7 +629,7 @@ UtilizenSpawnCommand:
 UtilizenBackCommand:
     type: command
     name: back
-    description: back to back!
+    description: Warp to your last Position you were teleported from
     usage: /back
     permission: utilizen.back
     permission message: <&3>[Permission] You need the permission <&b><permission>
@@ -645,7 +645,7 @@ UtilizenFlyCommand:
     type: command
     debug: false
     name: fly
-    description: fly!
+    description: Activates Flymode
     usage: /fly
     permission: utilizen.fly
     permission message: <&3>[Permission] You need the permission <&b><permission>
@@ -698,14 +698,14 @@ UtilizenBurnCommand:
     type: command
     debug: false
     name: burn
-    description: burn some player!
+    description: Burn a player
     usage: /burn [Player] [Duration]
     permission: utilizen.burn
     permission message: <&3>[Permission] You need the permission <&b><permission>
     tab complete:
     - if <context.args.size> < 1:
         - determine <server.list_online_players.parse[name]>
-    - if <context.args.size> == 1 && "!<context.raw_args.ends_with[ ]>":
+    - else if <context.args.size> == 1 && "!<context.raw_args.ends_with[ ]>":
         - determine <server.list_online_players.parse[name].filter[starts_with[<context.args.first>]]>
     script:
     - if <context.args.size> >= 1:
@@ -714,18 +714,18 @@ UtilizenBurnCommand:
                 - if <duration[<context.args.get[2]>]||null> != null:
                     - burn <server.match_player[<context.args.first>]> <context.args.get[2].as_duration>
                 - else:
-                    - narrate "<yaml[UtilizenLang].read[burntimeinvalid].parsed>"
+                    - narrate <yaml[UtilizenLang].read[burntimeinvalid].parsed>
             - else:
-                - narrate "<yaml[UtilizenLang].read[burnnotime].parsed>"
+                - narrate <yaml[UtilizenLang].read[burnnotime].parsed>
         - else:
-            - narrate "<yaml[UtilizenLang].read[burnplnotexist].parsed>"
+            - narrate <yaml[UtilizenLang].read[burnplnotexist].parsed>
     - else:
-        - narrate "<yaml[UtilizenLang].read[burnsyntax].parsed>"
+        - narrate <yaml[UtilizenLang].read[burnsyntax].parsed>
 UtilizenHealCommand:
     type: command
     debug: false
     name: heal
-    description: heals you
+    description: Heal yourself or a player
     usage: /heal (Player)
     permission: utilizen.heal
     permission message: <&3>[Permission] You need the permission <&b><permission>
@@ -735,21 +735,20 @@ UtilizenHealCommand:
     - if <context.args.size> == 1 && "!<context.raw_args.ends_with[ ]>":
         - determine <server.list_online_players.parse[name].filter[starts_with[<context.args.first>]]>
     script:
-    - if <context.args.size> == 0:
+    - if <context.args.is_empty:
         - heal <player>
-        - narrate "<yaml[UtilizenLang].read[healhealed].parsed>"
-        - stop
-    - if <server.player_is_valid[<context.args.first>]>:
+        - narrate <yaml[UtilizenLang].read[healhealed].parsed>
+    - else if <server.player_is_valid[<context.args.first>]>:
         - heal <server.match_player[<context.args.first>]>
-        - narrate "<yaml[UtilizenLang].read[healadmin].parsed>"
-        - narrate "<yaml[UtilizenLang].read[healhealed].parsed>" targets:<server.match_player[<context.args.first>]>
+        - narrate <yaml[UtilizenLang].read[healadmin].parsed>
+        - narrate <yaml[UtilizenLang].read[healhealed].parsed> targets:<server.match_player[<context.args.first>]>
     - else:
-        - narrate "<yaml[UtilizenLang].read[healplnotexist].parsed>"
+        - narrate <yaml[UtilizenLang].read[healplnotexist].parsed>
 UtilizenFeedCommand:
     type: command
     debug: false
     name: feed
-    description: feed someone!
+    description: Feed someone!
     usage: /feed (Player)
     permission: utilizen.feed
     permission message: <&3>[Permission] You need the permission <&b><permission>
@@ -759,20 +758,13 @@ UtilizenFeedCommand:
     - if <context.args.size> == 1 && "!<context.raw_args.ends_with[ ]>":
         - determine <server.list_online_players.parse[name].filter[starts_with[<context.args.first>]]>
     script:
-    - if <context.args.size> == 0:
-        - while <player.food_level> != 20:
-            - if <[loop_index]> >= 40:
-                - stop
-            - feed <player> amount:1
-        - narrate "<yaml[UtilizenLang].read[feedfeeded].parsed>"
-        - stop
+    - if <context.args.is_empty>:
+        - adjust <player> food_level:20
+        - narrate <yaml[UtilizenLang].read[feedfeeded].parsed>
     - if <server.player_is_valid[<context.args.first>]>:
-        - while <server.match_player[<context.args.first>].food_level> != 20:
-            - if <[loop_index]> >= 40:
-                - stop
-            - feed <server.match_player[<context.args.first>]> amount:1
-        - narrate "<yaml[UtilizenLang].read[feedadmin].parsed>"
-        - narrate "<yaml[UtilizenLang].read[feedfeeded].parsed>" targets:<server.match_player[<context.args.first>]>
+        - adjust <server.match_player[<context.args.first>]> food_level:20
+        - narrate <yaml[UtilizenLang].read[feedadmin].parsed>
+        - narrate <yaml[UtilizenLang].read[feedfeeded].parsed> targets:<server.match_player[<context.args.first>]>
 UtilizenMuteCommand:
     type: command
     debug: false
