@@ -1004,7 +1004,7 @@ UtilizenGamemodeCommand:
         - narrate <yaml[UtilizenLang].read[gamemodesyntax].parsed>
 UtilizenWeatherCommand:
     type: command
-    debug: true
+    debug: false
     name: weather
     description: Changes the weather
     usage: /weather [Type] (Duration)
@@ -1061,7 +1061,7 @@ UtilizenWeatherCommand:
         - narrate <yaml[UtilizenLang].read[weathertypes].parsed>
 UtilizenTimeCommand:
     type: command
-    debug: true
+    debug: false
     name: time
     description: change time
     usage: /time [day|night|set] (Time in Ticks)
