@@ -1061,32 +1061,34 @@ UtilizenWeatherCommand:
         - narrate <yaml[UtilizenLang].read[weathertypes].parsed>
 UtilizenTimeCommand:
     type: command
-    debug: false
+    debug: true
     name: time
     description: change time
-    usage: /time [day|night|set] (Zeit)
+    usage: /time [day|night|set] (Time in Ticks)
     permission: utilizen.time
     permission message: <&3>[Permission] You need the permission <&b><permission>
     tab complete:
-    - if <context.args.size> <= 1 && "!<context.raw_args.ends_with[ ]>":
+    - if <context.args.is_empty>:
         - determine <list[day|night|set]>
+    - else if <context.args.size> == 1 && "!<context.raw_args.ends_with[ ]>":
+        - determine <list[day|night|set].filter[starts_with[<context.args.first>]]>:
     script:
-    - if <context.args.size> == 1:
+    - if <context.args.size> <= 2:
         - choose <context.args.first>:
             - case day:
-                - time 1000t
-                - narrate "<yaml[UtilizenLang].read[timeday].parsed>"
+                - time 0t
+                - narrate <yaml[UtilizenLang].read[timeday].parsed>
             - case night:
-                - time 13000t
-                - narrate "<yaml[UtilizenLang].read[timenight].parsed>"
+                - time 14000t
+                - narrate <yaml[UtilizenLang].read[timenight].parsed>
             - case set:
-                - if <context.args.get[2].is_integer> && <context.args.get[2]> < 24000:
-                    - time <duration[<context.args.get[2]>].in_ticks>
-                    - narrate "<yaml[UtilizenLang].read[timevariable].parsed>"
+                - if <context.args.get[2].is_integer> && <context.args.get[2]> <= 24000:
+                    - time <context.args.get[2]>t
+                    - narrate <yaml[UtilizenLang].read[timevariable].parsed>
                 - else:
-                    - narrate "<yaml[UtilizenLang].read[timetohigh].parsed>"
+                    - narrate <yaml[UtilizenLang].read[timetohigh].parsed>
             - default:
-                - narrate "<yaml[UtilizenLang].read[timeargnotexist].parsed>"
+                - narrate <yaml[UtilizenLang].read[timeargnotexist].parsed>
 UtilizenTeleportCommand:
     type: command
     debug: false
