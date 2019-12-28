@@ -1032,7 +1032,7 @@ UtilizenWeatherCommand:
                 - weather storm
                 - weather thunder
                 - wait 2t
-                - adjust <player.world> thunder_duration:<world[Test1].weather_duration>
+                - adjust <player.world> thunder_duration:<player.world.weather_duration>
                 - narrate <yaml[UtilizenLang].read[weatherstorm].parsed>
             - default:
                 - narrate <yaml[UtilizenLang].read[weathernotexist].parsed>
