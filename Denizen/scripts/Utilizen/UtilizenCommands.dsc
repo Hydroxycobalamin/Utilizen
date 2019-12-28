@@ -1004,28 +1004,61 @@ UtilizenGamemodeCommand:
         - narrate <yaml[UtilizenLang].read[gamemodesyntax].parsed>
 UtilizenWeatherCommand:
     type: command
-    debug: false
+    debug: true
     name: weather
-    description: change the weather
-    usage: /weather [Type]
+    description: Changes the weather
+    usage: /weather [Type] (Duration)
     permission: utilizen.weather
     permission message: <&3>[Permission] You need the permission <&b><permission>
     tab complete:
-    - if <context.args.size> <= 1 && "!<context.raw_args.ends_with[ ]>":
+    - if <context.args.is_empty>:
         - determine <list[sun|rain|storm]>
+    - else if <context.args.size> == 1 && "!<context.raw_args.ends_with[ ]>":
+        - determine <list[sun|rain|storm].filter[starts_with[<context.args.first>]]>:
+    - else if <context.args.size> == 2 && "!<context.raw_args.ends_with[ ]>" && !<context.args.get[2].to_list.contains_any[s|m|h|d]>:
+        - determine <list[<context.args.get[2]>s|<context.args.get[2]>m|<context.args.get[2]>h|<context.args.get[2]>d]>
     script:
     - if <context.args.size> == 1:
         - choose <context.args.first>:
             - case sun:
                 - weather sunny
+                - adjust <player.world> thunder_duration:0
+                - narrate <yaml[UtilizenLang].read[weathersun].parsed>
             - case rain:
                 - weather storm
+                - adjust <player.world> thunder_duration:0
+                - narrate <yaml[UtilizenLang].read[weatherrain].parsed>
             - case storm:
+                - weather storm
                 - weather thunder
+                - wait 2t
+                - adjust <player.world> thunder_duration:<world[Test1].weather_duration>
+                - narrate <yaml[UtilizenLang].read[weatherstorm].parsed>
             - default:
-                - narrate "<yaml[UtilizenLang].read[weathernotexist].parsed>"
+                - narrate <yaml[UtilizenLang].read[weathernotexist].parsed>
+    - else if <context.args.size> == 2:
+        - if <duration[<context.args.last>]||null> != null:
+            - choose <context.args.first>:
+                - case sun:
+                    - weather sunny
+                    - adjust <player.world> thunder_duration:0
+                    - adjust <player.world> weather_duration:<context.args.last>
+                    - narrate <yaml[UtilizenLang].read[weathersunduration].parsed>
+                - case rain:
+                    - weather storm
+                    - adjust <player.world> thunder_duration:0
+                    - adjust <player.world> weather_duration:<context.args.last>
+                    - narrate <yaml[UtilizenLang].read[weatherrainduration].parsed>
+                - case storm:
+                    - weather storm
+                    - weather thunder
+                    - adjust <player.world> weather_duration:<context.args.last>
+                    - adjust <player.world> thunder_duration:<context.args.last>
+                    - narrate <yaml[UtilizenLang].read[weatherstormduration].parsed>
+                - default:
+                    - narrate <yaml[UtilizenLang].read[weathernotexist].parsed>
     - else:
-        - narrate "<yaml[UtilizenLang].read[weathertypes].parsed>"
+        - narrate <yaml[UtilizenLang].read[weathertypes].parsed>
 UtilizenTimeCommand:
     type: command
     debug: false
