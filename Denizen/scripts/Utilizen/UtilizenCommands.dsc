@@ -301,7 +301,7 @@ UtilizenShowNickCommand:
     - if <[nicklist].contains[<context.args.first>]||false>:
         - foreach <yaml[UtilizenPlayerdata].list_deep_keys[].filter[contains[nickname]]>:
             - if <yaml[UtilizenPlayerdata].read[<[value]>]> == <context.args.first>:
-                - narrate <[value].as_player.name>
+                - narrate <[value].before[.].as_player.name>
 UtilizenSetWarpCommand:
     type: command
     debug: false
