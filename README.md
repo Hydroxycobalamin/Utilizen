@@ -50,7 +50,8 @@ To make Utilizen work, you need the following plugins
 | **utilizen.sethome** | Creates a home |
 | **utilizen.shownick** | Returns the original name of a nicked player |
 | **utilizen.time** | Set the current time |
-| **utilizen.tp** | Teleport to players or a location |
+| **utilizen.tp** | Teleport players |
+| **utilizen.tppos** | Teleport yourself to a location |
 | **utilizen.tphere** | Teleport players to you |
 | **utilizen.unban** | Unban a player |
 | **utilizen.unjail** | Take player out of jail |
