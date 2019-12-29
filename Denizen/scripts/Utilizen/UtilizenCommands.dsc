@@ -1208,13 +1208,6 @@ UtilizenGodCommand:
     - else:
         - flag <player> god:!
         - narrate "<yaml[UtilizenLang].read[goddeactivated].parsed>"
-UtilizenMOTD:
-    type: world
-    debug: false
-    events:
-        on player joins:
-        - foreach <yaml[UtilizenConfig].read[motd]>:
-            - narrate <[value].parsed>
 UtilizenInvseeCommand:
     type: command
     debug: false

@@ -20,6 +20,13 @@ UtilizenAFKHandler:
         - narrate <yaml[UtilizenLang].read[afkback].parsed> targets:<server.list_online_players>
         - flag player afk:!
         - permission remove smoothsleep.ignore
+UtilizenMOTD:
+    type: world
+    debug: false
+    events:
+        on player joins:
+        - foreach <yaml[UtilizenConfig].read[motd]>:
+            - narrate <[value].parsed>
 UtilizenBedSpawnHandler:
     type: world
     debug: false
