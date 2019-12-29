@@ -653,7 +653,14 @@ UtilizenFlyCommand:
     - if !<context.server>:
         - stop
     script:
-    - if <player.has_permission[utilizen.fly.other]>:
+    - if <context.args.is_empty>:
+        - if !<player.can_fly>:
+            - adjust <player> can_fly:true
+            - narrate <yaml[UtilizenLang].read[flyactivated].parsed>
+        - else:
+            - adjust <player> can_fly:false
+            - narrate <yaml[UtilizenLang].read[flydeactivated].parsed>
+    - else if <player.has_permission[utilizen.fly.other]>:
         - if <server.player_is_valid[<context.args.first>]||false>:
             - if !<server.match_player[<context.args.first>].can_fly>:
                 - adjust <server.match_player[<context.args.first>]> can_fly:true
@@ -663,12 +670,6 @@ UtilizenFlyCommand:
                 - adjust <server.match_player[<context.args.first>]> can_fly:false
                 - narrate <yaml[UtilizenLang].read[flydeactivatedotherpl].parsed>
                 - narrate <yaml[UtilizenLang].read[flydeactivated].parsed> targets:<server.match_player[<context.args.first>]>
-    - else if !<player.can_fly>:
-        - adjust <player> can_fly:true
-        - narrate <yaml[UtilizenLang].read[flyactivated].parsed>
-    - else:
-        - adjust <player> can_fly:false
-        - narrate <yaml[UtilizenLang].read[flydeactivated].parsed>
 UtilizenVanishCommand:
     type: command
     debug: false
@@ -735,7 +736,7 @@ UtilizenHealCommand:
     - if <context.args.size> == 1 && "!<context.raw_args.ends_with[ ]>":
         - determine <server.list_online_players.parse[name].filter[starts_with[<context.args.first>]]>
     script:
-    - if <context.args.is_empty:
+    - if <context.args.is_empty>:
         - heal <player>
         - narrate <yaml[UtilizenLang].read[healhealed].parsed>
     - else if <server.player_is_valid[<context.args.first>]>:
