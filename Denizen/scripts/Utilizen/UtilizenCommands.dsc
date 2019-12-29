@@ -1093,8 +1093,8 @@ UtilizenTeleportCommand:
     type: command
     debug: false
     name: tp
-    description: teleporting!
-    usage: /tp [X Y Z|X Y Z World|Player] (Player)
+    description: Teleport players
+    usage: /tp [Player] (Player)
     permission: utilizen.tp
     permission message: <&3>[Permission] You need the permission <&b><permission>
     tab complete:
@@ -1109,29 +1109,60 @@ UtilizenTeleportCommand:
         - case 1:
             - if <server.player_is_valid[<context.args.first>]>:
                 - teleport <player> <server.match_player[<context.args.first>].location>
-                - narrate "<yaml[UtilizenLang].read[teleporttoplayer].parsed>"
+                - narrate <yaml[UtilizenLang].read[teleporttoplayer].parsed>
             - else:
-                - narrate "<yaml[UtilizenLang].read[teleportwrongsyntax1].parsed>"
+                - narrate <yaml[UtilizenLang].read[teleportwrongsyntax1].parsed>
         - case 2:
             - if <server.player_is_valid[<context.args.first>]> && <server.player_is_valid[<context.args.get[2]>]>:
                 - teleport <server.match_player[<context.args.first>]> <server.match_player[<context.args.get[2]>].location>
-                - narrate "<yaml[UtilizenLang].read[teleportpltopl].parsed>"
+                - narrate <yaml[UtilizenLang].read[teleportpltopl].parsed>
             - else:
-                - narrate "<yaml[UtilizenLang].read[teleportwrongsyntax2].parsed>"
-        - case 3:
-            - if <context.args.first.is_integer> && <context.args.get[2].is_integer> && <context.args.get[3].is_integer>:
-                - teleport <player> <location[<context.args.first>,<context.args.get[2]>,<context.args.get[3]>,<player.location.world.name>]>
-                - narrate "<yaml[UtilizenLang].read[teleporttopos].parsed>"
-            - else:
-                - narrate "<yaml[UtilizenLang].read[teleportwrongsyntax3].parsed>"
-        - case 4:
-            - if <context.args.first.is_integer> && <context.args.get[2].is_integer> && <context.args.get[3].is_integer> && <list[<server.list_worlds>].contains_text[<context.args.get[4]>]>:
-                - teleport <player> <location[<context.args.first>,<context.args.get[2]>,<context.args.get[3]>,<context.args.get[4]>]>
-                - narrate "<yaml[UtilizenLang].read[teleporttoworld].parsed>"
-            - else:
-                - narrate "<yaml[UtilizenLang].read[teleportwrongsyntax4].parsed>"
+                - narrate <yaml[UtilizenLang].read[teleportwrongsyntax2].parsed>
         - default:
-            - narrate "<yaml[UtilizenLang].read[teleportsyntax].parsed>"
+            - narrate <yaml[UtilizenLang].read[teleportsyntax].parsed>
+UtilizenTPPOSCommand:
+    type: command
+    name: tppos
+    description: Teleport to position
+    usage: /tppos [X] [Y] [Z] (World)
+    permission: utilizen.tppos
+    permission message: <&3>[Permission] You need the permission <&b><permission>
+    tab complete:
+    - if <context.args.is_empty>:
+        - determine <player.location.x.round>
+    - else if <context.args.size> == 1 && "!<context.raw_args.ends_with[ ]>":
+        - determine <player.location.x.round>
+    - else if <context.args.size> == 1:
+        - determine <player.location.y.round>
+    - else if <context.args.size> == 2 && "!<context.raw_args.ends_with[ ]>":
+        - determine <player.location.y.round>
+    - else if <context.args.size> == 2:
+        - determine <player.location.z.round>
+    - else if <context.args.size> == 3 && "!<context.raw_args.ends_with[ ]>":
+        - determine <player.location.z.round>
+    - else if <context.args.size> == 3:
+        - determine <server.list_worlds.parse[name]>
+    - else if <context.args.size> == 4 && "!<context.raw_args.ends_with[ ]>":
+        - determine <server.list_worlds.parse[name].filter[starts_with[<context.args.get[4]>]]>
+    script:
+    - if <context.args.size> <= 4:
+        - choose <context.args.size>:
+            - case 3:
+                - if <context.args.first.is_integer> && <context.args.get[2].is_integer> && <context.args.get[3].is_integer>:
+                    - teleport <location[<context.args.first>,<context.args.get[2]>,<context.args.get[3]>,<player.location.world.name>]>
+                    - narrate <yaml[UtilizenLang].read[teleporttopos].parsed>
+                - else:
+                    - narrate <yaml[UtilizenLang].read[teleportwrongsyntax3].parsed>
+            - case 4:
+                - if <context.args.first.is_integer> && <context.args.get[2].is_integer> && <context.args.get[3].is_integer> && <list[<server.list_worlds>].contains_text[<context.args.get[4]>]>:
+                    - teleport <location[<context.args.first>,<context.args.get[2]>,<context.args.get[3]>,<context.args.get[4]>]>
+                    - narrate <yaml[UtilizenLang].read[teleporttoworld].parsed>
+                - else:
+                    - narrate <yaml[UtilizenLang].read[teleportwrongsyntax4].parsed>
+            - default:
+                - narrate <yaml[UtilizenLang].read[teleportpossyntax].parsed>
+    - else:
+        - narrate <yaml[UtilizenLang].read[teleportpossyntax].parsed>
 UtilizenTphereCommand:
     type: command
     debug: false
