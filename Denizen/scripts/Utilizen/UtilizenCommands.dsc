@@ -1122,6 +1122,7 @@ UtilizenTeleportCommand:
             - narrate <yaml[UtilizenLang].read[teleportsyntax].parsed>
 UtilizenTPPOSCommand:
     type: command
+    debug: false
     name: tppos
     description: Teleport to position
     usage: /tppos [X] [Y] [Z] (World)
@@ -1167,24 +1168,27 @@ UtilizenTphereCommand:
     type: command
     debug: false
     name: tphere
-    description: teleport a player to you
+    description: Teleports a player to your position
     usage: /tphere [Player]
     permission: utilizen.tphere
     permission message: <&3>[Permission] You need the permission <&b><permission>
     tab complete:
-    - if <context.args.size> < 1:
+    - if <context.args.is_empty>:
         - determine <server.list_online_players.parse[name]>
     - if <context.args.size> == 1 && "!<context.raw_args.ends_with[ ]>":
         - determine <server.list_online_players.parse[name].filter[starts_with[<context.args.first>]]>
     script:
+    - if <context.server>:
+        - announce to_console "[Utilizen] This command can not be executed from console"
+        - stop
     - if <context.args.size> == 1:
         - if <server.player_is_valid[<context.args.first>]>:
             - teleport <server.match_player[<context.args.first>]> <player.location>
-            - narrate "<yaml[UtilizenLang].read[tphereadmin].parsed>" targets:<server.match_player[<context.args.first>]>
+            - narrate <yaml[UtilizenLang].read[tphereadmin].parsed> targets:<server.match_player[<context.args.first>]>
         - else:
-            - narrate "<yaml[UtilizenLang].read[tphereplnotexist].parsed>"
+            - narrate <yaml[UtilizenLang].read[tphereplnotexist].parsed>
     - else:
-        - narrate "<yaml[UtilizenLang].read[tpheresyntax].parsed>"
+        - narrate <yaml[UtilizenLang].read[tpheresyntax].parsed>
 UtilizenGodCommand:
     type: command
     debug: false
