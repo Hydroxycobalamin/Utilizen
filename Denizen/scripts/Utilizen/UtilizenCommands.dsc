@@ -1275,9 +1275,41 @@ UtilizenGCCommand:
         - stop
     script:
     - narrate "<yaml[UtilizenLang].read[gcuptime].parsed> <util.date.time.duration.sub[<server.start_time>].formatted>"
-    - narrate "<yaml[UtilizenLang].read[gcramfree].parsed> <server.ram_free.div[1048576].round>"
+    - narrate "<yaml[UtilizenLang].rwead[gcramfree].parsed> <server.ram_free.div[1048576].round>"
     - narrate "<yaml[UtilizenLang].read[gcramused].parsed> <server.ram_usage.div[1048576].round>"
     - narrate "<yaml[UtilizenLang].read[gcramallocated].parsed> <server.ram_allocated.div[1048576].round>"
     - narrate "<yaml[UtilizenLang].read[gctps].parsed> <server.recent_tps.first.add[<server.recent_tps.get[2].add[<server.recent_tps.get[3]>]>].div[3].round_to_precision[0.001]>
     - foreach <server.list_worlds.parse[name]>:
-        - narrate "<yaml[UtilizenLang].read[gcworld].parsed> <yaml[UtilizenLang].read[gcchunks].parsed> <world[<[value]>].loaded_chunks.size> <yaml[UtilizenLang].read[gcaientities].parsed> <world[<[value]>].living_entities.size> <yaml[UtilizenLang].read[gctiles].parsed> <world[<[value]>].entities.size.sub[<world[<[value]>].living_entities.size>]>
+        - narrate "<yaml[UtilizenLang].read[gcworld].parsed> <yaml[UtilizenLang].read[gcchunks].parsed> <world[<[value]>].loaded_chunks.size> <yaml[UtilizenLang].read[gcaientities].parsed> <world[<[value]>].living_entities.size> <yaml[UtilizenLang].read[gctiles].parsed> <world[<[value]>].entities.size.sub[<world[<[value]>].living_entities.size>]>"
+UtilizenEnchantCommand:
+    type: command
+    debug: false
+    name: enchant
+    description: Enchants Items in your Hand
+    usage: /enchant
+    permission: utilizen.enchant
+    permission message: <&3>You need the permission <&b><permission>
+    tab complete:
+    - if <context.args.is_empty>:
+        - determine <server.list_enchantments.parse[to_lowercase]>
+    - else if <context.args.size> == 1 && "!<context.raw_args.ends_with[ ]>":
+        - determine <server.list_enchantments.parse[to_lowercase].filter[starts_with[<context.args.first>]]>
+    script:
+    - if <context.server>:
+        - announce to_console "[Utilizen] This command can not be executed from console"
+        - stop
+    - else if <context.args.size> == 1:
+        - if <server.list_enchantments.contains[<context.args.first>]>:
+            - inventory adjust slot:<player.held_item_slot> remove_enchantments:<context.args.first>
+            - narrate <yaml[UtilizenLang].read[enchantremove].parsed>
+    - else if <context.args.size> == 2:
+        - if <server.list_enchantments.contains[<context.args.first>]>:
+            - if <context.args.last.is_integer> && <context.args.last> > 0:
+                - inventory adjust slot:<player.held_item_slot> enchantments:<context.args.first>,<context.args.last>
+                - narrate <yaml[UtilizenLang].read[enchantadd].parsed>
+            - else:
+                - narrate <yaml[UtilizenLang].read[enchantnoint].parsed>
+        - else:
+            - narrate <yaml[UtilizenLang].read[enchantnotvalid].parsed>
+    - else:
+        - narrate <yaml[UtilizenLang].read[enchantsyntax].parsed>
