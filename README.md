@@ -19,6 +19,7 @@ To make Utilizen work, you need the following plugins
 | **utilizen.delhome.other** | Delete homes from others |
 | **utilizen.deljail**  | Delete Jails |
 | **utilizen.delwarp**  | Delete Warps |
+| **utilizen.enchant** | Enchants the Item in your Hand |
 | **utilizen.feed**  | Feed yourself or other players |
 | **utilizen.fly**  | Give yourself fly-mode |
 | **utilizen.fly.other** | Give other fly-mode |
