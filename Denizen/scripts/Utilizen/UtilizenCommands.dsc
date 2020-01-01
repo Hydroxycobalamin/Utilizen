@@ -1217,18 +1217,24 @@ UtilizenInvseeCommand:
     permission: utilizen.invsee
     permission message: <&3>You need the permission <&b><permission>
     tab complete:
-    - if <context.args.size> < 1:
+    - if <context.args.is_empty>:
         - determine <server.list_online_players.parse[name]>
-    - if <context.args.size> == 1 && "!<context.raw_args.ends_with[ ]>":
+    - else if <context.args.size> == 1 && "!<context.raw_args.ends_with[ ]>":
         - determine <server.list_online_players.parse[name].filter[starts_with[<context.args.first>]]>
     script:
-    - if <context.args.size> >= 1:
-        - if <server.player_is_valid[<context.args.first>]>:
-            - inventory open d:<server.match_player[<context.args.first>].inventory>
+    - if <context.server>:
+        - announce to_console "[Utilizen] This command can not be executed from console"
+        - stop
+    - else if <context.args.size> == 1:
+        - if <server.player_is_valid[<context.args.first>]> && <server.match_offline_player[<context.args.first>].is_online>:
+            - if <server.match_player[<context.args.first>]> == <player>:
+                - narrate <yaml[UtilizenLang].read[invseecantopenown].parsed>:
+            - else:
+                - inventory open d:<server.match_player[<context.args.first>].inventory>
         - else:
-            - narrate "<yaml[UtilizenLang].read[invseeplnotexist].parsed>"
+            - narrate <yaml[UtilizenLang].read[invseeplnotonline].parsed>
     - else:
-        - narrate "<yaml[UtilizenLang].read[invseesyntax].parsed>"
+        - narrate <yaml[UtilizenLang].read[invseesyntax].parsed>
 UtilizenClearinventoryCommand:
     type: command
     debug: false
@@ -1240,19 +1246,22 @@ UtilizenClearinventoryCommand:
     tab complete:
     - if <context.args.size> < 1:
         - determine <server.list_online_players.parse[name]>
-    - if <context.args.size> == 1 && "!<context.raw_args.ends_with[ ]>":
+    - else if <context.args.size> == 1 && "!<context.raw_args.ends_with[ ]>":
         - determine <server.list_online_players.parse[name].filter[starts_with[<context.args.first>]]>
     script:
-    - if <context.args.size> == 1:
+    - if <context.server>:
+        - announce to_console "[Utilizen] This command can not be executed from console"
+        - stop
+    - else if <context.args.size> == 1:
         - if <server.player_is_valid[<context.args.first>]>:
             - inventory clear d:player[holder=<server.match_player[<context.args.first>]>]
-            - narrate "<yaml[UtilizenLang].read[clearinventoryadmin].parsed>"
-            - narrate "<yaml[UtilizenLang].read[clearinventoryadmincleared].parsed>" targets:<server.match_player[<context.args.first>]>
+            - narrate <yaml[UtilizenLang].read[clearinventoryadmin].parsed>
+            - narrate <yaml[UtilizenLang].read[clearinventoryadmincleared].parsed> targets:<server.match_player[<context.args.first>]>
         - else:
-            - narrate "<yaml[UtilizenLang].read[clearinventoryplnotexist].parsed>"
+            - narrate <yaml[UtilizenLang].read[clearinventoryplnotexist].parsed>
     - else:
         - inventory clear d:player[holder=<player>]
-        - narrate "<yaml[UtilizenLang].read[clearinventorycleared].parsed>"
+        - narrate <yaml[UtilizenLang].read[clearinventorycleared].parsed>
 UtilizenGCCommand:
     type: command
     debug: false
