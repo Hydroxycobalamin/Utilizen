@@ -1274,10 +1274,10 @@ UtilizenGCCommand:
     - if !<context.server>:
         - stop
     script:
-    - narrate "Uptime: <util.date.time.duration.sub[<server.start_time>].formatted>"
-    - narrate "RAM Free: <&2><server.ram_free.div[1048576].round><&r>"
-    - narrate "RAM Used: <&2><server.ram_usage.div[1048576].round>"
-    - narrate "RAM Allocated <&2><server.ram_allocated.div[1048576].round>"
-    - narrate "Current TPS: <server.recent_tps.first.add[<server.recent_tps.get[2].add[<server.recent_tps.get[3]>]>].div[3].round_to_precision[0.001]>
+    - narrate "<yaml[UtilizenLang].read[gcuptime].parsed> <util.date.time.duration.sub[<server.start_time>].formatted>"
+    - narrate "<yaml[UtilizenLang].read[gcramfree].parsed> <server.ram_free.div[1048576].round>"
+    - narrate "<yaml[UtilizenLang].read[gcramused].parsed> <server.ram_usage.div[1048576].round>"
+    - narrate "<yaml[UtilizenLang].read[gcramallocated].parsed> <server.ram_allocated.div[1048576].round>"
+    - narrate "<yaml[UtilizenLang].read[gctps].parsed> <server.recent_tps.first.add[<server.recent_tps.get[2].add[<server.recent_tps.get[3]>]>].div[3].round_to_precision[0.001]>
     - foreach <server.list_worlds.parse[name]>:
-        - narrate "<[value]>: Chunks: <world[<[value]>].loaded_chunks.size> AIEntities:<world[<[value]>].living_entities.size> Tiles:<world[<[value]>].entities.size.sub[<world[<[value]>].living_entities.size>]>
+        - narrate "<yaml[UtilizenLang].read[gcworld].parsed> <yaml[UtilizenLang].read[gcchunks].parsed> <world[<[value]>].loaded_chunks.size> <yaml[UtilizenLang].read[gcaientities].parsed> <world[<[value]>].living_entities.size> <yaml[UtilizenLang].read[gctiles].parsed> <world[<[value]>].entities.size.sub[<world[<[value]>].living_entities.size>]>
