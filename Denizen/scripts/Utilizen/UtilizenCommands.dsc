@@ -762,7 +762,7 @@ UtilizenFeedCommand:
     - if <context.args.is_empty>:
         - adjust <player> food_level:20
         - narrate <yaml[UtilizenLang].read[feedfeeded].parsed>
-    - if <server.player_is_valid[<context.args.first>]>:
+    - else if <server.player_is_valid[<context.args.first>]>:
         - adjust <server.match_player[<context.args.first>]> food_level:20
         - narrate <yaml[UtilizenLang].read[feedadmin].parsed>
         - narrate <yaml[UtilizenLang].read[feedfeeded].parsed> targets:<server.match_player[<context.args.first>]>
