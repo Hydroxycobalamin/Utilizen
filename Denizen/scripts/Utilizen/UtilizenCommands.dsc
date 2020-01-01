@@ -1204,10 +1204,10 @@ UtilizenGodCommand:
     script:
     - if !<player.has_flag[god]>:
         - flag <player> god:true
-        - narrate "<yaml[UtilizenLang].read[godactivated].parsed>"
+        - narrate <yaml[UtilizenLang].read[godactivated].parsed>
     - else:
         - flag <player> god:!
-        - narrate "<yaml[UtilizenLang].read[goddeactivated].parsed>"
+        - narrate <yaml[UtilizenLang].read[goddeactivated].parsed>
 UtilizenInvseeCommand:
     type: command
     debug: false

@@ -80,13 +80,20 @@ UtilizenMuteHandler:
         on player chats flagged:mute:
         - narrate <yaml[UtilizenLang].read[muteyouremuted].parsed>
         - determine cancelled
+UtilizenVanishHandler:
+    type: world
+    debug: false
+    events:
+        on player damaged flagged:vanish:
+        - determine cancelled
 UtilizenGodHandler:
     type: world
     debug: false
     events:
-        on player damaged:
-        - if <player.has_flag[god]>:
-            - determine cancelled
+        on player damaged flagged:god:
+        - determine cancelled
+        on entity targets player flagged:god:
+        - determine cancelled
 UtilizenGamemodeHandler:
     type: task
     debug: false
