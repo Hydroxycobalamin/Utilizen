@@ -1194,16 +1194,16 @@ UtilizenGodCommand:
     type: command
     debug: false
     name: god
-    description: activate godmode
+    description: Activate Godmode
     usage: /god
-    permission: utilizen.tphere
+    permission: utilizen.god
     permission message: <&3>[Permission] You need the permission <&b><permission>
     tab complete:
     - if !<context.server>:
         - stop
     script:
     - if !<player.has_flag[god]>:
-        - flag <player> god:true
+        - flag <player> god
         - narrate <yaml[UtilizenLang].read[godactivated].parsed>
     - else:
         - flag <player> god:!
