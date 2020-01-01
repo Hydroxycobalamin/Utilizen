@@ -28,6 +28,7 @@ To make Utilizen work, you need the following plugins
 | **utilizen.gamemode.adventure** | Change yourself to adventure |
 | **utilizen.gamemode.creative** | Change yourself to creative |
 | **utilizen.gamemode.spectator** | Change yourself to spectator |
+| **utilizen.god** | Turn on your God Mode! |
 | **utilizen.gc** | Get Server Information |
 | **utilizen.hat**| Set a block as your new fancy hat |
 | **utilizen.heal** | Heal yourself or other players |
