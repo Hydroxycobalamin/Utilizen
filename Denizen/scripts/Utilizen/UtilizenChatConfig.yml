@@ -15,11 +15,11 @@ UtilizenChat:
         on player chats:
         - if <player.has_flag[jailed]>:
           - determine FORMAT:UtilizenFormatJailed
-        - if <player.has_permission[utilizen.group.admin]>:
+        - else if <player.has_permission[utilizen.group.admin]>:
           - determine FORMAT:UtilizenFormatAdmin
-        - if <player.has_permission[utilizen.group.moderator]>:
+        - else if <player.has_permission[utilizen.group.moderator]>:
           - determine FORMAT:UtilizenFormatModerator
-        - if <player.has_permission[utilizen.group.member]>:
+        - else if <player.has_permission[utilizen.group.member]>:
           - determine FORMAT:UtilizenFormatMember
         - else:
           - determine FORMAT:UtilizenFormatDefault
