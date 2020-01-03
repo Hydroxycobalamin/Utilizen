@@ -29,6 +29,9 @@ kickreason: 'You were kicked'
 #Should OP's be kicked on /kickall?
 kickops: 'false'
 
+#Enable enchantments over the vanilla max level
+enchants: 'true'
+
 #You can use following Tags here:
 #<player.list_name> returns player's nickname
 #<player.name> returns player's Minecraft name

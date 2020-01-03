@@ -1304,9 +1304,18 @@ UtilizenEnchantCommand:
             - narrate <yaml[UtilizenLang].read[enchantremove].parsed>
     - else if <context.args.size> == 2:
         - if <server.list_enchantments.contains[<context.args.first>]>:
-            - if <context.args.last.is_integer> && <context.args.last> > 0:
-                - inventory adjust slot:<player.held_item_slot> enchantments:<context.args.first>,<context.args.last>
-                - narrate <yaml[UtilizenLang].read[enchantadd].parsed>
+            - if <context.args.last.is_integer>:
+                - if <player.item_in_hand.material.name> != air:
+                    - if <yaml[UtilizenConfig].read[enchants]> && <context.args.last> > 0:
+                        - inventory adjust slot:<player.held_item_slot> enchantments:<context.args.first>,<context.args.last>
+                        - narrate <yaml[UtilizenLang].read[enchantadd].parsed>
+                    - else if <context.args.last.is_integer> && <context.args.last> <= <server.enchantment_max_level[<context.args.first>]> && <context.args.last> >= <server.enchantment_start_level[<context.args.first>]>:
+                        - inventory adjust slot:<player.held_item_slot> enchantments:<context.args.first>,<context.args.last>
+                        - narrate <yaml[UtilizenLang].read[enchantadd].parsed>
+                    - else:
+                        - narrate <yaml[UtilizenLang].read[enchantnoint].parsed>
+                - else:
+                    - narrate <yaml[UtilizenLang].read[enchantnoitem].parsed>
             - else:
                 - narrate <yaml[UtilizenLang].read[enchantnoint].parsed>
         - else:
