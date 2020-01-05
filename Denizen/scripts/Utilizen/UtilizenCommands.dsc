@@ -173,7 +173,7 @@ UtilizenNickCommand:
     - if <context.args.size> >= 1:
         - if <server.player_is_valid[<context.args.first>]>:
             - if <context.args.size> == 2:
-                - foreach <list[<yaml[UtilizenServerdata].read[nicknames]>|<player.name>]>:
+                - foreach <list[<yaml[UtilizenServerdata].read[nicknames]||null>|<player.name>]>:
                     - if <server.list_players.parse[name].contains[<context.args.get[2]>]> || <[value]> == <context.args.get[2]>:
                         - narrate <yaml[UtilizenLang].read[nickinuse].parsed>
                         - stop
@@ -225,12 +225,13 @@ UtilizenShowNickCommand:
     - else:
         - determine <[nicklist]>
     script:
-    - foreach <yaml[Utilizen_<player.uuid>].list_deep_keys[].filter[contains[nickname]]>:
-        - define nicklist:->:<yaml[Utilizen_<player.uuid>].read[<[value]>]>
+    - foreach <yaml.list.filter[contains_any[utilizen_]]>:
+        - if <yaml[<[value]>].contains[<[value].after[utilizen_]>.nickname]>:
+            - define nicklist:->:<yaml[<[value]>].read[<[value].after[utilizen_]>.nickname]>
     - if <[nicklist].contains[<context.args.first>]||false>:
-        - foreach <yaml[Utilizen_<player.uuid>].list_deep_keys[].filter[contains[nickname]]>:
-            - if <yaml[Utilizen_<player.uuid>].read[<[value]>]> == <context.args.first>:
-                - narrate <[value].before[.].as_player.name>
+        - foreach <yaml.list.filter[contains_any[utilizen_]]>:
+            - if <yaml[<[value]>].read[<[value].after[utilizen_]>.nickname]> == <context.args.first>:
+                - narrate <[value].after[utilizen_].as_player.name>
 UtilizenSetWarpCommand:
     type: command
     debug: false
