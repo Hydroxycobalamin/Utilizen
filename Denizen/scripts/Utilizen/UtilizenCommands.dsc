@@ -1207,7 +1207,7 @@ UtilizenGCCommand:
         - stop
     script:
     - narrate "<yaml[UtilizenLang].read[gcuptime].parsed> <util.date.time.duration.sub[<server.start_time>].formatted>"
-    - narrate "<yaml[UtilizenLang].rwead[gcramfree].parsed> <server.ram_free.div[1048576].round>"
+    - narrate "<yaml[UtilizenLang].read[gcramfree].parsed> <server.ram_free.div[1048576].round>"
     - narrate "<yaml[UtilizenLang].read[gcramused].parsed> <server.ram_usage.div[1048576].round>"
     - narrate "<yaml[UtilizenLang].read[gcramallocated].parsed> <server.ram_allocated.div[1048576].round>"
     - narrate "<yaml[UtilizenLang].read[gctps].parsed> <server.recent_tps.first.add[<server.recent_tps.get[2].add[<server.recent_tps.get[3]>]>].div[3].round_to_precision[0.001]>
