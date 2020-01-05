@@ -49,7 +49,7 @@ UtilizenCommandAFK:
         - permission remove smoothsleep.ignore
 UtilizenCommandMail:
     type: command
-    debug: false
+    debug: true
     name: mail
     description: Read and Send mails!
     usage: /mail [send|read|remove|sendall] (Player) (Message)
@@ -107,9 +107,10 @@ UtilizenCommandMail:
                             - foreach next
                         - yaml id:UtilizenServerdata set msgcount:++
                         - ~yaml load:../Utilizen/data/players/<[value]> id:Utilizen_<[value].before[.yml]>
-                        - yaml id:Utilizen_<[value].before[.yml]> set <[value]>.mailbox.msg<yaml[UtilizenServerdata].read[msgcount]||0>:<player.uuid>|<context.args.remove[1].space_separated>
+                        - yaml id:Utilizen_<[value].before[.yml]> set <[value].before[.yml]>.mailbox.msg<yaml[UtilizenServerdata].read[msgcount]||0>:<player.uuid>|<context.args.remove[1].space_separated>
                         - ~yaml savefile:../Utilizen/data/players/<[value]> id:Utilizen_<[value].before[.yml]>
                         - if !<player[<[value].before[.yml]>].is_online>:
+                            - yaml unload id:Utilizen_<[value].before[.yml]>
                     - ~yaml savefile:../Utilizen/data/serverdata.yml id:UtilizenServerdata
                     - narrate <yaml[UtilizenLang].read[mailsendall].parsed>
         - default:
