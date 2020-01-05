@@ -17,11 +17,11 @@ UtilizenYamlLoad:
             - yaml create id:UtilizenServerdata
             - yaml savefile:../Utilizen/serverdata.yml id:UtilizenServerdata
         - yaml load:../Utilizen/config.yml id:UtilizenConfig
-        - yaml load:../Utilizen/<yaml[UtilizenConfig].read[lang]>.yml id:UtilizenLang
+        - yaml load:../Utilizen/lang/<yaml[UtilizenConfig].read[lang]>.yml id:UtilizenLang
         - yaml load:../Utilizen/serverdata.yml id:UtilizenServerdata
         on reload scripts:
         - yaml load:../Utilizen/config.yml id:UtilizenConfig
-        - yaml load:../Utilizen/<yaml[UtilizenConfig].read[lang]>.yml id:UtilizenLang
+        - yaml load:../Utilizen/lang/<yaml[UtilizenConfig].read[lang]>.yml id:UtilizenLang
         - yaml savefile:../Utilizen/serverdata.yml id:UtilizenServerdata
         - yaml load:../Utilizen/serverdata.yml id:UtilizenServerdata
         on player joins:
