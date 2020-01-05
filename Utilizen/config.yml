@@ -7,12 +7,14 @@ lang: 'en_US'
 allow-bed: 'true'
 
 #Allow max homes, define a list here. The player will need the permission "utilizen.group.[groupname]"
-#to be allowed to set homes.
-#Set as much groups you want to put here
+#to be allowed to set homes. The Number after : determines the allowed number of homes
+#Your group name MUST be exactly the same as the group name of your permission plugin
+#You need that also for other parts of Utilizen which needs this group system (example: prefixes & suffixes). 
+#So you should fill it up.
 homes:
-  admin: '7'
-  moderator: '5'
-  member: '4'
+  - 'admin:7'
+  - 'moderator:5'
+  - 'member:4'
 
 #If the player doesnt have the permission, set default homes here
 default: '3'
@@ -31,6 +33,9 @@ kickops: 'false'
 
 #Enable enchantments over the vanilla max level
 enchants: 'true'
+
+#Show prefix and suffix in TabList
+tablist: 'true'
 
 #You can use following Tags here:
 #<player.list_name> returns player's nickname

@@ -13,23 +13,26 @@ UtilizenYamlLoad:
     debug: false
     events:
         on server start:
-        - if !<server.has_file[../Utilizen/playerdata.yml]>:
-            - yaml create id:UtilizenPlayerdata
-            - yaml savefile:../Utilizen/playerdata.yml id:UtilizenPlayerdata
         - if !<server.has_file[../Utilizen/serverdata.yml]>:
             - yaml create id:UtilizenServerdata
             - yaml savefile:../Utilizen/serverdata.yml id:UtilizenServerdata
         - yaml load:../Utilizen/config.yml id:UtilizenConfig
-        - yaml load:../Utilizen/playerdata.yml id:UtilizenPlayerdata
         - yaml load:../Utilizen/<yaml[UtilizenConfig].read[lang]>.yml id:UtilizenLang
         - yaml load:../Utilizen/serverdata.yml id:UtilizenServerdata
         on reload scripts:
         - yaml load:../Utilizen/config.yml id:UtilizenConfig
         - yaml load:../Utilizen/<yaml[UtilizenConfig].read[lang]>.yml id:UtilizenLang
-        - yaml savefile:../Utilizen/playerdata.yml id:UtilizenPlayerdata
-        - yaml load:../Utilizen/playerdata.yml id:UtilizenPlayerdata
         - yaml savefile:../Utilizen/serverdata.yml id:UtilizenServerdata
         - yaml load:../Utilizen/serverdata.yml id:UtilizenServerdata
+        on player joins:
+        - if !<server.has_file[../Utilizen/data/<player.uuid>.yml]>:
+            - yaml create id:Utilizen_<player.uuid>
+            - yaml savefile:../Utilizen/data/players/<player.uuid>.yml id:Utilizen_<player.uuid>
+        - else:
+            - yaml load:../Utilizen/data/players/<player.uuid>.yml id:Utilizen_<player.uuid>
+        on player quits:
+        - yaml savefile:../Utilizen/data/players/<player.uuid>.yml id:Utilizen_<player.uuid>
+        - yaml unload id:Utilizen_<player.uuid>
 Utilizen:
     type: command
     debug: false

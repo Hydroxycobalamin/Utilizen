@@ -71,9 +71,9 @@ UtilizenCommandMail:
                 - if <server.player_is_valid[<context.args.get[2]>]>:
                     - if <context.args.size> > 2:
                         - yaml id:UtilizenServerdata set msgcount:++
-                        - yaml savefile:../Utilizen/serverdata.yml id:UtilizenServerdata
-                        - yaml id:UtilizenPlayerdata set <server.match_offline_player[<context.args.get[2]>].uuid>.mailbox.msg<yaml[UtilizenServerdata].read[msgcount]||0>:<player.uuid>|<context.args.remove[1|2].space_separated>
-                        - yaml savefile:../Utilizen/playerdata.yml id:UtilizenPlayerdata
+                        - yaml savefile:../Utilizen/data/serverdata.yml id:UtilizenServerdata
+                        - yaml id:Utilizen_<player.uuid> set <server.match_offline_player[<context.args.get[2]>].uuid>.mailbox.msg<yaml[UtilizenServerdata].read[msgcount]||0>:<player.uuid>|<context.args.remove[1|2].space_separated>
+                        - yaml savefile:../Utilizen/data/players/<player.uuid>.yml id:Utilizen_<player.uuid>
                         - narrate <yaml[UtilizenLang].read[mailsend].parsed>
                     - else:
                         - narrate <yaml[UtilizenLang].read[mailempty].parsed>
@@ -82,23 +82,23 @@ UtilizenCommandMail:
             - else:
                 - narrate <yaml[UtilizenLang].read[mailneedplayer].parsed>
         - case read:
-            - if <yaml[UtilizenPlayerdata].list_keys[<player.uuid>.mailbox]||true>:
+            - if <yaml[Utilizen_<player.uuid>].list_keys[<player.uuid>.mailbox]||true>:
                 - narrate <yaml[UtilizenLang].read[mailboxempty].parsed>
                 - stop
-            - foreach <yaml[UtilizenPlayerdata].list_keys[<player.uuid>.mailbox]>:
+            - foreach <yaml[Utilizen_<player.uuid>].list_keys[<player.uuid>.mailbox]>:
                 - narrate <yaml[UtilizenLang].read[mailread].parsed>
         - case remove:
-            - yaml id:UtilizenPlayerdata set <player.uuid>.mailbox:!
-            - yaml savefile:../Utilizen/playerdata.yml id:UtilizenPlayerdata
+            - yaml id:Utilizen_<player.uuid> set <player.uuid>.mailbox:!
+            - yaml savefile:../Utilizen/data/players/<player.uuid>.yml id:Utilizen_<player.uuid>
             - narrate <yaml[UtilizenLang].read[maildelete].parsed>
         - case sendall:
             - if <player.has_permission[utilizen.mail.sendall]>:
                 - if <context.args.size> > 1:
                     - foreach <server.list_players.parse[uuid]>:
                         - yaml id:UtilizenServerdata set msgcount:++
-                        - yaml id:UtilizenPlayerdata set <[value]>.mailbox.msg<yaml[UtilizenServerdata].read[msgcount]||0>:<player.uuid>|<context.args.remove[1].space_separated>
-                    - yaml savefile:../Utilizen/serverdata.yml id:UtilizenServerdata
-                    - yaml savefile:../Utilizen/playerdata.yml id:UtilizenPlayerdata
+                        - yaml id:Utilizen_<player.uuid> set <[value]>.mailbox.msg<yaml[UtilizenServerdata].read[msgcount]||0>:<player.uuid>|<context.args.remove[1].space_separated>
+                    - yaml savefile:../Utilizen/data/serverdata.yml id:UtilizenServerdata
+                    - yaml savefile:../Utilizen/data/players/<player.uuid>.yml id:Utilizen_<player.uuid>
                     - narrate <yaml[UtilizenLang].read[mailsendall]>
         - default:
             - narrate <yaml[UtilizenLang].read[mailallarguments].parsed>
@@ -162,91 +162,91 @@ UtilizenNickColor:
             - choose <context.args.first>:
                 - case aqua:
                     - narrate <yaml[UtilizenLang].read[nickcolorchanged].parsed>
-                    - yaml id:UtilizenPlayerdata set <player.uuid>.nickname:<&b><player.name>
-                    - yaml savefile:../Utilizen/playerdata.yml id:UtilizenPlayerdata
+                    - yaml id:Utilizen_<player.uuid> set <player.uuid>.nickname:<&b><player.name>
+                    - yaml savefile:../Utilizen/data/players/<player.uuid>.yml id:Utilizen_<player.uuid>
                     - adjust <player> player_list_name:<&b><player.name>
                 - case black:
                     - adjust <player> player_list_name:<&0><player.name>
                     - narrate <yaml[UtilizenLang].read[nickcolorchanged].parsed>
-                    - yaml id:UtilizenPlayerdata set <player.uuid>.nickname:<&0><player.name>
-                    - yaml savefile:../Utilizen/playerdata.yml id:UtilizenPlayerdata
+                    - yaml id:Utilizen_<player.uuid> set <player.uuid>.nickname:<&0><player.name>
+                    - yaml savefile:../Utilizen/data/players/<player.uuid>.yml id:Utilizen_<player.uuid>
                 - case blue:
                     - adjust <player> player_list_name:<&9><player.name>
                     - narrate <yaml[UtilizenLang].read[nickcolorchanged].parsed>
-                    - yaml id:UtilizenPlayerdata set <player.uuid>.nickname:<&9><player.name>
-                    - yaml savefile:../Utilizen/playerdata.yml id:UtilizenPlayerdata
+                    - yaml id:Utilizen_<player.uuid> set <player.uuid>.nickname:<&9><player.name>
+                    - yaml savefile:../Utilizen/data/players/<player.uuid>.yml id:Utilizen_<player.uuid>
                 - case dark_aqua:
                     - adjust <player> player_list_name:<&3><player.name>
                     - narrate <yaml[UtilizenLang].read[nickcolorchanged].parsed>
-                    - yaml id:UtilizenPlayerdata set <player.uuid>.nickname:<&3><player.name>
-                    - yaml savefile:../Utilizen/playerdata.yml id:UtilizenPlayerdata
+                    - yaml id:Utilizen_<player.uuid> set <player.uuid>.nickname:<&3><player.name>
+                    - yaml savefile:../Utilizen/data/players/<player.uuid>.yml id:Utilizen_<player.uuid>
                 - case dark_blue:
                     - adjust <player> player_list_name:<&1><player.name>
                     - narrate <yaml[UtilizenLang].read[nickcolorchanged].parsed>
-                    - yaml id:UtilizenPlayerdata set <player.uuid>.nickname:<&1><player.name>
-                    - yaml savefile:../Utilizen/playerdata.yml id:UtilizenPlayerdata
+                    - yaml id:Utilizen_<player.uuid> set <player.uuid>.nickname:<&1><player.name>
+                    - yaml savefile:../Utilizen/data/players/<player.uuid>.yml id:Utilizen_<player.uuid>
                 - case dark_gray:
                     - adjust <player> player_list_name:<&8><player.name>
                     - narrate <yaml[UtilizenLang].read[nickcolorchanged].parsed>
-                    - yaml id:UtilizenPlayerdata set <player.uuid>.nickname:<&8><player.name>
-                    - yaml savefile:../Utilizen/playerdata.yml id:UtilizenPlayerdata
+                    - yaml id:Utilizen_<player.uuid> set <player.uuid>.nickname:<&8><player.name>
+                    - yaml savefile:../Utilizen/data/players/<player.uuid>.yml id:Utilizen_<player.uuid>
                 - case dark_green:
                     - adjust <player> player_list_name:<&2><player.name>
                     - narrate <yaml[UtilizenLang].read[nickcolorchanged].parsed>
-                    - yaml id:UtilizenPlayerdata set <player.uuid>.nickname:<&2><player.name>
-                    - yaml savefile:../Utilizen/playerdata.yml id:UtilizenPlayerdata
+                    - yaml id:Utilizen_<player.uuid> set <player.uuid>.nickname:<&2><player.name>
+                    - yaml savefile:../Utilizen/data/players/<player.uuid>.yml id:Utilizen_<player.uuid>
                 - case dark_purple:
                     - adjust <player> player_list_name:<&5><player.name>
                     - narrate <yaml[UtilizenLang].read[nickcolorchanged].parsed>
-                    - yaml id:UtilizenPlayerdata set <player.uuid>.nickname:<&5><player.name>
-                    - yaml savefile:../Utilizen/playerdata.yml id:UtilizenPlayerdata
+                    - yaml id:Utilizen_<player.uuid> set <player.uuid>.nickname:<&5><player.name>
+                    - yaml savefile:../Utilizen/data/players/<player.uuid>.yml id:Utilizen_<player.uuid>
                 - case dark_red:
                     - adjust <player> player_list_name:<&4><player.name>
                     - narrate <yaml[UtilizenLang].read[nickcolorchanged].parsed>
-                    - yaml id:UtilizenPlayerdata set <player.uuid>.nickname:<&4><player.name>
-                    - yaml savefile:../Utilizen/playerdata.yml id:UtilizenPlayerdata
+                    - yaml id:Utilizen_<player.uuid> set <player.uuid>.nickname:<&4><player.name>
+                    - yaml savefile:../Utilizen/data/players/<player.uuid>.yml id:Utilizen_<player.uuid>
                 - case gold:
                     - adjust <player> player_list_name:<&6><player.name>
                     - narrate <yaml[UtilizenLang].read[nickcolorchanged].parsed>
-                    - yaml id:UtilizenPlayerdata set <player.uuid>.nickname:<&6><player.name>
-                    - yaml savefile:../Utilizen/playerdata.yml id:UtilizenPlayerdata
+                    - yaml id:Utilizen_<player.uuid> set <player.uuid>.nickname:<&6><player.name>
+                    - yaml savefile:../Utilizen/data/players/<player.uuid>.yml id:Utilizen_<player.uuid>
                 - case gray:
                     - adjust <player> player_list_name:<&7><player.name>
                     - narrate <yaml[UtilizenLang].read[nickcolorchanged].parsed>
-                    - yaml id:UtilizenPlayerdata set <player.uuid>.nickname:<&7><player.name>
-                    - yaml savefile:../Utilizen/playerdata.yml id:UtilizenPlayerdata
+                    - yaml id:Utilizen_<player.uuid> set <player.uuid>.nickname:<&7><player.name>
+                    - yaml savefile:../Utilizen/data/players/<player.uuid>.yml id:Utilizen_<player.uuid>
                 - case green:
                     - adjust <player> player_list_name:<&a><player.name>
                     - narrate <yaml[UtilizenLang].read[nickcolorchanged].parsed>
-                    - yaml id:UtilizenPlayerdata set <player.uuid>.nickname:<&a><player.name>
-                    - yaml savefile:../Utilizen/playerdata.yml id:UtilizenPlayerdata
+                    - yaml id:Utilizen_<player.uuid> set <player.uuid>.nickname:<&a><player.name>
+                    - yaml savefile:../Utilizen/data/players/<player.uuid>.yml id:Utilizen_<player.uuid>
                 - case lightpurple:
                     - adjust <player> player_list_name:<&d><player.name>
                     - narrate <yaml[UtilizenLang].read[nickcolorchanged].parsed>
-                    - yaml id:UtilizenPlayerdata set <player.uuid>.nickname:<&d><player.name>
-                    - yaml savefile:../Utilizen/playerdata.yml id:UtilizenPlayerdata
+                    - yaml id:Utilizen_<player.uuid> set <player.uuid>.nickname:<&d><player.name>
+                    - yaml savefile:../Utilizen/data/players/<player.uuid>.yml id:Utilizen_<player.uuid>
                 - case red:
                     - adjust <player> player_list_name:<&c><player.name>
                     - narrate <yaml[UtilizenLang].read[nickcolorchanged].parsed>
-                    - yaml id:UtilizenPlayerdata set <player.uuid>.nickname:<&c><player.name>
-                    - yaml savefile:../Utilizen/playerdata.yml id:UtilizenPlayerdata
+                    - yaml id:Utilizen_<player.uuid> set <player.uuid>.nickname:<&c><player.name>
+                    - yaml savefile:../Utilizen/data/players/<player.uuid>.yml id:Utilizen_<player.uuid>
                 - case white:
                     - adjust <player> player_list_name:<player.name>
                     - narrate <yaml[UtilizenLang].read[nickcolorchanged].parsed>
-                    - yaml id:UtilizenPlayerdata set <player.uuid>.nickname:<player.name>
-                    - yaml savefile:../Utilizen/playerdata.yml id:UtilizenPlayerdata
+                    - yaml id:Utilizen_<player.uuid> set <player.uuid>.nickname:<player.name>
+                    - yaml savefile:../Utilizen/data/players/<player.uuid>.yml id:Utilizen_<player.uuid>
                 - case yellow:
                     - adjust <player> player_list_name:<&e><player.name>
                     - narrate <yaml[UtilizenLang].read[nickcolorchanged].parsed>
-                    - yaml id:UtilizenPlayerdata set <player.uuid>.nickname:<&e><player.name>
-                    - yaml savefile:../Utilizen/playerdata.yml id:UtilizenPlayerdata
+                    - yaml id:Utilizen_<player.uuid> set <player.uuid>.nickname:<&e><player.name>
+                    - yaml savefile:../Utilizen/data/players/<player.uuid>.yml id:Utilizen_<player.uuid>
         - else:
             - narrate <yaml[UtilizenLang].read[nickcolorwrong].parsed>
     - else:
       - narrate <yaml[UtilizenLang].read[nickcolornocolor].parsed>
 UtilizenNickCommand:
     type: command
-    debug: false
+    debug: true
     name: nick
     description: Nick people
     usage: /nick
@@ -261,21 +261,38 @@ UtilizenNickCommand:
     - if <context.args.size> >= 1:
         - if <server.player_is_valid[<context.args.first>]>:
             - if <context.args.size> == 2:
-                - foreach <list[<yaml[UtilizenPlayerdata].list_deep_keys[].filter[contains[nickname]]>|<player.uuid>.nickname].combine>:
-                    - if <server.list_players.parse[name].contains[<context.args.get[2]>]> || <yaml[UtilizenPlayerdata].read[<[value]>]||<player.name>> == <context.args.get[2]>:
+                - foreach <list[<yaml[UtilizenServerdata].read[nicknames]>|<player.name>]>:
+                    - if <server.list_players.parse[name].contains[<context.args.get[2]>]> || <[value]> == <context.args.get[2]>:
                         - narrate <yaml[UtilizenLang].read[nickinuse].parsed>
                         - stop
-                - define nick:<context.args.get[2].parse_color>
-                - adjust <server.match_player[<context.args.first>]> player_list_name:<[nick]>
+                - if <yaml[UtilizenConfig].read[tablist]>:
+                    - foreach <yaml[UtilizenConfig].read[homes].parse[before[:]]>:
+                        - if <player.has_permission[utilizen.group.<[value]>]>:
+                            - define prefix:<server.group_prefix[<[value]>]||>
+                            - define suffix:<server.group_suffix[<[value]>]||>
+                            - foreach stop
+                    - define nick:<context.args.get[2].parse_color>
+                - adjust <server.match_player[<context.args.first>]> player_list_name:<[prefix]||><[nick]><[suffix]||>
+                - adjust <server.match_player[<context.args.first>]> display_name:<[nick]>
                 - narrate <yaml[UtilizenLang].read[nicksuccess].parsed>
                 - narrate <yaml[UtilizenLang].read[nickchanged].parsed>
-                - yaml id:UtilizenPlayerdata set <player.uuid>.nickname:<context.args.get[2]>
-                - yaml savefile:../Utilizen/playerdata.yml id:UtilizenPlayerdata
-            - else:
-                - adjust <server.match_player[<context.args.first>]> player_list_name:
+                - yaml id:Utilizen_<player.uuid> set <player.uuid>.nickname:<context.args.get[2]>
+                - yaml savefile:../Utilizen/data/players/<player.uuid>.yml id:Utilizen_<player.uuid>
+                - yaml id:UtilizenServerdata set nicknames:->:<context.args.get[2]>
+                - yaml savefile:../Utilizen/data/serverdata.yml id:UtilizenServerdata
+            - else if <yaml[UtilizenConfig].read[tablist]>:
+                - foreach <yaml[UtilizenConfig].read[homes].parse[before[:]]>:
+                    - if <player.has_permission[utilizen.group.<[value]>]>:
+                        - define prefix:<server.group_prefix[<[value]>]||>
+                        - define suffix:<server.group_suffix[<[value]>]||>
+                        - foreach stop
+                - yaml id:UtilizenServerdata set nicknames:<-:<yaml[Utilizen_<server.match_player[<context.args.first>].uuid>].read[<server.match_player[<context.args.first>].uuid>.nickname]>
+                - yaml savefile:../Utilizen/data/serverdata.yml id:UtilizenServerdata
+                - adjust <server.match_player[<context.args.first>]> player_list_name:<[prefix]||><player.name><[suffix]||>
+                - adjust <server.match_player[<context.args.first>]> display_name:<player.name>
                 - narrate <yaml[UtilizenLang].read[nickdelete].parsed>
-                - yaml id:UtilizenPlayerdata set <player.uuid>.nickname:!
-                - yaml savefile:../Utilizen/playerdata.yml id:UtilizenPlayerdata
+                - yaml id:Utilizen_<player.uuid> set <player.uuid>.nickname:!
+                - yaml savefile:../Utilizen/data/players/<player.uuid>.yml id:Utilizen_<player.uuid>
         - else:
             - narrate <yaml[UtilizenLang].read[nickplnotexist].parsed>
     - else:
@@ -289,18 +306,18 @@ UtilizenShowNickCommand:
     permission: utilizen.shownick
     permission message: <&3>[Permission] You need the permission <&b><permission>
     tab complete:
-    - foreach <yaml[UtilizenPlayerdata].list_deep_keys[].filter[contains[nickname]]>:
-        - define nicklist:->:<yaml[UtilizenPlayerdata].read[<[value]>]>
+    - foreach <yaml[Utilizen_<player.uuid>].list_deep_keys[].filter[contains[nickname]]>:
+        - define nicklist:->:<yaml[Utilizen_<player.uuid>].read[<[value]>]>
     - if <[nicklist].is_empty||true>:
         - stop
     - else:
         - determine <[nicklist]>
     script:
-    - foreach <yaml[UtilizenPlayerdata].list_deep_keys[].filter[contains[nickname]]>:
-        - define nicklist:->:<yaml[Utilizenplayerdata].read[<[value]>]>
+    - foreach <yaml[Utilizen_<player.uuid>].list_deep_keys[].filter[contains[nickname]]>:
+        - define nicklist:->:<yaml[Utilizen_<player.uuid>].read[<[value]>]>
     - if <[nicklist].contains[<context.args.first>]||false>:
-        - foreach <yaml[UtilizenPlayerdata].list_deep_keys[].filter[contains[nickname]]>:
-            - if <yaml[UtilizenPlayerdata].read[<[value]>]> == <context.args.first>:
+        - foreach <yaml[Utilizen_<player.uuid>].list_deep_keys[].filter[contains[nickname]]>:
+            - if <yaml[Utilizen_<player.uuid>].read[<[value]>]> == <context.args.first>:
                 - narrate <[value].before[.].as_player.name>
 UtilizenSetWarpCommand:
     type: command
@@ -319,7 +336,7 @@ UtilizenSetWarpCommand:
         - stop
     - if <context.args.size> == 1:
         - yaml id:UtilizenServerdata set warps.<context.args.first>:<player.location>
-        - yaml savefile:../Utilizen/serverdata.yml id:UtilizenServerdata
+        - yaml savefile:../Utilizen/data/serverdata.yml id:UtilizenServerdata
         - narrate <yaml[UtilizenLang].read[warpcreate].parsed>
     - else:
         - narrate <yaml[UtilizenLang].read[warpnoname].parsed>
@@ -340,7 +357,7 @@ UtilizenDelWarpCommand:
     - if <context.args.size> >= 1:
         - if <yaml[UtilizenServerdata].contains[<context.args.first>]>:
             - yaml id:UtilizenServerdata set <context.args.first>:!
-            - yaml savefile:../Utilizen/serverdata.yml id:UtilizenServerdata
+            - yaml savefile:../Utilizen/data/serverdata.yml id:UtilizenServerdata
             - narrate <yaml[UtilizenLang].read[warpdelete].parsed>
         - else:
             - narrate <yaml[UtilizenLang].read[warpnotexist].parsed>
@@ -409,8 +426,8 @@ UtilizenJailCommand:
                     - if <yaml[UtilizenServerdata].contains[jailname.<context.args.get[2]>]>:
                         - if <context.args.size> == 3:
                             - if <duration[<context.args.get[3]>]||null> != null:
-                                - yaml id:UtilizenPlayerdata set <server.match_player[<context.args.first>].uuid>.jail.location:<[playerlocation]>
-                                - yaml savefile:../Utilizen/playerdata.yml id:UtilizenPlayerdata
+                                - yaml id:Utilizen_<player.uuid> set <server.match_player[<context.args.first>].uuid>.jail.location:<[playerlocation]>
+                                - yaml savefile:../Utilizen/data/players/<player.uuid>.yml id:Utilizen_<player.uuid>
                                 - teleport <server.match_player[<context.args.first>]> <yaml[UtilizenServerdata].read[jailname.<context.args.get[2]>]>
                                 - wait 1t
                                 - flag <server.match_player[<context.args.first>]> jailed d:<context.args.get[3].as_duration>
@@ -449,7 +466,7 @@ UtilizenSetJailCommand:
     script:
     - if <context.args.size> == 1:
         - yaml id:UtilizenServerdata set jailname.<context.args.first>:<player.location>
-        - yaml savefile:../Utilizen/serverdata.yml id:UtilizenServerdata
+        - yaml savefile:../Utilizen/data/serverdata.yml id:UtilizenServerdata
         - narrate <yaml[UtilizenLang].read[jailcreate].parsed>
     - else:
         - narrate <yaml[UtilizenLang].read[jailnoname].parsed>
@@ -470,7 +487,7 @@ UtilizenDelJailCommand:
     - if <context.args.size> == 1:
         - if <yaml[UtilizenServerdata].contains[jailname.<context.args.first>]>:
             - yaml id:UtilizenServerdata set jailname.<context.args.first>:!
-            - yaml savefile:../Utilizen/serverdata.yml id:UtilizenServerdata
+            - yaml savefile:../Utilizen/data/serverdata.yml id:UtilizenServerdata
             - narrate <yaml[UtilizenLang].read[jaildeleted].parsed>
         - else:
             - narrate <yaml[UtilizenLang].read[notexist].parsed>
@@ -502,7 +519,7 @@ UtilizenUnJailCommand:
         - narrate <yaml[UtilizenLang].read[jailnoplayer].parsed>
 UtlizenSetHomeCommand:
     type: command
-    debug: false
+    debug: true
     description: Sets your home
     usage: /sethome [Homename]
     name: sethome
@@ -515,27 +532,27 @@ UtlizenSetHomeCommand:
     - if <context.args.is_empty>:
         - narrate <yaml[UtilizenLang].read[sethomenoargs].parsed>
     - else if <context.args.size> == 1:
-        - if !<yaml[UtilizenPlayerdata].read[<player.uuid>.homes].get_sub_items[1].contains[<context.args.first>]>:
+        - if !<yaml[Utilizen_<player.uuid>].read[<player.uuid>.homes].get_sub_items[1].contains[<context.args.first>]>:
             - if <player.is_op>:
-                - if <yaml[UtilizenPlayerdata].read[<player.uuid>.homes].size||0> <= <yaml[UtilizenConfig].read[op-homes]>:
+                - if <yaml[Utilizen_<player.uuid>].read[<player.uuid>.homes].size||0> <= <yaml[UtilizenConfig].read[op-homes]>:
                         - narrate <yaml[UtilizenLang].read[sethomeset].parsed>
-                        - yaml set id:UtilizenPlayerdata <player.uuid>.homes:->:<context.args.first>/<player.location.simple>
-                        - yaml savefile:../Utilizen/playerdata.yml id:UtilizenPlayerdata
+                        - yaml set id:Utilizen_<player.uuid> <player.uuid>.homes:->:<context.args.first>/<player.location.simple>
+                        - yaml savefile:../Utilizen/data/players/<player.uuid>.yml id:Utilizen_<player.uuid>
                         - stop
-            - foreach <yaml[UtilizenConfig].list_keys[homes]>:
-                - if <player.has_permission[utilizen.groups.<[value]>]>:
-                    - if <yaml[UtilizenPlayerdata].read[<player.uuid>.homes].size||0> <= <yaml[UtilizenConfig].read[homes.<[value]>]>:
+            - foreach <yaml[UtilizenConfig].read[homes]>:
+                - if <player.has_permission[utilizen.groups.<[value].before[:]>]>:
+                    - if <yaml[Utilizen_<player.uuid>].read[<player.uuid>.homes].size||0> <= <[value].after[:]>:
                         - narrate <yaml[UtilizenLang].read[sethomeset].parsed>
-                        - yaml set id:UtilizenPlayerdata <player.uuid>.homes:->:<context.args.first>/<player.location.simple>
-                        - yaml savefile:../Utilizen/playerdata.yml id:UtilizenPlayerdata
+                        - yaml set id:Utilizen_<player.uuid> <player.uuid>.homes:->:<context.args.first>/<player.location.simple>
+                        - yaml savefile:../Utilizen/data/players/<player.uuid>.yml id:Utilizen_<player.uuid>
                         - stop
                     - else:
                         - narrate <yaml[UtilizenLang].read[sethometomuchhome]>
                         - stop
-            - if <yaml[UtilizenPlayerdata].read[<player.uuid>.homes].size||0> <= <yaml[UtilizenConfig].read[default]>:
+            - if <yaml[Utilizen_<player.uuid>].read[<player.uuid>.homes].size||0> <= <yaml[UtilizenConfig].read[default]>:
                 - narrate <yaml[UtilizenLang].read[sethomeset].parsed>
-                - yaml set id:UtilizenPlayerdata <player.uuid>.homes:->:<context.args.first>/<player.location.simple>
-                - yaml savefile:../Utilizen/playerdata.yml id:UtilizenPlayerdata
+                - yaml set id:Utilizen_<player.uuid> <player.uuid>.homes:->:<context.args.first>/<player.location.simple>
+                - yaml savefile:../Utilizen/data/players/<player.uuid>.yml id:Utilizen_<player.uuid>
         - else:
             - narrate <yaml[UtilizenLang].read[sethomealreadyset].parsed>
 UtilizenDelHomeCommand:
@@ -547,24 +564,24 @@ UtilizenDelHomeCommand:
     permission: utilizen.delhome
     permission message: <&3>[Permission] You need the permission <&b><permission>
     tab complete:
-    - if <yaml[UtilizenPlayerdata].contains[<player.uuid>.homes]>:
+    - if <yaml[Utilizen_<player.uuid>].contains[<player.uuid>.homes]>:
         - if <context.args.size> < 1:
-            - determine <yaml[UtilizenPlayerdata].read[<player.uuid>.homes].get_sub_items[1]>
+            - determine <yaml[Utilizen_<player.uuid>].read[<player.uuid>.homes].get_sub_items[1]>
         - if <context.args.size> == 1 && "!<context.raw_args.ends_with[ ]>":
-            - determine <yaml[UtilizenPlayerdata].read[<player.uuid>.homes].get_sub_items[1].filter[starts_with[<context.args.first>]]>
+            - determine <yaml[Utilizen_<player.uuid>].read[<player.uuid>.homes].get_sub_items[1].filter[starts_with[<context.args.first>]]>
     script:
-    - if <player.has_permission[Utilizen.delhome.other]>:
-        - if <context.args.size> == 2 && <server.player_is_valid[<context.args.get[2]>]>:
-            - if <yaml[UtilizenPlayerdata].read[<server.match_player[<context.args.get[2]>].uuid>.homes].get_sub_items[1].contains[<context.args.first>]>:
-                - yaml set id:UtilizenPlayerdata set <server.match_player[<context.args.get[2]>].uuid>.homes:!|:<yaml[UtilizenPlayerdata].read[<server.match_player[<context.args.get[2]>].uuid>.homes].remove[<yaml[UtilizenPlayerdata].read[<player.uuid>.homes].get_sub_items[1].find[<context.args.first>]>]>
-                - yaml savefile:../Utilizen/playerdata.yml id:UtilizenPlayerdata
+    - if <context.args.size> == 2 && <server.player_is_valid[<context.args.get[2]>]>:
+        - if <player.has_permission[utilizen.delhome.other]>:
+            - if <yaml[Utilizen_<player.uuid>].read[<server.match_player[<context.args.get[2]>].uuid>.homes].get_sub_items[1].contains[<context.args.first>]>:
+                - yaml set id:Utilizen_<player.uuid> set <server.match_player[<context.args.get[2]>].uuid>.homes:!|:<yaml[Utilizen_<player.uuid>].read[<server.match_player[<context.args.get[2]>].uuid>.homes].remove[<yaml[Utilizen_<player.uuid>].read[<player.uuid>.homes].get_sub_items[1].find[<context.args.first>]>]>
+                - yaml savefile:../Utilizen/data/players/<player.uuid>.yml id:Utilizen_<player.uuid>
                 - narrate <yaml[UtilizenLang].read[delhomedeleted].parsed>
-                - stop
             - else:
                 - narrate <yaml[UtilizenLang].read[delhomeothernohomeexist].parsed>
                 - stop
-    - else if <yaml[UtilizenPlayerdata].read[<player.uuid>.homes].get_sub_items[1].contains[<context.args.first||null>]>:
-        - yaml set id:UtilizenPlayerdata <player.uuid>.homes:!|:<yaml[UtilizenPlayerdata].read[<player.uuid>.homes].remove[<yaml[UtilizenPlayerdata].read[<player.uuid>.homes].get_sub_items[1].find[<context.args.first>]>]>
+    - else if <yaml[Utilizen_<player.uuid>].read[<player.uuid>.homes].get_sub_items[1].contains[<context.args.first||null>]>:
+        - yaml set id:Utilizen_<player.uuid> <player.uuid>.homes:!|:<yaml[Utilizen_<player.uuid>].read[<player.uuid>.homes].remove[<yaml[Utilizen_<player.uuid>].read[<player.uuid>.homes].get_sub_items[1].find[<context.args.first>]>]>
+        - yaml savefile:..Utilizen/data/players/<player.uuid>.yml id:Utilizen_<player.uuid>
     - else:
         - narrate <yaml[UtilizenLang].read[delhomenohomeexist].parsed>
 UtlizenHomeCommand:
@@ -576,21 +593,21 @@ UtlizenHomeCommand:
     permission: utilizen.home
     permission message: <&3>[Permission] You need the permission <&b><permission>
     tab complete:
-    - if <yaml[UtilizenPlayerdata].contains[<player.uuid>.homes]>:
+    - if <yaml[Utilizen_<player.uuid>].contains[<player.uuid>.homes]>:
         - if <context.args.size> < 1:
-            - determine <yaml[UtilizenPlayerdata].read[<player.uuid>.homes].get_sub_items[1]>
+            - determine <yaml[Utilizen_<player.uuid>].read[<player.uuid>.homes].get_sub_items[1]>
         - else if <context.args.size> == 1 && "!<context.raw_args.ends_with[ ]>":
-            - determine <yaml[UtilizenPlayerdata].read[<player.uuid>.homes].get_sub_items[1].filter[starts_with[<context.args.first>]]>
+            - determine <yaml[Utilizen_<player.uuid>].read[<player.uuid>.homes].get_sub_items[1].filter[starts_with[<context.args.first>]]>
     script:
     - if <context.server>:
         - announce to_console "[Utilizen] This command can not be executed from console"
         - stop
     - if <context.args.is_empty>:
-        - if <yaml[UtilizenPlayerdata].read[<player.uuid>.homes].is_empty||false>:
-            - teleport <location[<yaml[UtilizenPlayerdata].read[<player.uuid>.homes].get_sub_items[2].first>]>
+        - if <yaml[Utilizen_<player.uuid>].read[<player.uuid>.homes].is_empty||false>:
+            - teleport <location[<yaml[Utilizen_<player.uuid>].read[<player.uuid>.homes].get_sub_items[2].first>]>
             - narrate <yaml[UtilizenLang].read[homefirsthomed].parsed>
-    - else if <yaml[UtilizenPlayerdata].read[<player.uuid>.homes].get_sub_items[1].contains[<context.args.first>]||false>:
-        - teleport <location[<yaml[UtilizenPlayerdata].read[<player.uuid>.homes].map_get[<context.args.first>]>]>
+    - else if <yaml[Utilizen_<player.uuid>].read[<player.uuid>.homes].get_sub_items[1].contains[<context.args.first>]||false>:
+        - teleport <location[<yaml[Utilizen_<player.uuid>].read[<player.uuid>.homes].map_get[<context.args.first>]>]>
         - narrate <yaml[UtilizenLang].read[homehomed].parsed>
 UtilizenHatCommand:
     type: command
@@ -637,8 +654,8 @@ UtilizenBackCommand:
     - if !<context.server>:
         - stop
     script:
-    - if <yaml[UtilizenPlayerdata].contains[<player.uuid>.lastlocation]>:
-        - teleport <player> <yaml[UtilizenPlayerdata].read[<player.uuid>.lastlocation]>
+    - if <yaml[Utilizen_<player.uuid>].contains[<player.uuid>.lastlocation]>:
+        - teleport <player> <yaml[Utilizen_<player.uuid>].read[<player.uuid>.lastlocation]>
     - else:
         - narrate <yaml[UtilizenLang].read[backinvalid].parsed>
 UtilizenFlyCommand:

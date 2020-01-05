@@ -1,11 +1,15 @@
-#This is the Chatformat Section from Utilizen.
+#This is the Chatformat section of Utilizen.
 #You should follow this format to make your own formatting
-#NEVER EVER touch the else part
-#Put the highest group first, and the lowest group last, OP's always get the highest permissionw
-#Feel free to use following tags
-#<player.chat_prefix.parse_color> to get the prefix from your permission plugin, parsed with colors
-#<player.list_name> to get the nickname from the player, you need that if you use nicknames from Utilizen
-#<player.name> to get the player's original name
+#You don't wanna touch line 26 & 27
+#Put the highest group first, and the lowest group last, OP's always get the highest permission
+#Owner -> Admin -> Moderator -> Supporter -> Member
+#
+#Following tags are recommended:
+#<server.group_prefix[<groupname>].parse_color> returns the prefix of the group from your permission plugin, parsed with colors
+#<server.group_suffix[<groupname>].parse_color> returns the suffix of the group from your permission plugin, parsed with colors
+#<player.list_name> returns the name from the tablist
+#<player.display_name> returns the nickname of the player
+#<player.name> returns the player's original name (not nicked)
 #<text> to get the chat output - you need that in any format: part
 #put colors in a <> like <&a>
 UtilizenChat:
@@ -26,11 +30,11 @@ UtilizenChat:
 UtilizenFormatDefault:
     type: format
     debug: false
-    format: <player.chat_prefix.parse_color> <&r><player.list_name><&r> > <text>
+    format: <server.group_prefix[default]> <&r><player.display_name><&r> > <text>
 UtilizenFormatAdmin:
     type: format
     debug: false
-    format: <&a>[Admin] <&r><player.list_name><&r> > <text>
+    format: <&a>[Admin] <&r><player.display_name><&r> > <text>
 UtilizenFormatModerator:
     type: format
     debug: false
