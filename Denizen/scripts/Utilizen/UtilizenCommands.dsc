@@ -49,7 +49,7 @@ UtilizenCommandAFK:
         - permission remove smoothsleep.ignore
 UtilizenCommandMail:
     type: command
-    debug: true
+    debug: false
     name: mail
     description: Read and Send mails!
     usage: /mail [send|read|remove|sendall] (Player) (Message)
@@ -158,7 +158,7 @@ UtilizenMSGCommand:
         - narrate <yaml[UtilizenLang].read[msgsyntax].parsed>
 UtilizenNickCommand:
     type: command
-    debug: false
+    debug: true
     name: nick
     description: Nick people
     usage: /nick
@@ -184,13 +184,15 @@ UtilizenNickCommand:
                             - define suffix:<server.group_suffix[<[value]>]||>
                             - foreach stop
                     - define nick:<context.args.get[2].parse_color>
+                - if <server.match_player[<context.args.first>].name> != <server.match_player[<context.args.first>].display_name>:
+                    - yaml id:UtilizenServerdata set nicknames:<-:<server.match_player[<context.args.first>].display_name.parse_color>
                 - adjust <server.match_player[<context.args.first>]> player_list_name:<[prefix]||><[nick]><[suffix]||>
                 - adjust <server.match_player[<context.args.first>]> display_name:<[nick]>
                 - narrate <yaml[UtilizenLang].read[nicksuccess].parsed>
                 - narrate <yaml[UtilizenLang].read[nickchanged].parsed>
-                - yaml id:Utilizen_<player.uuid> set <player.uuid>.nickname:<context.args.get[2]>
+                - yaml id:Utilizen_<player.uuid> set <player.uuid>.nickname:<context.args.get[2].parse_color>
                 - ~yaml savefile:../Utilizen/data/players/<player.uuid>.yml id:Utilizen_<player.uuid>
-                - yaml id:UtilizenServerdata set nicknames:->:<context.args.get[2]>
+                - yaml id:UtilizenServerdata set nicknames:->:<context.args.get[2].parse_color>
                 - ~yaml savefile:../Utilizen/data/serverdata.yml id:UtilizenServerdata
             - else if <yaml[UtilizenConfig].read[tablist]>:
                 - foreach <yaml[UtilizenConfig].read[homes].parse[before[:]]>:
