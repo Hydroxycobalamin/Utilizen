@@ -246,7 +246,7 @@ UtilizenNickColor:
       - narrate <yaml[UtilizenLang].read[nickcolornocolor].parsed>
 UtilizenNickCommand:
     type: command
-    debug: true
+    debug: false
     name: nick
     description: Nick people
     usage: /nick
@@ -519,7 +519,7 @@ UtilizenUnJailCommand:
         - narrate <yaml[UtilizenLang].read[jailnoplayer].parsed>
 UtlizenSetHomeCommand:
     type: command
-    debug: true
+    debug: false
     description: Sets your home
     usage: /sethome [Homename]
     name: sethome
