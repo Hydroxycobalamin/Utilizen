@@ -101,36 +101,6 @@ UtilizenGodHandler:
         - determine cancelled
         on entity targets player flagged:god:
         - determine cancelled
-UtilizenGamemodeHandler:
-    type: task
-    debug: false
-    script:
-    - if <context.args.size> == 1:
-        - if <player.has_permission[utilizen.gamemode.<context.args.first>]>:
-            - adjust <player> gamemode:<context.args.first>
-            - narrate <yaml[UtilizenLang].read[gamemodechanged].parsed>
-        - else:
-            - narrate <yaml[UtilizenLang].read[gamemodeneedperm<context.args.first>].parsed>
-    - else:
-        - adjust <server.match_player[<context.args.last>]> gamemode:<context.args.first>
-        - narrate <yaml[UtilizenLang].read[gamemodechangedother].parsed>
-        - narrate <yaml[UtilizenLang].read[gamemodechanged].parsed> targets:<server.match_player[<context.args.last>]>
-UtilizenGamemodeHandlerNumber:
-    type: task
-    debug: false
-    script:
-    - define mode:<tern[<context.args.first.is[==].to[0]>].pass[survival].fail[<tern[<context.args.first.is[==].to[1]>].pass[creative].fail[<tern[<context.args.first.is[==].to[2]>].pass[adventure].fail[<tern[<context.args.first.is[==].to[3]>].pass[spectator].fail[null]>]>]>]>
-    - if <context.args.size> == 1:
-        - if <player.has_permission[utilizen.gamemode.<[mode]>]>:
-            - adjust <player> gamemode:<[mode]>
-            - narrate <yaml[UtilizenLang].read[gamemodechanged].parsed>
-        - else:
-            - narrate <yaml[UtilizenLang].read[gamemodeneedperm<[mode]>].parsed>
-    - else:
-        - adjust <server.match_player[<context.args.last>]> gamemode:<[mode]>
-        - narrate <yaml[UtilizenLang].read[gamemodechangedother].parsed>
-        - narrate <yaml[UtilizenLang].read[gamemodechanged].parsed> targets:<server.match_player[<context.args.last>]>
-
 #temp fix for broken uncancellable teleport event
 UtilizenJailHandler:
     type: world

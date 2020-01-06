@@ -878,57 +878,41 @@ UtilizenGamemodeCommand:
             - determine <server.list_online_players.parse[name].filter[starts_with[<context.args.get[2]>]]>
     script:
     - if <context.args.size> == 1:
-        - if <context.args.first.is_integer>:
-            - choose <context.args.first>:
-                - case 0:
-                    - inject UtilizenGamemodeHandlerNumber
-                - case 1:
-                    - inject UtilizenGamemodeHandlerNumber
-                - case 2:
-                    - inject UtilizenGamemodeHandlerNumber
-                - case 3:
-                    - inject UtilizenGamemodeHandlerNumber
-                - default:
-                    - narrate <yaml[UtilizenLang].read[gamemodevalidnumber].parsed>
+        - choose <context.args.first>:
+            - case 0 || survival:
+                - define mode:survival
+            - case 1 || creative:
+                - define mode:creative
+            - case 2 || adventure:
+                - define mode:adventure
+            - case 3 || spectator:
+                - define mode:spectator
+            - default:
+                - narrate <yaml[UtilizenLang].read[gamemodevalidmode].parsed>
+                - stop
+        - if <player.has_permission[utilizen.gamemode.<[mode]>]>:
+            - adjust <player> gamemode:<[mode]>
+            - narrate <yaml[UtilizenLang].read[gamemodechanged].parsed>
         - else:
-            - choose <context.args.first>:
-                - case survival:
-                    - inject UtilizenGamemodeHandler
-                - case creative:
-                    - inject UtilizenGamemodeHandler
-                - case adventure:
-                    - inject UtilizenGamemodeHandler
-                - case spectator:
-                    - inject UtilizenGamemodeHandler
-                - default:
-                    - narrate <yaml[UtilizenLang].read[gamemodevalidmode].parsed>
+            - narrate <yaml[UtilizenLang].read[gamemodeneedperm<[mode]>].parsed>
     - else if <context.args.size> == 2:
         - if <server.player_is_valid[<context.args.get[2]>]>:
             - if <player.has_permission[utilizen.gamemode.other]>:
-                - if <context.args.first.is_integer>:
-                    - choose <context.args.first>:
-                        - case 0:
-                            - inject UtilizenGamemodeHandlerNumber
-                        - case 1:
-                            - inject UtilizenGamemodeHandlerNumber
-                        - case 2:
-                            - inject UtilizenGamemodeHandlerNumber
-                        - case 3:
-                            - inject UtilizenGamemodeHandlerNumber
-                        - default:
-                            - narrate <yaml[UtilizenLang].read[gamemodevalidnumber].parsed>
-                - else:
-                    - choose <context.args.first>:
-                        - case survival:
-                            - inject UtilizenGamemodeHandler
-                        - case creative:
-                            - inject UtilizenGamemodeHandler
-                        - case adventure:
-                            - inject UtilizenGamemodeHandler
-                        - case spectator:
-                            - inject UtilizenGamemodeHandler
-                        - default:
-                            - narrate <yaml[UtilizenLang].read[gamemodevalidmode].parsed>
+                - choose <context.args.first>:
+                   - case 0 || survival:
+                        - define mode:survival
+                    - case 1 || creative:
+                        - define mode:creative
+                    - case 2 || adventure:
+                        - define mode:adventure
+                    - case 3 || spectator:
+                        - define mode:spectator
+                    - default:
+                        - narrate <yaml[UtilizenLang].read[gamemodevalidmode].parsed>
+                        - stop
+                - adjust <server.match_player[<context.args.last>]> gamemode:<[mode]>
+                - narrate <yaml[UtilizenLang].read[gamemodechangedother].parsed>
+                - narrate <yaml[UtilizenLang].read[gamemodechanged].parsed> targets:<server.match_player[<context.args.last>]>
             - else:
                 - narrate <yaml[UtilizenLang].read[gamemodeneedpermother].parsed>
         - else:
