@@ -899,7 +899,7 @@ UtilizenGamemodeCommand:
         - if <server.player_is_valid[<context.args.get[2]>]>:
             - if <player.has_permission[utilizen.gamemode.other]>:
                 - choose <context.args.first>:
-                   - case 0 || survival:
+                    - case 0 || survival:
                         - define mode:survival
                     - case 1 || creative:
                         - define mode:creative
