@@ -33,6 +33,15 @@ UtilizenYamlLoad:
         on player quits:
         - ~yaml savefile:../Utilizen/data/players/<player.uuid>.yml id:Utilizen_<player.uuid>
         - yaml unload id:Utilizen_<player.uuid>
+UtilizenSavePlayerTask:
+    type: task
+    definitions: uuid
+    script:
+    - ~yaml savefile:../Utilizen/data/players/<[uuid]>.yml id:Utilizen_<[uuid]>
+UtilizenSaveServerTask:
+    type: task
+    script:
+    - ~yaml savefile:../Utilizen/data/serverdata.yml id:UtilizenServerdata
 Utilizen:
     type: command
     debug: false

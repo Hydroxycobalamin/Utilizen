@@ -34,7 +34,7 @@ UtilizenBedSpawnHandler:
         on player right clicks *_BED:
         - if <yaml[UtilizenConfig].read[allow-bed]>:
             - yaml id:Utilizen_<player.uuid> set <player.uuid>.spawnlocation:<context.location>
-            - yaml savefile:../Utilizen/data/players/<player.uuid>.yml id:Utilizen_<player.uuid>
+            - run UtilizenSavePlayerTask def:<player.uuid>
             - adjust <player> bed_spawn_location:<context.location>
             - narrate "<yaml[UtilizenLang].read[bedspawnset].parsed>"
         on player right clicks with COMPASS:
@@ -76,10 +76,10 @@ UtilizenBackHandler:
     events:
         on player teleports:
         - yaml id:Utilizen_<player.uuid> set <player.uuid>.lastlocation:<context.origin>
-        - yaml savefile:../Utilizen/data/players/<player.uuid>.yml id:Utilizen_<player.uuid>
+        - run UtilizenSavePlayerTask def:<player.uuid>
         on player dies:
         - yaml id:Utilizen_<player.uuid> set <player.uuid>.lastlocation:<context.entity.location>
-        - yaml savefile:../Utilizen/data/players/<player.uuid>.yml id:Utilizen_<player.uuid>
+        - run UtilizenSavePlayerTask def:<player.uuid>
 UtilizenMuteHandler:
     type: world
     debug: false
@@ -109,20 +109,20 @@ UtilizenJailHandler:
         on player teleports flagged:jailed:
         - ratelimit <player> 1t
         - yaml id:Utilizen_<player.uuid> set <player.uuid>.jail.duration:<player.flag[jailed].expiration>
-        - yaml savefile:../Utilizen/data/players/<player.uuid>.yml id:Utilizen_<player.uuid>
+        - run UtilizenSavePlayerTask def:<player.uuid>
         - flag player jailed:!
         - teleport <context.origin>
         - flag player jailed d:<yaml[Utilizen_<player.uuid>].read[<player.uuid>.jail.duration]>
         - narrate <yaml[UtilizenLang].read[jailnopermission].parsed>
         on player quits flagged:jailed:
         - yaml id:Utilizen_<player.uuid> set <player.uuid>.jail.duration:<player.flag[jailed].expiration>
-        - yaml savefile:../Utilizen/data/players/<player.uuid>.yml id:Utilizen_<player.uuid>
+        - run UtilizenSavePlayerTask def:<player.uuid>
         - flag player jailed:!
         on player breaks block flagged:jailed:
         - determine passively cancelled
         - narrate <yaml[UtilizenLang].read[jailnopermission].parsed>
         on player places block flagged:jailed:
-        - determine passivevly cancelled
+        - determine passively cancelled
         - narrate <yaml[UtilizenLang].read[jailnopermission].parsed>
         on player joins:
         - if <yaml[Utilizen_<player.uuid>].contains[<player.uuid>.jail.duration]||false>:
@@ -136,6 +136,6 @@ UtilizenJailHandler:
                     - stop
                 - teleport <yaml[Utilizen_<player.uuid>].read[<player.uuid>.jail.location]>
                 - yaml id:Utilizen_<player.uuid> set <player.uuid>.jail:!
-                - yaml savefile:../Utilizen/data/players/<player.uuid>.yml id:Utilizen_<player.uuid>
+                - run UtilizenSavePlayerTask def:<player.uuid>
                 - narrate <yaml[UtilizenLang].read[jailexit].parsed>
                 
