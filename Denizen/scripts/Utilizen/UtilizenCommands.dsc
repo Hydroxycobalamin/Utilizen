@@ -49,7 +49,7 @@ UtilizenCommandAFK:
         - permission remove smoothsleep.ignore
 UtilizenCommandMail:
     type: command
-    debug: false
+    debug: true
     name: mail
     description: Read and Send mails!
     usage: /mail [send|read|remove|sendall] (Player) (Message)
@@ -58,11 +58,11 @@ UtilizenCommandMail:
     tab complete:
     - if <context.args.is_empty>:
         - determine <list[send|read|remove|<tern[<player.has_permission[utilizen.mail.sendall]>].pass[sendall].fail[]>]>
-    - if <context.args.size> == 1 && "!<context.raw_args.ends_with[ ]>":
+    - else if <context.args.size> == 1 && "!<context.raw_args.ends_with[ ]>":
         - determine <list[send|read|remove|<tern[<player.has_permission[utilizen.mail.sendall]>].pass[sendall].fail[]>].filter[starts_with[<context.args.first>]]>
-    - if <context.args.size> < 2 && <context.args.first> == send:
+    - else if <context.args.size> < 2 && <context.args.first> == send:
         - determine <server.list_online_players.parse[name]>
-    - if <context.args.size> == 2 && "!<context.raw_args.ends_with[ ]>":
+    - else if <context.args.size> == 2 && "!<context.raw_args.ends_with[ ]>":
         - determine <server.list_online_players.parse[name].filter[starts_with[<context.args.get[2]>]]>
     script:
     - choose <context.args.first>:
@@ -100,14 +100,16 @@ UtilizenCommandMail:
         - case sendall:
             - if <player.has_permission[utilizen.mail.sendall]>:
                 - if <context.args.size> > 1:
-                    - foreach <server.list_files[../Utilizen/data/players].parse[before[.yml]]>:
+                    - foreach <server.list_players.parse[uuid]>:
                         - yaml id:UtilizenServerdata set msgcount:++
-                        - if <yaml.list.contains[Utilizen_<[value]>]>:
+                        - if <player[<[value]>].is_online>:
                             - yaml id:Utilizen_<[value]> set <[value]>.mailbox.msg<yaml[UtilizenServerdata].read[msgcount]||0>:|:<player.uuid>|<context.args.remove[1].space_separated>
                             - run UtilizenSavePlayerTask def:<[value]>
                             - foreach next
                         - else:
                             - run MailHandlerTask def:<[value]>|<context.args.remove[1].space_separated>|<player.uuid>
+                        - if <[loop_index].mod[5]> == 0:
+                            - wait 1t
                     - run UtilizenSaveServerTask
                     - narrate <yaml[UtilizenLang].read[mailsendall].parsed>
         - default:
@@ -117,6 +119,9 @@ MailHandlerTask:
     debug: false
     definitions: uuid|text|puuid
     script:
+    - if !<server.has_file[../Utilizen/data/players/<[uuid]>.yml]>:
+        - yaml create id:Utilizen_<player.uuid>
+        - ~yaml savefile:../Utilizen/data/players/<[uuid]>.yml id:Utilizen_<[uuid]>
     - ~yaml load:../Utilizen/data/players/<[uuid]>.yml id:Utilizen_<[uuid]>
     - yaml id:Utilizen_<[uuid]> set <[uuid]>.mailbox.msg.<yaml[UtilizenServerdata].read[msgcount]||0>:|:<[puuid]>|<[text]>
     - ~yaml savefile:../Utilizen/data/players/<[uuid]>.yml id:Utilizen_<[uuid]>
