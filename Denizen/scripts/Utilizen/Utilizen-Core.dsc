@@ -25,7 +25,7 @@ UtilizenYamlLoad:
         - ~yaml savefile:../Utilizen/serverdata.yml id:UtilizenServerdata
         - ~yaml load:../Utilizen/serverdata.yml id:UtilizenServerdata
         on player joins:
-        - if !<server.has_file[../Utilizen/data/<player.uuid>.yml]>:
+        - if !<server.has_file[../Utilizen/data/players/<player.uuid>.yml]>:
             - yaml create id:Utilizen_<player.uuid>
             - ~yaml savefile:../Utilizen/data/players/<player.uuid>.yml id:Utilizen_<player.uuid>
         - else:
