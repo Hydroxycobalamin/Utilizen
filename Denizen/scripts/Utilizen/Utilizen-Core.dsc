@@ -35,11 +35,13 @@ UtilizenYamlLoad:
         - yaml unload id:Utilizen_<player.uuid>
 UtilizenSavePlayerTask:
     type: task
+    debug: false
     definitions: uuid
     script:
     - ~yaml savefile:../Utilizen/data/players/<[uuid]>.yml id:Utilizen_<[uuid]>
 UtilizenSaveServerTask:
     type: task
+    debug: false
     script:
     - ~yaml savefile:../Utilizen/data/serverdata.yml id:UtilizenServerdata
 Utilizen:

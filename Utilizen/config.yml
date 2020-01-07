@@ -35,7 +35,7 @@ kickops: 'false'
 enchants: 'true'
 
 #Show prefix and suffix in TabList
-tablist: 'true'
+tablist: 'false'
 
 #You can use following Tags here:
 #<player.list_name> returns player's nickname
