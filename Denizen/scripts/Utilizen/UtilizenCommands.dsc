@@ -49,7 +49,7 @@ UtilizenCommandAFK:
         - permission remove smoothsleep.ignore
 UtilizenCommandMail:
     type: command
-    debug: true
+    debug: false
     name: mail
     description: Read and Send mails!
     usage: /mail [send|read|remove|sendall] (Player) (Message)
@@ -114,6 +114,7 @@ UtilizenCommandMail:
             - narrate <yaml[UtilizenLang].read[mailallarguments].parsed>
 MailHandlerTask:
     type: task
+    debug: false
     definitions: uuid|text|puuid
     script:
     - ~yaml load:../Utilizen/data/players/<[uuid]>.yml id:Utilizen_<[uuid]>
