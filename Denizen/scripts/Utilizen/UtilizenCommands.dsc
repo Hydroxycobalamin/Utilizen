@@ -161,18 +161,20 @@ UtilizenMSGCommand:
     tab complete:
     - if <context.args.is_empty>:
         - determine <server.list_online_players.parse[name]>
-    - if <context.args.size> == 1 && "!<context.raw_args.ends_with[ ]>":
+    - else if <context.args.size> == 1 && "!<context.raw_args.ends_with[ ]>":
         - determine <server.list_online_players.parse[name].filter[starts_with[<context.args.first>]]>
     script:
-    - if !<context.args.is_empty>:
-        - if <server.match_player[<context.args.first>].is_online>:
-            - if <context.args.size> != 1:
+    - if <context.args.size> >= 1:
+        - if <server.player_is_valid[<context.args.first>]>:
+            - if <server.match_player[<context.args.first>].is_online>:
                 - if <context.args.size> > 1:
                     - narrate <yaml[UtilizenLang].read[msgsent].parsed> targets:<player>|<server.match_player[<context.args.first>]>
+                - else:
+                    - narrate <yaml[UtilizenLang].read[msgempty].parsed>
             - else:
-                - narrate <yaml[UtilizenLang].read[msgempty].parsed>
+                - narrate <yaml[UtilizenLang].read[msgplnotonline].parsed>
         - else:
-            - narrate <yaml[UtilizenLang].read[msgplnotonline].parsed>
+            - narrate <yaml[UtilizenLang].read[msgplnotexist].parsed>
     - else:
         - narrate <yaml[UtilizenLang].read[msgsyntax].parsed>
 UtilizenNickCommand:
