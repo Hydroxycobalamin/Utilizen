@@ -18,9 +18,12 @@ UtilizenCommandAFK:
     permission message: <&3>[Permission] You need the permission <&b><permission>
     tab complete:
     - if <player.has_permission[utilizen.afk.other]>:
-        - determine <server.list_online_players.parse[name]>
-    - else:
-        - stop
+        - choose <context.args.size>:
+            - case 0:
+                - determine <server.list_online_players.parse[name]>
+            - case 1:
+                - if "!<context.raw_args.ends_with[ ]>":
+                    - determine <server.list_online_players.parse[name].filter[starts_with[<context.args.first>]]>
     script:
     - if <context.server>:
         - announce to_console "[Utilizen] This command can not be executed from console"
@@ -38,7 +41,7 @@ UtilizenCommandAFK:
                 - permission remove smoothsleep.ignore players:<server.match_player[<context.args.get[1]>]>
                 - stop
         - else:
-            - narrate <yaml[UtilizenLang].read[afkplnotonline].parsed> targets:<server.list_online_players>
+            - narrate <yaml[UtilizenLang].read[afkplnotonline].parsed>
     - if !<player.has_flag[afk]>:
         - narrate <yaml[UtilizenLang].read[afk].parsed> targets:<server.list_online_players>
         - flag player afk
@@ -49,7 +52,7 @@ UtilizenCommandAFK:
         - permission remove smoothsleep.ignore
 UtilizenCommandMail:
     type: command
-    debug: true
+    debug: false
     name: mail
     description: Read and Send mails!
     usage: /mail [send|read|remove|sendall] (Player) (Message)
@@ -174,7 +177,7 @@ UtilizenMSGCommand:
         - narrate <yaml[UtilizenLang].read[msgsyntax].parsed>
 UtilizenNickCommand:
     type: command
-    debug: true
+    debug: false
     name: nick
     description: Nick people
     usage: /nick
