@@ -56,31 +56,35 @@ UtilizenCommandMail:
     permission: utilizen.mail
     permission message: <&3>[Permission] You need the permission <&b><permission>
     tab complete:
-    - if <context.args.is_empty>:
-        - determine <list[send|read|remove|<tern[<player.has_permission[utilizen.mail.sendall]>].pass[sendall].fail[]>]>
-    - else if <context.args.size> == 1 && "!<context.raw_args.ends_with[ ]>":
-        - determine <list[send|read|remove|<tern[<player.has_permission[utilizen.mail.sendall]>].pass[sendall].fail[]>].filter[starts_with[<context.args.first>]]>
-    - else if <context.args.size> < 2 && <context.args.first> == send:
-        - determine <server.list_online_players.parse[name]>
-    - else if <context.args.size> == 2 && "!<context.raw_args.ends_with[ ]>":
-        - determine <server.list_online_players.parse[name].filter[starts_with[<context.args.get[2]>]]>
+    - choose <context.args.size>:
+        - case 0:
+            - determine <list[send|read|remove|<tern[<player.has_permission[utilizen.mail.sendall]>].pass[sendall].fail[]>]>
+        - case 1:
+            - if "!<context.raw_args.ends_with[ ]>":
+                - determine <list[send|read|remove|<tern[<player.has_permission[utilizen.mail.sendall]>].pass[sendall].fail[]>].filter[starts_with[<context.args.first>]]>
+            - else if <context.args.first> == send:
+                - determine <server.list_online_players.parse[name]>
+        - case 2:
+            - if "!<context.raw_args.ends_with[ ]>":
+                - determine <server.list_online_players.parse[name].filter[starts_with[<context.args.get[2]>]]>
     script:
     - choose <context.args.first>:
         - case send:
             - if <context.args.size> >= 2:
                 - if <server.player_is_valid[<context.args.get[2]>]>:
                     - if <context.args.size> > 2:
+                        - narrate <yaml[UtilizenLang].read[mailsend].parsed>
                         - yaml id:UtilizenServerdata set msgcount:++
                         - run UtilizenSaveServerTask
-                        - if !<yaml.list.contains[Utilizen_<server.match_offline_player[<context.args.get[2]>].uuid>]>:
+                        - if !<server.match_offline_player[<context.args.get[2]>].is_online>:
                             - ~yaml load:../Utilizen/data/players/<server.match_offline_player[<context.args.get[2]>].uuid>.yml id:Utilizen_<server.match_offline_player[<context.args.get[2]>].uuid>
-                            - yaml id:Utilizen_<player.uuid> set <server.match_offline_player[<context.args.get[2]>].uuid>.mailbox.msg<yaml[UtilizenServerdata].read[msgcount]||0>:|:<player.uuid>|<context.args.remove[1|2].space_separated>
+                            - yaml id:Utilizen_<player.uuid> set <server.match_offline_player[<context.args.get[2]>].uuid>.mailbox.<yaml[UtilizenServerdata].read[msgcount]||0>:|:<player.uuid>|<context.args.remove[1|2].space_separated>
+                            - ~yaml savefile:../Utilizen/data/players/<server.match_offline_player[<context.args.get[2]>].uuid>.yml id:Utilizen_<server.match_offline_player[<context.args.get[2]>].uuid>
                             - yaml unload id:Utilizen_<server.match_offline_player[<context.args.get[2]>].uuid>
                             - narrate <yaml[UtilizenLang].read[mailsend].parsed>
                             - stop
-                        - yaml id:Utilizen_<player.uuid> set <server.match_offline_player[<context.args.get[2]>].uuid>.mailbox.msg<yaml[UtilizenServerdata].read[msgcount]||0>:|:<player.uuid>|<context.args.remove[1|2].space_separated>
+                        - yaml id:Utilizen_<player.uuid> set <server.match_offline_player[<context.args.get[2]>].uuid>.mailbox.<yaml[UtilizenServerdata].read[msgcount]||0>:|:<player.uuid>|<context.args.remove[1|2].space_separated>
                         - ~yaml savefile:../Utilizen/data/players/<server.match_offline_player[<context.args.get[2]>].uuid>.yml id:Utilizen_<server.match_offline_player[<context.args.get[2]>].uuid>
-                        - narrate <yaml[UtilizenLang].read[mailsend].parsed>
                     - else:
                         - narrate <yaml[UtilizenLang].read[mailempty].parsed>
                 - else:
@@ -100,18 +104,18 @@ UtilizenCommandMail:
         - case sendall:
             - if <player.has_permission[utilizen.mail.sendall]>:
                 - if <context.args.size> > 1:
+                    - narrate <yaml[UtilizenLang].read[mailsendall].parsed>
                     - foreach <server.list_players.parse[uuid]>:
+                        - if <[loop_index].mod[5]> == 0:
+                            - wait 1t
                         - yaml id:UtilizenServerdata set msgcount:++
                         - if <player[<[value]>].is_online>:
-                            - yaml id:Utilizen_<[value]> set <[value]>.mailbox.msg<yaml[UtilizenServerdata].read[msgcount]||0>:|:<player.uuid>|<context.args.remove[1].space_separated>
+                            - yaml id:Utilizen_<[value]> set <[value]>.mailbox.<yaml[UtilizenServerdata].read[msgcount]||0>:|:<player.uuid>|<context.args.remove[1].space_separated>
                             - run UtilizenSavePlayerTask def:<[value]>
                             - foreach next
                         - else:
                             - run MailHandlerTask def:<[value]>|<context.args.remove[1].space_separated>|<player.uuid>
-                        - if <[loop_index].mod[5]> == 0:
-                            - wait 1t
                     - run UtilizenSaveServerTask
-                    - narrate <yaml[UtilizenLang].read[mailsendall].parsed>
         - default:
             - narrate <yaml[UtilizenLang].read[mailallarguments].parsed>
 MailHandlerTask:
@@ -123,7 +127,7 @@ MailHandlerTask:
         - yaml create id:Utilizen_<player.uuid>
         - ~yaml savefile:../Utilizen/data/players/<[uuid]>.yml id:Utilizen_<[uuid]>
     - ~yaml load:../Utilizen/data/players/<[uuid]>.yml id:Utilizen_<[uuid]>
-    - yaml id:Utilizen_<[uuid]> set <[uuid]>.mailbox.msg.<yaml[UtilizenServerdata].read[msgcount]||0>:|:<[puuid]>|<[text]>
+    - yaml id:Utilizen_<[uuid]> set <[uuid]>.mailbox.<yaml[UtilizenServerdata].read[msgcount]||0>:|:<[puuid]>|<[text]>
     - ~yaml savefile:../Utilizen/data/players/<[uuid]>.yml id:Utilizen_<[uuid]>
     - if !<player[<[uuid]>].is_online>:
         - yaml unload id:Utilizen_<[uuid]>
