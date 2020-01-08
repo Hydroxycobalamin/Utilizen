@@ -15,15 +15,15 @@ UtilizenYamlLoad:
         on server start:
         - if !<server.has_file[../Utilizen/serverdata.yml]>:
             - yaml create id:UtilizenServerdata
-            - ~yaml savefile:../Utilizen/serverdata.yml id:UtilizenServerdata
+            - ~yaml savefile:../Utilizen/data/serverdata.yml id:UtilizenServerdata
         - ~yaml load:../Utilizen/config.yml id:UtilizenConfig
         - ~yaml load:../Utilizen/lang/<yaml[UtilizenConfig].read[lang]>.yml id:UtilizenLang
-        - ~yaml load:../Utilizen/serverdata.yml id:UtilizenServerdata
+        - ~yaml load:../Utilizen/data/serverdata.yml id:UtilizenServerdata
         on reload scripts:
         - ~yaml load:../Utilizen/config.yml id:UtilizenConfig
         - ~yaml load:../Utilizen/lang/<yaml[UtilizenConfig].read[lang]>.yml id:UtilizenLang
-        - ~yaml savefile:../Utilizen/serverdata.yml id:UtilizenServerdata
-        - ~yaml load:../Utilizen/serverdata.yml id:UtilizenServerdata
+        - ~yaml savefile:../Utilizen/data/serverdata.yml id:UtilizenServerdata
+        - ~yaml load:../Utilizen/data/serverdata.yml id:UtilizenServerdata
         on player joins:
         - if !<server.has_file[../Utilizen/data/players/<player.uuid>.yml]>:
             - yaml create id:Utilizen_<player.uuid>
