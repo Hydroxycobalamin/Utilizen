@@ -75,10 +75,10 @@ UtilizenNickGetPermissionHandler:
     debug: false
     script:
     - foreach <yaml[UtilizenConfig].read[homes].parse[before[:]]>:
-        - if <player.has_permission[utilizen.group.<[value]>]>:
+        - if <server.match_player[<context.args.first>].has_permission[utilizen.group.<[value]>]>:
             - define prefix:<server.group_prefix[<[value]>]||>
             - define suffix:<server.group_suffix[<[value]>]||>
-            - foreach stop
+                - foreach stop
 UtilizenBackHandler:
     type: world
     debug: false

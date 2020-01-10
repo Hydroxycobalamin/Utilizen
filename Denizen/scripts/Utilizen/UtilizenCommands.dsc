@@ -179,7 +179,7 @@ UtilizenMSGCommand:
         - narrate <yaml[UtilizenLang].read[msgsyntax].parsed>
 UtilizenNickCommand:
     type: command
-    debug: false
+    debug: true
     name: nick
     description: Nick people
     usage: /nick
@@ -193,32 +193,34 @@ UtilizenNickCommand:
     script:
     - choose <context.args.size>:
         - case 1:
-            - if <server.player_is_valid[<context.args.first>]>
+            - if <server.player_is_valid[<context.args.first>]>:
+                - define uuid:<server.match_player[<context.args.first>].uuid>
                 - inject UtilizenNickGetPermissionHandler
-                - yaml id:UtilizenServerdata set nicknames:<-:<yaml[Utilizen_<server.match_player[<context.args.first>].uuid>].read[<server.match_player[<context.args.first>].uuid>.nickname]>
+                - yaml id:UtilizenServerdata set nicknames:<-:<[uuid]>/<server.match_player[<context.args.first>].display_name>
                 - run UtilizenSaveServerTask
                 - adjust <server.match_player[<context.args.first>]> player_list_name:<[prefix]||><player.name><[suffix]||>
                 - adjust <server.match_player[<context.args.first>]> display_name:<player.name>
                 - narrate <yaml[UtilizenLang].read[nickdelete].parsed>
-                - yaml id:Utilizen_<player.uuid> set <player.uuid>.nickname:!
-                - run UtilizenSavePlayerTask def:<player.uuid>
+                - yaml id:Utilizen_<[uuid]> set <[uuid]>.nickname:!
+                - run UtilizenSavePlayerTask def:<[uuid]>
             - else:
                 - narrate <yaml[UtilizenLang].read[nickplnotexist].parsed>
         - case 2:
             - if <server.list_players.parse[name].contains[<context.args.get[2]>]> || <yaml[UtilizenServerdata].read[nicknames].contains[<context.args.get[2]>]>:
                 - narrate <yaml[UtilizenLang].read[nickinuse].parsed>
                 - stop
+            - define uuid:<server.match_player[<context.args.first>].uuid>
             - inject UtilizenNickGetPermissionHandler
             - if <server.match_player[<context.args.first>].name> != <server.match_player[<context.args.first>].display_name>:
-                - yaml id:UtilizenServerdata set nicknames:<-:<server.match_player[<context.args.first>].display_name.parse_color>
+                - yaml id:UtilizenServerdata set nicknames:<-:<[uuid]>/<server.match_player[<context.args.first>].display_name>
             - define nick:<context.args.get[2].parse_color>
             - adjust <server.match_player[<context.args.first>]> player_list_name:<[prefix]||><[nick]><[suffix]||>
             - adjust <server.match_player[<context.args.first>]> display_name:<[nick]>
             - narrate <yaml[UtilizenLang].read[nicksuccess].parsed>
             - narrate <yaml[UtilizenLang].read[nickchanged].parsed>
-            - yaml id:Utilizen_<player.uuid> set <player.uuid>.nickname:<context.args.get[2].parse_color>
-            - run UtilizenSavePlayerTask def:<player.uuid>
-            - yaml id:UtilizenServerdata set nicknames:->:<context.args.get[2].parse_color>
+            - yaml id:Utilizen_<[uuid]> set <[uuid]>.nickname:<context.args.get[2].parse_color>
+            - run UtilizenSavePlayerTask def:<[uuid]>
+            - yaml id:UtilizenServerdata set nicknames:->:<[uuid]>/<context.args.get[2].parse_color>
             - run UtilizenSaveServerTask
         - default:
             - narrate <yaml[UtilizenLang].read[nicksyntax].parsed>
@@ -231,20 +233,21 @@ UtilizenShowNickCommand:
     permission: utilizen.shownick
     permission message: <&3>[Permission] You need the permission <&b><permission>
     tab complete:
-    - foreach <yaml[Utilizen_<player.uuid>].list_deep_keys[].filter[contains[nickname]]>:
-        - define nicklist:->:<yaml[Utilizen_<player.uuid>].read[<[value]>]>
-    - if <[nicklist].is_empty||true>:
-        - stop
-    - else:
-        - determine <[nicklist]>
+    - if <context.args.is_empty>:
+        - determine <yaml[UtilizenServerdata].read[nicknames].get_sub_items[2]||>
+    - else if <context.args.size> == 1 && "!<context.raw_args.ends_with[ ]>":
+        - determine <yaml[UtilizenServerdata].read[nicknames].get_sub_items[2].filter[starts_with[<context.args.first>]]||>
     script:
-    - foreach <yaml.list.filter[contains_any[utilizen_]]>:
-        - if <yaml[<[value]>].contains[<[value].after[utilizen_]>.nickname]>:
-            - define nicklist:->:<yaml[<[value]>].read[<[value].after[utilizen_]>.nickname]>
-    - if <[nicklist].contains[<context.args.first>]||false>:
-        - foreach <yaml.list.filter[contains_any[utilizen_]]>:
-            - if <yaml[<[value]>].read[<[value].after[utilizen_]>.nickname]> == <context.args.first>:
-                - narrate <[value].after[utilizen_].as_player.name>
+    - if <context.args.size> == 1:
+        - if <yaml[UtilizenServerdata].contains[nicknames]>:
+            - if <yaml[UtilizenServerdata].read[nicknames].get_sub_items[2].contains[<context.args.first>]>:
+                - narrate <player[<yaml[UtilizenServerdata].read[nicknames].map_find_key[<context.args.first>]>].name>
+            - else:
+                - narrate <yaml[UtilizenLang].read[shownicknonick].parsed>
+        - else:
+            - narrate <yaml[UtilizenLang].read[shownicknonicked].parsed>
+    - else:
+        - narrate <yaml[UtilizenLang].read[shownicksyntax].parsed>
 UtilizenSetWarpCommand:
     type: command
     debug: false
