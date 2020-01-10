@@ -70,6 +70,15 @@ UtilizenNickHandler:
                         - foreach stop
             - adjust <player> player_list_name:<[prefix]||><yaml[Utilizen_<player.uuid>].read[<player.uuid>.nickname].parse_color><[suffix]||>
             - adjust <player> display_name:<yaml[Utilizen_<player.uuid>].read[<player.uuid>.nickname].parse_color>
+UtilizenNickGetPermissionHandler:
+    type: task
+    debug: false
+    script:
+    - foreach <yaml[UtilizenConfig].read[homes].parse[before[:]]>:
+        - if <player.has_permission[utilizen.group.<[value]>]>:
+            - define prefix:<server.group_prefix[<[value]>]||>
+            - define suffix:<server.group_suffix[<[value]>]||>
+            - foreach stop
 UtilizenBackHandler:
     type: world
     debug: false
