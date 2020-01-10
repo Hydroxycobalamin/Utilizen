@@ -84,10 +84,10 @@ UtilizenBackHandler:
     debug: false
     events:
         on player teleports:
-        - yaml id:Utilizen_<player.uuid> set <player.uuid>.lastlocation:<context.origin.simple>
+        - yaml id:Utilizen_<player.uuid> set <player.uuid>.lastlocation:<context.origin>
         - run UtilizenSavePlayerTask def:<player.uuid>
         on player dies:
-        - yaml id:Utilizen_<player.uuid> set <player.uuid>.lastlocation:<context.entity.location.simple>
+        - yaml id:Utilizen_<player.uuid> set <player.uuid>.lastlocation:<context.entity.location>
         - run UtilizenSavePlayerTask def:<player.uuid>
 UtilizenMuteHandler:
     type: world

@@ -585,7 +585,7 @@ UtilizenBackCommand:
         - stop
     script:
     - if <yaml[Utilizen_<player.uuid>].contains[<player.uuid>.lastlocation]>:
-        - teleport <location[<yaml[Utilizen_<player.uuid>].read[<player.uuid>.lastlocation]>]>
+        - teleport <yaml[Utilizen_<player.uuid>].read[<player.uuid>.lastlocation]>
     - else:
         - narrate <yaml[UtilizenLang].read[backinvalid].parsed>
 UtilizenFlyCommand:
