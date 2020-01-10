@@ -574,6 +574,7 @@ UtilizenSpawnCommand:
     - teleport <player> <world[Test1].spawn_location>
 UtilizenBackCommand:
     type: command
+    debug: false
     name: back
     description: Warp to your last Position you were teleported from
     usage: /back
@@ -584,7 +585,7 @@ UtilizenBackCommand:
         - stop
     script:
     - if <yaml[Utilizen_<player.uuid>].contains[<player.uuid>.lastlocation]>:
-        - teleport <player> <yaml[Utilizen_<player.uuid>].read[<player.uuid>.lastlocation]>
+        - teleport <location[<yaml[Utilizen_<player.uuid>].read[<player.uuid>.lastlocation]>]>
     - else:
         - narrate <yaml[UtilizenLang].read[backinvalid].parsed>
 UtilizenFlyCommand:
