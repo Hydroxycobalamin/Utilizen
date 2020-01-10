@@ -179,7 +179,7 @@ UtilizenMSGCommand:
         - narrate <yaml[UtilizenLang].read[msgsyntax].parsed>
 UtilizenNickCommand:
     type: command
-    debug: true
+    debug: false
     name: nick
     description: Nick people
     usage: /nick
