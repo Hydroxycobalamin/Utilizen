@@ -6,6 +6,9 @@ lang: 'en_US'
 #Allow bedspawn?
 allow-bed: 'true'
 
+#Allow conpass pointing to bedspawn
+allow-compass-bed: 'false'
+
 #Allow max homes, define a list here. The player will need the permission "utilizen.group.[groupname]"
 #to be allowed to set homes. The Number after : determines the allowed number of homes
 #Your group name MUST be exactly the same as the group name of your permission plugin

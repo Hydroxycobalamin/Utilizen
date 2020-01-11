@@ -558,6 +558,31 @@ UtilizenHatCommand:
         - inventory set slot:<player.item_in_hand.slot> o:air
     - else:
         - narrate <yaml[UtilizenLang].read[hatoccupied].parsed>
+UtilizenSetSpawnCommand:
+    type: command
+    debug: false
+    name: setspawn
+    description: Sets the World Spawn
+    usage: /setspawnw
+    permission: utilizen.setspawn
+    permission message: <&3>[Permission] You need the permission <&b><permission>
+    tab complete:
+    - if <context.args.size> < 1:
+        - determine <list[newbie]>
+    - else if <context.args.size> == 1 && "!<context.raw_args.ends_with[ ]>":
+        - determine <list[newbie].filter[starts_with[<context.args.first>]]>
+    script:
+    - if <context.server>:
+        - announce to_console "[Utilizen] This command can not be executed from console"
+        - stop
+    - if <context.args.is_empty>:
+        - adjust <player.world> spawn_location:<player.location>
+        - narrate <yaml[UtilizenLang].read[setspawnworld].parsed>
+    - else if <context.args.size> == 1:
+        - if <context.args.first> == newbie:
+            - narrate <yaml[UtilizenLang].read[setspawnnewbie].parsed>
+            - yaml id:UtilizenServerData set newbie_location:<player.location>
+            - run UtilizenSaveServerTask
 UtilizenSpawnCommand:
     type: command
     debug: false
@@ -571,7 +596,7 @@ UtilizenSpawnCommand:
         - stop
     script:
     - narrate <yaml[UtilizenLang].read[spawn].parsed>
-    - teleport <player> <world[Test1].spawn_location>
+    - teleport <player> <player.world.spawn_location>
 UtilizenBackCommand:
     type: command
     debug: false

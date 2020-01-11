@@ -27,33 +27,46 @@ UtilizenMOTD:
         on player joins:
         - foreach <yaml[UtilizenConfig].read[motd]>:
             - narrate <[value].parsed>
-UtilizenBedSpawnHandler:
+UtilizenSpawnHandler:
     type: world
     debug: false
+    events:
+        on player joins:
+        - if !<yaml[Utilizen_<player.uuid>].contains[new]> && <yaml[UtilizenServerData].contains[<player.uuid>.newbie_location]>
+            - teleport <yaml[UtilizenServerData].read[newbie_location]>
+            - yaml id:Utilizen_<player.uuid> set new:false
+            - run UtilizenSavePlayerTask def:<player.uuid>
+UtilizenBedSpawnHandler:
+    type: world
+    debug: true
     events:
         on player right clicks *_BED:
         - if <yaml[UtilizenConfig].read[allow-bed]>:
             - yaml id:Utilizen_<player.uuid> set <player.uuid>.spawnlocation:<context.location>
             - run UtilizenSavePlayerTask def:<player.uuid>
             - adjust <player> bed_spawn_location:<context.location>
-            - narrate "<yaml[UtilizenLang].read[bedspawnset].parsed>"
+            - narrate <yaml[UtilizenLang].read[bedspawnset].parsed>
+            - flag player bedspawn d:1t
+        on player receives message flagged:bedspawn priority:1:
+        - if "<element[Respawn point set]>" == <context.message>:
+            - determine cancelled
         on player right clicks with COMPASS:
-        - if <yaml[Utilizen_<player.uuid>].read[<player.uuid>.spawnlocation]||null> == null:
-            - narrate "<yaml[UtilizenLang].read[comnobedspawn].parsed>"
-            - stop
-        - if <player.compass_target> == <yaml[Utilizen_<player.uuid>].read[<player.uuid>.spawnlocation]>:
-            - compass <world[test1].spawn_location>
-            - narrate "<yaml[UtilizenLang].read[comspawn].parsed>"
-            - stop
+        - if <yaml[UtilizenConfig].read[allow-compass-bed]>:
+            - if <player.bed_spawn||null> == null:
+                - narrate <yaml[UtilizenLang].read[comnobedspawn].parsed>
+                - compass <player.world.spawn_location>
+            - else if <player.compass_target> == <yaml[Utilizen_<player.uuid>].read[<player.uuid>.spawnlocation]>:
+                - compass <player.world.spawn_location>
+                - narrate <yaml[UtilizenLang].read[comspawn].parsed>
+            - else:
+                - compass <yaml[Utilizen_<player.uuid>].read[<player.uuid>.spawnlocation]>
+                - narrate <yaml[UtilizenLang].read[combedspawn].parsed>
         - else:
-            - compass <yaml[Utilizen_<player.uuid>].read[<player.uuid>.spawnlocation]>
-            - narrate "<yaml[UtilizenLang].read[combedspawn].parsed>"
-        on player respawns:
+            - compass <player.world.spawn_location>
+            - narrate <yaml[UtilizenLang].read[comspawn].parsed>
+        on player respawns at bed:
         - if <yaml[UtilizenConfig].read[allow-bed]>:
-            - if <yaml[Utilizen_<player.uuid>].read[<player.uuid>.spawnlocation]||false>:
-                - determine <yaml[Utilizen_<player.uuid>].read[<player.uuid>.spawnlocation]>
-        - else:
-            - determine <world[test1].spawn_location>
+            - determine <server.list_worlds.first.spawn_location>
 UtilizenNickHandler:
     type: world
     debug: false
