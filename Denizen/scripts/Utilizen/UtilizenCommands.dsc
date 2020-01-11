@@ -465,14 +465,14 @@ UtlizenSetHomeCommand:
             - if <player.is_op>:
                 - if <yaml[Utilizen_<player.uuid>].read[<player.uuid>.homes].size||0> <= <yaml[UtilizenConfig].read[op-homes]>:
                         - narrate <yaml[UtilizenLang].read[sethomeset].parsed>
-                        - yaml set id:Utilizen_<player.uuid> <player.uuid>.homes:->:<context.args.first>/<player.location.simple>
+                        - yaml id:Utilizen_<player.uuid> set <player.uuid>.homes:->:<context.args.first>/<player.location.simple>
                         - run UtilizenSavePlayerTask def:<player.uuid>
                         - stop
             - foreach <yaml[UtilizenConfig].read[homes]>:
                 - if <player.has_permission[utilizen.groups.<[value].before[:]>]>:
                     - if <yaml[Utilizen_<player.uuid>].read[<player.uuid>.homes].size||0> <= <[value].after[:]>:
                         - narrate <yaml[UtilizenLang].read[sethomeset].parsed>
-                        - yaml set id:Utilizen_<player.uuid> <player.uuid>.homes:->:<context.args.first>/<player.location.simple>
+                        - yaml id:Utilizen_<player.uuid> set <player.uuid>.homes:->:<context.args.first>/<player.location.simple>
                         - run UtilizenSavePlayerTask def:<player.uuid>
                         - stop
                     - else:
@@ -480,7 +480,7 @@ UtlizenSetHomeCommand:
                         - stop
             - if <yaml[Utilizen_<player.uuid>].read[<player.uuid>.homes].size||0> <= <yaml[UtilizenConfig].read[default]>:
                 - narrate <yaml[UtilizenLang].read[sethomeset].parsed>
-                - yaml set id:Utilizen_<player.uuid> <player.uuid>.homes:->:<context.args.first>/<player.location.simple>
+                - yaml id:Utilizen_<player.uuid> set <player.uuid>.homes:->:<context.args.first>/<player.location.simple>
                 - run UtilizenSavePlayerTask def:<player.uuid>
         - else:
             - narrate <yaml[UtilizenLang].read[sethomealreadyset].parsed>
@@ -502,14 +502,14 @@ UtilizenDelHomeCommand:
     - if <context.args.size> == 2 && <server.player_is_valid[<context.args.get[2]>]>:
         - if <player.has_permission[utilizen.delhome.other]>:
             - if <yaml[Utilizen_<player.uuid>].read[<server.match_player[<context.args.get[2]>].uuid>.homes].get_sub_items[1].contains[<context.args.first>]>:
-                - yaml set id:Utilizen_<player.uuid> set <server.match_player[<context.args.get[2]>].uuid>.homes:!|:<yaml[Utilizen_<player.uuid>].read[<server.match_player[<context.args.get[2]>].uuid>.homes].remove[<yaml[Utilizen_<player.uuid>].read[<player.uuid>.homes].get_sub_items[1].find[<context.args.first>]>]>
+                - yaml id:Utilizen_<player.uuid> set <server.match_player[<context.args.get[2]>].uuid>.homes:!|:<yaml[Utilizen_<player.uuid>].read[<server.match_player[<context.args.get[2]>].uuid>.homes].remove[<yaml[Utilizen_<player.uuid>].read[<player.uuid>.homes].get_sub_items[1].find[<context.args.first>]>]>
                 - run UtilizenSavePlayerTask def:<player.uuid>
                 - narrate <yaml[UtilizenLang].read[delhomedeleted].parsed>
             - else:
                 - narrate <yaml[UtilizenLang].read[delhomeothernohomeexist].parsed>
                 - stop
     - else if <yaml[Utilizen_<player.uuid>].read[<player.uuid>.homes].get_sub_items[1].contains[<context.args.first||null>]>:
-        - yaml set id:Utilizen_<player.uuid> <player.uuid>.homes:!|:<yaml[Utilizen_<player.uuid>].read[<player.uuid>.homes].remove[<yaml[Utilizen_<player.uuid>].read[<player.uuid>.homes].get_sub_items[1].find[<context.args.first>]>]>
+        - yaml id:Utilizen_<player.uuid> set <player.uuid>.homes:!|:<yaml[Utilizen_<player.uuid>].read[<player.uuid>.homes].remove[<yaml[Utilizen_<player.uuid>].read[<player.uuid>.homes].get_sub_items[1].find[<context.args.first>]>]>
         - run UtilizenSavePlayerTask def:<player.uuid>
     - else:
         - narrate <yaml[UtilizenLang].read[delhomenohomeexist].parsed>
