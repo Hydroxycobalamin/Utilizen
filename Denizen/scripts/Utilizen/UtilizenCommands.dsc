@@ -563,7 +563,7 @@ UtilizenSetSpawnCommand:
     debug: false
     name: setspawn
     description: Sets the World Spawn
-    usage: /setspawnw
+    usage: /setspawn
     permission: utilizen.setspawn
     permission message: <&3>[Permission] You need the permission <&b><permission>
     tab complete:
