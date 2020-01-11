@@ -32,13 +32,13 @@ UtilizenSpawnHandler:
     debug: false
     events:
         on player joins:
-        - if !<yaml[Utilizen_<player.uuid>].contains[new]> && <yaml[UtilizenServerData].contains[<player.uuid>.newbie_location]>
+        - if !<yaml[Utilizen_<player.uuid>].contains[new]> && <yaml[UtilizenServerData].contains[newbie_location]>:
             - teleport <yaml[UtilizenServerData].read[newbie_location]>
             - yaml id:Utilizen_<player.uuid> set new:false
             - run UtilizenSavePlayerTask def:<player.uuid>
 UtilizenBedSpawnHandler:
     type: world
-    debug: true
+    debug: false
     events:
         on player right clicks *_BED:
         - if <yaml[UtilizenConfig].read[allow-bed]>:
