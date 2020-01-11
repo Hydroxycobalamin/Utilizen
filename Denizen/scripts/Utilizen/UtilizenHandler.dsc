@@ -32,6 +32,7 @@ UtilizenSpawnHandler:
     debug: false
     events:
         on player joins:
+        - waituntil rate:1t <yaml[Utilizen_<player.uuid>].list_keys[]||null> != null
         - if !<yaml[Utilizen_<player.uuid>].contains[new]> && <yaml[UtilizenServerData].contains[newbie_location]>:
             - teleport <yaml[UtilizenServerData].read[newbie_location]>
             - yaml id:Utilizen_<player.uuid> set new:false
@@ -72,6 +73,7 @@ UtilizenNickHandler:
     debug: false
     events:
         on player joins:
+        - waituntil rate:1t <yaml[Utilizen_<player.uuid>].list_keys[]||null> != null
         - if <yaml[Utilizen_<player.uuid>].read[<player.uuid>.nickname]||null> == null:
             - stop
         - else:
@@ -147,6 +149,7 @@ UtilizenJailHandler:
         - determine passively cancelled
         - narrate <yaml[UtilizenLang].read[jailnopermission].parsed>
         on player joins:
+        - waituntil rate:1t <yaml[Utilizen_<player.uuid>].list_keys[]||null> != null
         - if <yaml[Utilizen_<player.uuid>].contains[<player.uuid>.jail.duration]||false>:
             - teleport <player> <yaml[UtilizenServerdata].read[jailname.<yaml[UtilizenServerdata].list_keys[jailname].random>]>
             - wait 1t
