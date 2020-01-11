@@ -6,7 +6,7 @@ lang: 'en_US'
 #Allow bedspawn?
 allow-bed: 'true'
 
-#Allow conpass pointing to bedspawn
+#Allow compass pointing to bedspawn
 allow-compass-bed: 'false'
 
 #Allow max homes, define a list here. The player will need the permission "utilizen.group.[groupname]"
