@@ -24,7 +24,7 @@ UtilizenYamlLoad:
         - ~yaml load:../Utilizen/lang/<yaml[UtilizenConfig].read[lang]>.yml id:UtilizenLang
         - ~yaml savefile:../Utilizen/data/serverdata.yml id:UtilizenServerdata
         - ~yaml load:../Utilizen/data/serverdata.yml id:UtilizenServerdata
-        on player joins:
+        on player joins priority:-1:
         - if !<server.has_file[../Utilizen/data/players/<player.uuid>.yml]>:
             - yaml create id:Utilizen_<player.uuid>
             - ~yaml savefile:../Utilizen/data/players/<player.uuid>.yml id:Utilizen_<player.uuid>
