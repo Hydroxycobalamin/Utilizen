@@ -32,14 +32,15 @@ kickreason: 'You were kicked'
 kickops: 'false'
 
 #Enable enchantments over the vanilla max level
-enchants: 'true'
+enchants: 'false'
 
 #Show prefix and suffix in TabList
 tablist: 'false'
 
 #You can use following Tags here:
-#<player.list_name> returns player's nickname
+#<player.list_name> returns player's name as shown in the player list
 #<player.name> returns player's Minecraft name
+#<player.display_name> returns the player's nickname (if nicked)
 #<server.list_online_players.size> returns the number of online players
 #<server.max_players> returns the number of max players allowed on this server
 motd:
