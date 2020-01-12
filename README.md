@@ -36,6 +36,7 @@ To make Utilizen work, you need the following plugins
 | **utilizen.help** | Main Command for access Utilizen |
 | **utilizen.home** | Let players teleport to their homes |
 | **utilizen.invsee** | Look into player inventories |
+| **utilizen.itemdb** | Shows Item Data |
 | **utilizen.jail** | Jail Bad players |
 | **utilizen.kick** | Kick Bad players |
 | **utilizen.kickall** | Kick everyone |

@@ -1278,3 +1278,25 @@ UtilizenEnchantCommand:
             - narrate <yaml[UtilizenLang].read[enchantnotvalid].parsed>
     - else:
         - narrate <yaml[UtilizenLang].read[enchantsyntax].parsed>
+UtilizenItemDBCommand:
+    type: command
+    debug: false
+    name: itemdb
+    description: Shows Item Data
+    usage: /itemdb
+    permission: utilizen.itemdb
+    permission message: <&3>You need the permission <&b><permission>
+    tab complete:
+    - if !<context.server>:
+        - stop
+    script:
+    - define item:<player.item_in_hand>
+    - narrate "<&3>======================================================"
+    - narrate "<&3>Item: <&f><[item].material.name> <&3>Display: <tern[<[item].has_display>].pass[<&r><[item].display>].fail[<&f>NONE]>
+    - narrate "<&3>dItem: <&b><tern[<[item].has_script>].pass[true | <&3>Script: <&b><[item].script>].fail[<&b>false]>"
+    - narrate "<&3>Repairable: <&b><[item].repairable>"
+    - narrate "<&3>Is Enchanted: <&b><[item].is_enchanted>"
+    - if <[item].is_enchanted>:
+        - foreach <[item].enchantments.with_levels>:
+            - narrate "<&3><[loop_index]> Enchantment: <&b><&translate[enchantment.minecraft.<[value].before[,]>]>: <&f><[value].after[,]>"
+    - narrate "<&3>Has Lore: <&b><[item].has_lore> <tern[<[item].has_lore>].pass[| <&3>Lore: <&r><[item].lore.separated_by[<&r> ]>].fail[]>"
