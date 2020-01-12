@@ -1303,4 +1303,3 @@ UtilizenItemDBCommand:
         - foreach <[item].enchantments.with_levels>:
             - narrate "<&3>Enchantment: <&b><&translate[enchantment.minecraft.<[value].before[,]>]> <&f><[value].after[,]>"
     - narrate "<&3>Has Lore: <&b><[item].has_lore> <tern[<[item].has_lore>].pass[| <&3>Lore: <&r><[item].lore.separated_by[<&r> ]>].fail[]>"
-    - narrate "<queue.time_ran.in_milliseconds>"
