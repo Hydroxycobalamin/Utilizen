@@ -1290,9 +1290,12 @@ UtilizenItemDBCommand:
     - if !<context.server>:
         - stop
     script:
+    - if <context.server>:
+        - announce to_console "[Utilizen] This command can not be executed from console"
+        - stop
     - define item:<player.item_in_hand>
     - narrate "<&3>======================================================"
-    - narrate "<&3>Item: <&f><[item].material.name> <&3>Display: <tern[<[item].has_display>].pass[<&r><[item].display>].fail[<&f>NONE]>
+    - narrate "<&3>Item: <&f><[item].material.name> <&3>Display: <tern[<[item].has_display>].pass[<&r><[item].display>].fail[<&f>NONE]>"
     - narrate "<&3>dItem: <&b><tern[<[item].has_script>].pass[<&b>true <&3>Script: <&b><[item].script>].fail[<&b>false]>"
     - narrate "<&3>Repairable: <tern[<[item].repairable>].pass[<&b>true <&3>Durability: <&b><[item].max_durability.sub[<[item].durability>]><&f>/<&b><[item].max_durability>].fail[<&b>false]>"
     - narrate "<&3>Is Enchanted: <&b><[item].is_enchanted>"
@@ -1300,3 +1303,4 @@ UtilizenItemDBCommand:
         - foreach <[item].enchantments.with_levels>:
             - narrate "<&3>Enchantment: <&b><&translate[enchantment.minecraft.<[value].before[,]>]> <&f><[value].after[,]>"
     - narrate "<&3>Has Lore: <&b><[item].has_lore> <tern[<[item].has_lore>].pass[| <&3>Lore: <&r><[item].lore.separated_by[<&r> ]>].fail[]>"
+    - narrate "<queue.time_ran.in_milliseconds>"
