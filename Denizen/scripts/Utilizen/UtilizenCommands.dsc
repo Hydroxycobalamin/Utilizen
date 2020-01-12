@@ -1293,8 +1293,8 @@ UtilizenItemDBCommand:
     - define item:<player.item_in_hand>
     - narrate "<&3>======================================================"
     - narrate "<&3>Item: <&f><[item].material.name> <&3>Display: <tern[<[item].has_display>].pass[<&r><[item].display>].fail[<&f>NONE]>
-    - narrate "<&3>dItem: <&b><tern[<[item].has_script>].pass[true | <&3>Script: <&b><[item].script>].fail[<&b>false]>"
-    - narrate "<&3>Repairable: <&b><[item].repairable> <&3>Durability: <&b><[item].max_durability.sub[<[item].durability>]><&f>/<&b><[item].max_durability>"
+    - narrate "<&3>dItem: <&b><tern[<[item].has_script>].pass[<&b>true <&3>Script: <&b><[item].script>].fail[<&b>false]>"
+    - narrate "<&3>Repairable: <tern[<[item].repairable>].pass[<&b>true <&3>Durability: <&b><[item].max_durability.sub[<[item].durability>]><&f>/<&b><[item].max_durability>].fail[<&b>false]>"
     - narrate "<&3>Is Enchanted: <&b><[item].is_enchanted>"
     - if <[item].is_enchanted>:
         - foreach <[item].enchantments.with_levels>:
