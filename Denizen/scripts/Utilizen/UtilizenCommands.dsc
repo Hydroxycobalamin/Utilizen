@@ -127,7 +127,7 @@ MailHandlerTask:
     definitions: uuid|text|puuid
     script:
     - if !<server.has_file[../Utilizen/data/players/<[uuid]>.yml]>:
-        - yaml create id:Utilizen_<player.uuid>
+        - yaml create id:Utilizen_<[uuid]>
         - ~yaml savefile:../Utilizen/data/players/<[uuid]>.yml id:Utilizen_<[uuid]>
     - ~yaml load:../Utilizen/data/players/<[uuid]>.yml id:Utilizen_<[uuid]>
     - yaml id:Utilizen_<[uuid]> set mailbox.<yaml[UtilizenServerdata].read[msgcount]||0>:|:<[puuid]>|<[text]>
