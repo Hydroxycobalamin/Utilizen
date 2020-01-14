@@ -42,7 +42,7 @@ UtilizenBedSpawnHandler:
     events:
         on player right clicks *_BED:
         - if <yaml[UtilizenConfig].read[allow-bed]>:
-            - yaml id:Utilizen_<player.uuid> set <player.uuid>.spawnlocation:<context.location>
+            - yaml id:Utilizen_<player.uuid> set spawnlocation:<context.location>
             - run UtilizenSavePlayerTask def:<player.uuid>
             - adjust <player> bed_spawn_location:<context.location>
             - narrate <yaml[UtilizenLang].read[bedspawnset].parsed>
@@ -55,11 +55,11 @@ UtilizenBedSpawnHandler:
             - if <player.bed_spawn||null> == null:
                 - narrate <yaml[UtilizenLang].read[comnobedspawn].parsed>
                 - compass <player.world.spawn_location>
-            - else if <player.compass_target> == <yaml[Utilizen_<player.uuid>].read[<player.uuid>.spawnlocation]>:
+            - else if <player.compass_target> == <yaml[Utilizen_<player.uuid>].read[spawnlocation]>:
                 - compass <player.world.spawn_location>
                 - narrate <yaml[UtilizenLang].read[comspawn].parsed>
             - else:
-                - compass <yaml[Utilizen_<player.uuid>].read[<player.uuid>.spawnlocation]>
+                - compass <yaml[Utilizen_<player.uuid>].read[spawnlocation]>
                 - narrate <yaml[UtilizenLang].read[combedspawn].parsed>
         - else:
             - compass <player.world.spawn_location>
@@ -73,7 +73,7 @@ UtilizenNickHandler:
     events:
         on player joins:
         - waituntil rate:1t <yaml[Utilizen_<player.uuid>].list_keys[]||null> != null
-        - if <yaml[Utilizen_<player.uuid>].read[<player.uuid>.nickname]||null> == null:
+        - if <yaml[Utilizen_<player.uuid>].read[nickname]||null> == null:
             - stop
         - else:
             - if <yaml[UtilizenConfig].read[tablist]>:
@@ -82,8 +82,8 @@ UtilizenNickHandler:
                         - define prefix:<server.group_prefix[<[value]>]||>
                         - define suffix:<server.group_suffix[<[value]>]||>
                         - foreach stop
-            - adjust <player> player_list_name:<[prefix]||><yaml[Utilizen_<player.uuid>].read[<player.uuid>.nickname].parse_color><[suffix]||>
-            - adjust <player> display_name:<yaml[Utilizen_<player.uuid>].read[<player.uuid>.nickname].parse_color>
+            - adjust <player> player_list_name:<[prefix]||><yaml[Utilizen_<player.uuid>].read[nickname].parse_color><[suffix]||>
+            - adjust <player> display_name:<yaml[Utilizen_<player.uuid>].read[nickname].parse_color>
 UtilizenNickGetPermissionHandler:
     type: task
     debug: false
@@ -98,10 +98,10 @@ UtilizenBackHandler:
     debug: false
     events:
         on player teleports:
-        - yaml id:Utilizen_<player.uuid> set <player.uuid>.lastlocation:<context.origin>
+        - yaml id:Utilizen_<player.uuid> set lastlocation:<context.origin>
         - run UtilizenSavePlayerTask def:<player.uuid>
         on player dies:
-        - yaml id:Utilizen_<player.uuid> set <player.uuid>.lastlocation:<context.entity.location>
+        - yaml id:Utilizen_<player.uuid> set lastlocation:<context.entity.location>
         - run UtilizenSavePlayerTask def:<player.uuid>
 UtilizenMuteHandler:
     type: world
@@ -131,14 +131,14 @@ UtilizenJailHandler:
     events:
         on player teleports flagged:jailed:
         - ratelimit <player> 1t
-        - yaml id:Utilizen_<player.uuid> set <player.uuid>.jail.duration:<player.flag[jailed].expiration>
+        - yaml id:Utilizen_<player.uuid> set jail.duration:<player.flag[jailed].expiration>
         - run UtilizenSavePlayerTask def:<player.uuid>
         - flag player jailed:!
         - teleport <context.origin>
-        - flag player jailed d:<yaml[Utilizen_<player.uuid>].read[<player.uuid>.jail.duration]>
+        - flag player jailed d:<yaml[Utilizen_<player.uuid>].read[jail.duration]>
         - narrate <yaml[UtilizenLang].read[jailnopermission].parsed>
         on player quits flagged:jailed:
-        - yaml id:Utilizen_<player.uuid> set <player.uuid>.jail.duration:<player.flag[jailed].expiration>
+        - yaml id:Utilizen_<player.uuid> set jail.duration:<player.flag[jailed].expiration>
         - run UtilizenSavePlayerTask def:<player.uuid>
         - flag player jailed:!
         on player breaks block flagged:jailed:
@@ -152,13 +152,13 @@ UtilizenJailHandler:
         - if <yaml[Utilizen_<player.uuid>].contains[<player.uuid>.jail.duration]||false>:
             - teleport <player> <yaml[UtilizenServerdata].read[jailname.<yaml[UtilizenServerdata].list_keys[jailname].random>]>
             - wait 1t
-            - flag player jailed d:<yaml[Utilizen_<player.uuid>].read[<player.uuid>.jail.duration]>
+            - flag player jailed d:<yaml[Utilizen_<player.uuid>].read[jail.duration]>
             - narrate <yaml[UtilizenLang].read[jailstilljailed].parsed>
             - if <player.is_online> && <player[<player>]||null> != null:
                 - waituntil rate:20t !<player.has_flag[jailed]||null>
                 - if <server.match_player[<player.name>]||null> == null:
                     - stop
-                - teleport <yaml[Utilizen_<player.uuid>].read[<player.uuid>.jail.location]>
-                - yaml id:Utilizen_<player.uuid> set <player.uuid>.jail:!
+                - teleport <yaml[Utilizen_<player.uuid>].read[jail.location]>
+                - yaml id:Utilizen_<player.uuid> set jail:!
                 - run UtilizenSavePlayerTask def:<player.uuid>
                 - narrate <yaml[UtilizenLang].read[jailexit].parsed>

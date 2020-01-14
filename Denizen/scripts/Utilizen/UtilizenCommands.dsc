@@ -76,17 +76,17 @@ UtilizenCommandMail:
             - if <context.args.size> >= 2:
                 - if <server.player_is_valid[<context.args.get[2]>]>:
                     - if <context.args.size> > 2:
-                        - narrate <yaml[UtilizenLang].read[mailsend].parsed>
                         - yaml id:UtilizenServerdata set msgcount:++
                         - run UtilizenSaveServerTask
                         - if !<server.match_offline_player[<context.args.get[2]>].is_online>:
                             - ~yaml load:../Utilizen/data/players/<server.match_offline_player[<context.args.get[2]>].uuid>.yml id:Utilizen_<server.match_offline_player[<context.args.get[2]>].uuid>
-                            - yaml id:Utilizen_<player.uuid> set <server.match_offline_player[<context.args.get[2]>].uuid>.mailbox.<yaml[UtilizenServerdata].read[msgcount]||0>:|:<player.uuid>|<context.args.remove[1|2].space_separated>
+                            - yaml id:Utilizen_<server.match_offline_player[<context.args.get[2]>].uuid> set mailbox.<yaml[UtilizenServerdata].read[msgcount]||0>:|:<player.uuid>|<context.args.remove[1|2].space_separated>
                             - ~yaml savefile:../Utilizen/data/players/<server.match_offline_player[<context.args.get[2]>].uuid>.yml id:Utilizen_<server.match_offline_player[<context.args.get[2]>].uuid>
                             - yaml unload id:Utilizen_<server.match_offline_player[<context.args.get[2]>].uuid>
                             - narrate <yaml[UtilizenLang].read[mailsend].parsed>
                             - stop
-                        - yaml id:Utilizen_<player.uuid> set <server.match_offline_player[<context.args.get[2]>].uuid>.mailbox.<yaml[UtilizenServerdata].read[msgcount]||0>:|:<player.uuid>|<context.args.remove[1|2].space_separated>
+                        - narrate <yaml[UtilizenLang].read[mailsend].parsed>
+                        - yaml id:Utilizen_<server.match_offline_player[<context.args.get[2]>].uuid> set mailbox.<yaml[UtilizenServerdata].read[msgcount]||0>:|:<player.uuid>|<context.args.remove[1|2].space_separated>
                         - ~yaml savefile:../Utilizen/data/players/<server.match_offline_player[<context.args.get[2]>].uuid>.yml id:Utilizen_<server.match_offline_player[<context.args.get[2]>].uuid>
                     - else:
                         - narrate <yaml[UtilizenLang].read[mailempty].parsed>
@@ -95,13 +95,13 @@ UtilizenCommandMail:
             - else:
                 - narrate <yaml[UtilizenLang].read[mailneedplayer].parsed>
         - case read:
-            - if <yaml[Utilizen_<player.uuid>].list_keys[<player.uuid>.mailbox]||true>:
+            - if <yaml[Utilizen_<player.uuid>].list_keys[mailbox]||true>:
                 - narrate <yaml[UtilizenLang].read[mailboxempty].parsed>
                 - stop
-            - foreach <yaml[Utilizen_<player.uuid>].list_keys[<player.uuid>.mailbox]>:
+            - foreach <yaml[Utilizen_<player.uuid>].list_keys[mailbox]>:
                 - narrate <yaml[UtilizenLang].read[mailread].parsed>
         - case remove:
-            - yaml id:Utilizen_<player.uuid> set <player.uuid>.mailbox:!
+            - yaml id:Utilizen_<player.uuid> set mailbox:!
             - run UtilizenSavePlayerTask def:<player.uuid>
             - narrate <yaml[UtilizenLang].read[maildelete].parsed>
         - case sendall:
@@ -355,7 +355,7 @@ UtilizenJailCommand:
                     - if <yaml[UtilizenServerdata].contains[jailname.<context.args.get[2]>]>:
                         - if <context.args.size> == 3:
                             - if <duration[<context.args.get[3]>]||null> != null:
-                                - yaml id:Utilizen_<player.uuid> set <server.match_player[<context.args.first>].uuid>.jail.location:<[playerlocation]>
+                                - yaml id:Utilizen_<server.match_player[<context.args.first>].uuid> set jail.location:<[playerlocation]>
                                 - run UtilizenSavePlayerTask def:<player.uuid>
                                 - teleport <server.match_player[<context.args.first>]> <yaml[UtilizenServerdata].read[jailname.<context.args.get[2]>]>
                                 - wait 1t
@@ -461,26 +461,26 @@ UtlizenSetHomeCommand:
     - if <context.args.is_empty>:
         - narrate <yaml[UtilizenLang].read[sethomenoargs].parsed>
     - else if <context.args.size> == 1:
-        - if !<yaml[Utilizen_<player.uuid>].read[<player.uuid>.homes].get_sub_items[1].contains[<context.args.first>]>:
+        - if !<yaml[Utilizen_<player.uuid>].read[homes].get_sub_items[1].contains[<context.args.first>]>:
             - if <player.is_op>:
-                - if <yaml[Utilizen_<player.uuid>].read[<player.uuid>.homes].size||0> <= <yaml[UtilizenConfig].read[op-homes]>:
+                - if <yaml[Utilizen_<player.uuid>].read[homes].size||0> <= <yaml[UtilizenConfig].read[op-homes]>:
                         - narrate <yaml[UtilizenLang].read[sethomeset].parsed>
-                        - yaml id:Utilizen_<player.uuid> set <player.uuid>.homes:->:<context.args.first>/<player.location.simple>
+                        - yaml id:Utilizen_<player.uuid> set homes:->:<context.args.first>/<player.location.simple>
                         - run UtilizenSavePlayerTask def:<player.uuid>
                         - stop
             - foreach <yaml[UtilizenConfig].read[homes]>:
                 - if <player.has_permission[utilizen.groups.<[value].before[:]>]>:
-                    - if <yaml[Utilizen_<player.uuid>].read[<player.uuid>.homes].size||0> <= <[value].after[:]>:
+                    - if <yaml[Utilizen_<player.uuid>].read[homes].size||0> <= <[value].after[:]>:
                         - narrate <yaml[UtilizenLang].read[sethomeset].parsed>
-                        - yaml id:Utilizen_<player.uuid> set <player.uuid>.homes:->:<context.args.first>/<player.location.simple>
+                        - yaml id:Utilizen_<player.uuid> set homes:->:<context.args.first>/<player.location.simple>
                         - run UtilizenSavePlayerTask def:<player.uuid>
                         - stop
                     - else:
                         - narrate <yaml[UtilizenLang].read[sethometomuchhome]>
                         - stop
-            - if <yaml[Utilizen_<player.uuid>].read[<player.uuid>.homes].size||0> <= <yaml[UtilizenConfig].read[default]>:
+            - if <yaml[Utilizen_<player.uuid>].read[homes].size||0> <= <yaml[UtilizenConfig].read[default]>:
                 - narrate <yaml[UtilizenLang].read[sethomeset].parsed>
-                - yaml id:Utilizen_<player.uuid> set <player.uuid>.homes:->:<context.args.first>/<player.location.simple>
+                - yaml id:Utilizen_<player.uuid> set homes:->:<context.args.first>/<player.location.simple>
                 - run UtilizenSavePlayerTask def:<player.uuid>
         - else:
             - narrate <yaml[UtilizenLang].read[sethomealreadyset].parsed>
@@ -493,23 +493,23 @@ UtilizenDelHomeCommand:
     permission: utilizen.delhome
     permission message: <&3>[Permission] You need the permission <&b><permission>
     tab complete:
-    - if <yaml[Utilizen_<player.uuid>].contains[<player.uuid>.homes]>:
+    - if <yaml[Utilizen_<player.uuid>].contains[homes]>:
         - if <context.args.size> < 1:
-            - determine <yaml[Utilizen_<player.uuid>].read[<player.uuid>.homes].get_sub_items[1]>
+            - determine <yaml[Utilizen_<player.uuid>].read[homes].get_sub_items[1]>
         - if <context.args.size> == 1 && "!<context.raw_args.ends_with[ ]>":
-            - determine <yaml[Utilizen_<player.uuid>].read[<player.uuid>.homes].get_sub_items[1].filter[starts_with[<context.args.first>]]>
+            - determine <yaml[Utilizen_<player.uuid>].read[homes].get_sub_items[1].filter[starts_with[<context.args.first>]]>
     script:
     - if <context.args.size> == 2 && <server.player_is_valid[<context.args.get[2]>]>:
         - if <player.has_permission[utilizen.delhome.other]>:
-            - if <yaml[Utilizen_<player.uuid>].read[<server.match_player[<context.args.get[2]>].uuid>.homes].get_sub_items[1].contains[<context.args.first>]>:
-                - yaml id:Utilizen_<player.uuid> set <server.match_player[<context.args.get[2]>].uuid>.homes:!|:<yaml[Utilizen_<player.uuid>].read[<server.match_player[<context.args.get[2]>].uuid>.homes].remove[<yaml[Utilizen_<player.uuid>].read[<player.uuid>.homes].get_sub_items[1].find[<context.args.first>]>]>
+            - if <yaml[Utilizen_<server.match_player[<context.args.get[2]>].uuid>].read[homes].get_sub_items[1].contains[<context.args.first>]>:
+                - yaml id:Utilizen_<server.match_player[<context.args.get[2]>].uuid> set homes:!|:<yaml[Utilizen_<server.match_player[<context.args.get[2]>].uuid>].read[homes].remove[<yaml[Utilizen_<player.uuid>].read[homes].get_sub_items[1].find[<context.args.first>]>]>
                 - run UtilizenSavePlayerTask def:<player.uuid>
                 - narrate <yaml[UtilizenLang].read[delhomedeleted].parsed>
             - else:
                 - narrate <yaml[UtilizenLang].read[delhomeothernohomeexist].parsed>
                 - stop
-    - else if <yaml[Utilizen_<player.uuid>].read[<player.uuid>.homes].get_sub_items[1].contains[<context.args.first||null>]>:
-        - yaml id:Utilizen_<player.uuid> set <player.uuid>.homes:!|:<yaml[Utilizen_<player.uuid>].read[<player.uuid>.homes].remove[<yaml[Utilizen_<player.uuid>].read[<player.uuid>.homes].get_sub_items[1].find[<context.args.first>]>]>
+    - else if <yaml[Utilizen_<player.uuid>].read[homes].get_sub_items[1].contains[<context.args.first||null>]>:
+        - yaml id:Utilizen_<player.uuid> set homes:!|:<yaml[Utilizen_<player.uuid>].read[homes].remove[<yaml[Utilizen_<player.uuid>].read[homes].get_sub_items[1].find[<context.args.first>]>]>
         - run UtilizenSavePlayerTask def:<player.uuid>
     - else:
         - narrate <yaml[UtilizenLang].read[delhomenohomeexist].parsed>
@@ -522,21 +522,21 @@ UtlizenHomeCommand:
     permission: utilizen.home
     permission message: <&3>[Permission] You need the permission <&b><permission>
     tab complete:
-    - if <yaml[Utilizen_<player.uuid>].contains[<player.uuid>.homes]>:
+    - if <yaml[Utilizen_<player.uuid>].contains[homes]>:
         - if <context.args.size> < 1:
-            - determine <yaml[Utilizen_<player.uuid>].read[<player.uuid>.homes].get_sub_items[1]>
+            - determine <yaml[Utilizen_<player.uuid>].read[homes].get_sub_items[1]>
         - else if <context.args.size> == 1 && "!<context.raw_args.ends_with[ ]>":
-            - determine <yaml[Utilizen_<player.uuid>].read[<player.uuid>.homes].get_sub_items[1].filter[starts_with[<context.args.first>]]>
+            - determine <yaml[Utilizen_<player.uuid>].read[homes].get_sub_items[1].filter[starts_with[<context.args.first>]]>
     script:
     - if <context.server>:
         - announce to_console "[Utilizen] This command can not be executed from console"
         - stop
     - if <context.args.is_empty>:
-        - if <yaml[Utilizen_<player.uuid>].read[<player.uuid>.homes].is_empty||false>:
-            - teleport <location[<yaml[Utilizen_<player.uuid>].read[<player.uuid>.homes].get_sub_items[2].first>]>
+        - if <yaml[Utilizen_<player.uuid>].read[homes].is_empty||false>:
+            - teleport <location[<yaml[Utilizen_<player.uuid>].read[homes].get_sub_items[2].first>]>
             - narrate <yaml[UtilizenLang].read[homefirsthomed].parsed>
-    - else if <yaml[Utilizen_<player.uuid>].read[<player.uuid>.homes].get_sub_items[1].contains[<context.args.first>]||false>:
-        - teleport <location[<yaml[Utilizen_<player.uuid>].read[<player.uuid>.homes].map_get[<context.args.first>]>]>
+    - else if <yaml[Utilizen_<player.uuid>].read[homes].get_sub_items[1].contains[<context.args.first>]||false>:
+        - teleport <location[<yaml[Utilizen_<player.uuid>].read[homes].map_get[<context.args.first>]>]>
         - narrate <yaml[UtilizenLang].read[homehomed].parsed>
 UtilizenHatCommand:
     type: command
@@ -609,8 +609,8 @@ UtilizenBackCommand:
     - if !<context.server>:
         - stop
     script:
-    - if <yaml[Utilizen_<player.uuid>].contains[<player.uuid>.lastlocation]>:
-        - teleport <yaml[Utilizen_<player.uuid>].read[<player.uuid>.lastlocation]>
+    - if <yaml[Utilizen_<player.uuid>].contains[lastlocation]>:
+        - teleport <yaml[Utilizen_<player.uuid>].read[lastlocation]>
     - else:
         - narrate <yaml[UtilizenLang].read[backinvalid].parsed>
 UtilizenFlyCommand:
@@ -1302,4 +1302,4 @@ UtilizenItemDBCommand:
     - if <[item].is_enchanted>:
         - foreach <[item].enchantments.with_levels>:
             - narrate "<&3>Enchantment: <&b><&translate[enchantment.minecraft.<[value].before[,]>]> <&f><[value].after[,]>"
-    - narrate "<&3>Has Lore: <&b><[item].has_lore> <tern[<[item].has_lore>].pass[| <&3>Lore: <&r><[item].lore.separated_by[<&r> ]>].fail[]>"
+    - narrate "<&3>Lore: <&b><[item].has_lore> <tern[<[item].has_lore>].pass[| <&3>Lore: <&r><[item].lore.separated_by[<&r> ]>].fail[]>"
