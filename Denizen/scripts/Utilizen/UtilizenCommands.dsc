@@ -113,7 +113,7 @@ UtilizenCommandMail:
                             - wait 1t
                         - yaml id:UtilizenServerdata set msgcount:++
                         - if <player[<[value]>].is_online>:
-                            - yaml id:Utilizen_<[value]> set <[value]>.mailbox.<yaml[UtilizenServerdata].read[msgcount]||0>:|:<player.uuid>|<context.args.remove[1].space_separated>
+                            - yaml id:Utilizen_<[value]> set mailbox.<yaml[UtilizenServerdata].read[msgcount]||0>:|:<player.uuid>|<context.args.remove[1].space_separated>
                             - run UtilizenSavePlayerTask def:<[value]>
                             - foreach next
                         - else:
@@ -130,7 +130,7 @@ MailHandlerTask:
         - yaml create id:Utilizen_<player.uuid>
         - ~yaml savefile:../Utilizen/data/players/<[uuid]>.yml id:Utilizen_<[uuid]>
     - ~yaml load:../Utilizen/data/players/<[uuid]>.yml id:Utilizen_<[uuid]>
-    - yaml id:Utilizen_<[uuid]> set <[uuid]>.mailbox.<yaml[UtilizenServerdata].read[msgcount]||0>:|:<[puuid]>|<[text]>
+    - yaml id:Utilizen_<[uuid]> set mailbox.<yaml[UtilizenServerdata].read[msgcount]||0>:|:<[puuid]>|<[text]>
     - ~yaml savefile:../Utilizen/data/players/<[uuid]>.yml id:Utilizen_<[uuid]>
     - if !<player[<[uuid]>].is_online>:
         - yaml unload id:Utilizen_<[uuid]>
