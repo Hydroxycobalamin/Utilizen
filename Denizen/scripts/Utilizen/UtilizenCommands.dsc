@@ -356,7 +356,7 @@ UtilizenJailCommand:
                         - if <context.args.size> == 3:
                             - if <duration[<context.args.get[3]>]||null> != null:
                                 - yaml id:Utilizen_<server.match_player[<context.args.first>].uuid> set jail.location:<[playerlocation]>
-                                - run UtilizenSavePlayerTask def:<player.uuid>
+                                - run UtilizenSavePlayerTask def:<server.match_player[<context.args.first>].uuid>
                                 - teleport <server.match_player[<context.args.first>]> <yaml[UtilizenServerdata].read[jailname.<context.args.get[2]>]>
                                 - wait 1t
                                 - flag <server.match_player[<context.args.first>]> jailed d:<context.args.get[3].as_duration>
@@ -503,7 +503,7 @@ UtilizenDelHomeCommand:
         - if <player.has_permission[utilizen.delhome.other]>:
             - if <yaml[Utilizen_<server.match_player[<context.args.get[2]>].uuid>].read[homes].get_sub_items[1].contains[<context.args.first>]>:
                 - yaml id:Utilizen_<server.match_player[<context.args.get[2]>].uuid> set homes:!|:<yaml[Utilizen_<server.match_player[<context.args.get[2]>].uuid>].read[homes].remove[<yaml[Utilizen_<player.uuid>].read[homes].get_sub_items[1].find[<context.args.first>]>]>
-                - run UtilizenSavePlayerTask def:<player.uuid>
+                - run UtilizenSavePlayerTask def:<server.match_player[<context.args.get[2]>].uuid>
                 - narrate <yaml[UtilizenLang].read[delhomedeleted].parsed>
             - else:
                 - narrate <yaml[UtilizenLang].read[delhomeothernohomeexist].parsed>
