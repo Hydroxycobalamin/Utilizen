@@ -511,6 +511,7 @@ UtilizenDelHomeCommand:
     - else if <yaml[Utilizen_<player.uuid>].read[homes].get_sub_items[1].contains[<context.args.first||null>]>:
         - yaml id:Utilizen_<player.uuid> set homes:!|:<yaml[Utilizen_<player.uuid>].read[homes].remove[<yaml[Utilizen_<player.uuid>].read[homes].get_sub_items[1].find[<context.args.first>]>]>
         - run UtilizenSavePlayerTask def:<player.uuid>
+        - narrate <yaml[UtilizenLang].read[delhomeowndelete].parsed>
     - else:
         - narrate <yaml[UtilizenLang].read[delhomenohomeexist].parsed>
 UtlizenHomeCommand:
