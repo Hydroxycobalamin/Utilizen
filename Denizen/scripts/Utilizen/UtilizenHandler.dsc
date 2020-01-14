@@ -162,4 +162,3 @@ UtilizenJailHandler:
                 - yaml id:Utilizen_<player.uuid> set <player.uuid>.jail:!
                 - run UtilizenSavePlayerTask def:<player.uuid>
                 - narrate <yaml[UtilizenLang].read[jailexit].parsed>
-                
