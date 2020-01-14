@@ -816,12 +816,12 @@ UtilizenBanCommand:
         - if <server.player_is_valid[<context.args.first>]>:
             - choose <context.args.size>:
                 - case 1:
-                    - ban add <server.match_player[<context.args.first>]> "reason:<yaml[UtilizenConfig].read[banreason]>"
+                    - ban add <server.match_player[<context.args.first>]> reason:<yaml[UtilizenConfig].read[banreason]>
                 - case 2:
-                    - ban add <server.match_player[<context.args.first>]> "reason:<context.args.get[2]>"
+                    - ban add <server.match_player[<context.args.first>]> reason:<context.args.get[2]>
                 - case 3:
                     - if <duration[<context.args.get[3]>]||null> != null:
-                        - ban add <server.match_player[<context.args.first>]> "reason:<context.args.get[2]>" duration:<context.args.get[3].as_duration>
+                        - ban add <server.match_player[<context.args.first>]> reason:<context.args.get[2]> duration:<context.args.get[3].as_duration>
                     - else:
                         - narrate <yaml[UtilizenLang].read[bantimeinvalid].parsed>
         - else:
@@ -844,7 +844,7 @@ UtilizenUnbanCommand:
     script:
     - if <context.args.size> >= 1:
         - if <server.player_is_valid[<context.args.first>]>:
-            - if <server.match_offline_player[<context.args.first>].is_banned>
+            - if <server.match_offline_player[<context.args.first>].is_banned>:
                 - ban remove <server.match_offline_player[<context.args.first>]>
                 - narrate <yaml[UtilizenLang].read[unbaned].parsed> targets:<server.list_online_players.filter[has_permission[Utilizen.ban]]>
             - else:
@@ -871,9 +871,9 @@ UtilizenKickCommand:
         - if <server.player_is_valid[<context.args.first>]>:
             - choose <context.args.size>:
                 - case 1:
-                    - kick <server.match_player[<context.args.first>]> "reason:<yaml[UtilizenConfig].read[kickreason]>"
+                    - kick <server.match_player[<context.args.first>]> reason:<yaml[UtilizenConfig].read[kickreason]>
                 - case 2:
-                    - kick <server.match_player[<context.args.first>]> "reason:<context.args.get[2]>"
+                    - kick <server.match_player[<context.args.first>]> reason:<context.args.get[2]>
             - default:
                 - narrate <yaml[UtilizenLang].read[kickwrongsyntax].parsed>
         - else:
@@ -893,9 +893,9 @@ UtilizenKickallCommand:
         - stop
     script:
     - if <yaml[UtilizenConfig].read[kickops]>:
-        - kick <server.list_online_players.exclude[<player>]> "reason:<yaml[UtilizenConfig].read[kickreason]>"
+        - kick <server.list_online_players.exclude[<player>]> reason:<yaml[UtilizenConfig].read[kickreason]>
     - else:
-        - kick <server.list_online_players.filter[is_op.not].exclude[<player>]> "reason:<yaml[UtilizenConfig].read[kickreason]>"
+        - kick <server.list_online_players.filter[is_op.not].exclude[<player>]> reason:<yaml[UtilizenConfig].read[kickreason]>
 UtilizenGamemodeCommand:
     type: command
     debug: false
@@ -1196,7 +1196,7 @@ UtilizenClearinventoryCommand:
     debug: false
     name: clearinventory
     description: delete your inventory
-    usages: /clearinventory
+    usage: /clearinventory (Player)
     permission: utilizen.clearinventory
     permisson message: <&3>You need the permission <&b><permission>
     tab complete:
@@ -1234,7 +1234,7 @@ UtilizenGCCommand:
     - narrate "<yaml[UtilizenLang].read[gcramfree].parsed> <server.ram_free.div[1048576].round>"
     - narrate "<yaml[UtilizenLang].read[gcramused].parsed> <server.ram_usage.div[1048576].round>"
     - narrate "<yaml[UtilizenLang].read[gcramallocated].parsed> <server.ram_allocated.div[1048576].round>"
-    - narrate "<yaml[UtilizenLang].read[gctps].parsed> <server.recent_tps.first.add[<server.recent_tps.get[2].add[<server.recent_tps.get[3]>]>].div[3].round_to_precision[0.001]>
+    - narrate "<yaml[UtilizenLang].read[gctps].parsed> <server.recent_tps.first.add[<server.recent_tps.get[2].add[<server.recent_tps.get[3]>]>].div[3].round_to_precision[0.001]>"
     - foreach <server.list_worlds.parse[name]>:
         - narrate "<yaml[UtilizenLang].read[gcworld].parsed> <yaml[UtilizenLang].read[gcchunks].parsed> <world[<[value]>].loaded_chunks.size> <yaml[UtilizenLang].read[gcaientities].parsed> <world[<[value]>].living_entities.size> <yaml[UtilizenLang].read[gctiles].parsed> <world[<[value]>].entities.size.sub[<world[<[value]>].living_entities.size>]>"
 UtilizenEnchantCommand:
@@ -1294,7 +1294,7 @@ UtilizenItemDBCommand:
         - announce to_console "[Utilizen] This command can not be executed from console"
         - stop
     - define item:<player.item_in_hand>
-    - narrate "<&3>======================================================"
+    - narrate <&3>======================================================
     - narrate "<&3>Item: <&f><[item].material.name> <&3>Display: <tern[<[item].has_display>].pass[<&r><[item].display>].fail[<&f>NONE]>"
     - narrate "<&3>dItem: <&b><tern[<[item].has_script>].pass[<&b>true <&3>Script: <&b><[item].script>].fail[<&b>false]>"
     - narrate "<&3>Repairable: <tern[<[item].repairable>].pass[<&b>true <&3>Durability: <&b><[item].max_durability.sub[<[item].durability>]><&f>/<&b><[item].max_durability>].fail[<&b>false]>"
