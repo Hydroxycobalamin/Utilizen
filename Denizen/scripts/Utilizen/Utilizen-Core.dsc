@@ -13,7 +13,7 @@ UtilizenYamlLoad:
     debug: false
     events:
         on server start:
-        - if !<server.has_file[../Utilizen/serverdata.yml]>:
+        - if !<server.has_file[../Utilizen/data/serverdata.yml]>:
             - yaml create id:UtilizenServerdata
             - ~yaml savefile:../Utilizen/data/serverdata.yml id:UtilizenServerdata
         - ~yaml load:../Utilizen/config.yml id:UtilizenConfig
