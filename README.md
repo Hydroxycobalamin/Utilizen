@@ -2,9 +2,14 @@
 Utilizen is a Denizen Script which provides you with several commands and options for your own Minecraft Server.
 ## Requirements
 To make Utilizen work, you need the following plugins 
-* [Denizen](https://www.spigotmc.org/resources/denizen.21039/)
+* [Denizen](https://www.spigotmc.org/resources/denizen.21039/) (latest REL-Build or latest DEV-Build for experimental Denizen user)
 * [LuckPerms](https://www.spigotmc.org/resources/luckperms-an-advanced-permissions-plugin.28140/) (recommended)
 * [Vault](https://www.spigotmc.org/resources/vault.34315/)
+
+## Installation
+1. Turn off your server
+2. Drag the Utilizen and Denizen folder into your /plugins/ folder.
+3. Turn on your server & have fun :)
 
 ## Permissions
 | Permission | Description |
