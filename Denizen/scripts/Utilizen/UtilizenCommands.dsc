@@ -1248,20 +1248,20 @@ UtilizenEnchantCommand:
     permission message: <&3>You need the permission <&b><permission>
     tab complete:
     - if <context.args.is_empty>:
-        - determine <server.list_enchantments.parse[to_lowercase]>
+        - determine <server.list_enchantment_keys>
     - else if <context.args.size> == 1 && "!<context.raw_args.ends_with[ ]>":
-        - determine <server.list_enchantments.parse[to_lowercase].filter[starts_with[<context.args.first>]]>
+        - determine <server.list_enchantment_keys.filter[starts_with[<context.args.first>]]>
     script:
     - if <context.server>:
         - announce to_console "[Utilizen] This command can not be executed from console"
         - stop
     - choose <context.args.size>:
         - case 1:
-            - if <server.list_enchantments.contains[<context.args.first>]>:
+            - if <server.list_enchantment_keys.contains[<context.args.first>]>:
                 - inventory adjust slot:<player.held_item_slot> remove_enchantments:<context.args.first>
                 - narrate <yaml[UtilizenLang].read[enchantremove].parsed>
         - case 2:
-            - if <server.list_enchantments.contains[<context.args.first>]>:
+            - if <server.list_enchantment_keys.contains[<context.args.first>]>:
                 - if <context.args.last.is_integer>:
                     - if <player.item_in_hand.material.name> != air:
                         - if <yaml[UtilizenConfig].read[enchants]>:
