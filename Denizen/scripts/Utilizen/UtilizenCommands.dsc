@@ -1255,30 +1255,34 @@ UtilizenEnchantCommand:
     - if <context.server>:
         - announce to_console "[Utilizen] This command can not be executed from console"
         - stop
-    - else if <context.args.size> == 1:
-        - if <server.list_enchantments.contains[<context.args.first>]>:
-            - inventory adjust slot:<player.held_item_slot> remove_enchantments:<context.args.first>
-            - narrate <yaml[UtilizenLang].read[enchantremove].parsed>
-    - else if <context.args.size> == 2:
-        - if <server.list_enchantments.contains[<context.args.first>]>:
-            - if <context.args.last.is_integer>:
-                - if <player.item_in_hand.material.name> != air:
-                    - if <yaml[UtilizenConfig].read[enchants]> && <context.args.last> > 0:
-                        - inventory adjust slot:<player.held_item_slot> enchantments:<context.args.first>,<context.args.last>
-                        - narrate <yaml[UtilizenLang].read[enchantadd].parsed>
-                    - else if <context.args.last.is_integer> && <context.args.last> <= <server.enchantment_max_level[<context.args.first>]> && <context.args.last> >= <server.enchantment_start_level[<context.args.first>]>:
-                        - inventory adjust slot:<player.held_item_slot> enchantments:<context.args.first>,<context.args.last>
-                        - narrate <yaml[UtilizenLang].read[enchantadd].parsed>
+    - choose <context.args.size>:
+        - case 1:
+            - if <server.list_enchantments.contains[<context.args.first>]>:
+                - inventory adjust slot:<player.held_item_slot> remove_enchantments:<context.args.first>
+                - narrate <yaml[UtilizenLang].read[enchantremove].parsed>
+        - case 2:
+            - if <server.list_enchantments.contains[<context.args.first>]>:
+                - if <context.args.last.is_integer>:
+                    - if <player.item_in_hand.material.name> != air:
+                        - if <yaml[UtilizenConfig].read[enchants]>:
+                            - if <context.args.last> > 0:
+                                - inventory adjust slot:<player.held_item_slot> enchantments:<context.args.first>,<context.args.last>
+                                - narrate <yaml[UtilizenLang].read[enchantadd].parsed>
+                            - else:
+                                - narrate <yaml[UtilizenLang].read[enchantnoint].parsed>
+                        - else if <context.args.last.is_integer> && <context.args.last> <= <server.enchantment_max_level[<context.args.first>]> && <context.args.last> >= <server.enchantment_start_level[<context.args.first>]>:
+                            - inventory adjust slot:<player.held_item_slot> enchantments:<context.args.first>,<context.args.last>
+                            - narrate <yaml[UtilizenLang].read[enchantadd].parsed>
+                        - else:
+                            - narrate <yaml[UtilizenLang].read[enchantinttohigh].parsed>
                     - else:
-                        - narrate <yaml[UtilizenLang].read[enchantnoint].parsed>
+                        - narrate <yaml[UtilizenLang].read[enchantnoitem].parsed>
                 - else:
-                    - narrate <yaml[UtilizenLang].read[enchantnoitem].parsed>
+                    - narrate <yaml[UtilizenLang].read[enchantnoint].parsed>
             - else:
-                - narrate <yaml[UtilizenLang].read[enchantnoint].parsed>
-        - else:
-            - narrate <yaml[UtilizenLang].read[enchantnotvalid].parsed>
-    - else:
-        - narrate <yaml[UtilizenLang].read[enchantsyntax].parsed>
+                - narrate <yaml[UtilizenLang].read[enchantnotvalid].parsed>
+        - default:
+            - narrate <yaml[UtilizenLang].read[enchantsyntax].parsed>
 UtilizenItemDBCommand:
     type: command
     debug: false
