@@ -1087,22 +1087,27 @@ UtilizenTPPOSCommand:
     permission: utilizen.tppos
     permission message: <&3>[Permission] You need the permission <&b><permission>
     tab complete:
-    - if <context.args.is_empty>:
-        - determine <player.location.x.round>
-    - else if <context.args.size> == 1 && "!<context.raw_args.ends_with[ ]>":
-        - determine <player.location.x.round>
-    - else if <context.args.size> == 1:
-        - determine <player.location.y.round>
-    - else if <context.args.size> == 2 && "!<context.raw_args.ends_with[ ]>":
-        - determine <player.location.y.round>
-    - else if <context.args.size> == 2:
-        - determine <player.location.z.round>
-    - else if <context.args.size> == 3 && "!<context.raw_args.ends_with[ ]>":
-        - determine <player.location.z.round>
-    - else if <context.args.size> == 3:
-        - determine <server.list_worlds.parse[name]>
-    - else if <context.args.size> == 4 && "!<context.raw_args.ends_with[ ]>":
-        - determine <server.list_worlds.parse[name].filter[starts_with[<context.args.get[4]>]]>
+    - choose <context.args.size>:
+        - case 0:
+            - determine <player.location.x.round>
+        - case 1:
+            - if "!<context.raw_args.ends_with[ ]>":
+                - determine <player.location.x.round>
+            - else:
+                - determine <player.location.y.round>
+        - case 2:
+            - if "!<context.raw_args.ends_with[ ]>":
+                - determine <player.location.y.round>
+            - else:
+                - determine <player.location.z.round>
+        - case 3:
+            - if "!<context.raw_args.ends_with[ ]>":
+                - determine <player.location.z.round>
+            - else:
+                - determine <server.list_worlds.parse[name]>
+        - case 4:
+            - if "!<context.raw_args.ends_with[ ]>":
+                - determine <server.list_worlds.parse[name].filter[starts_with[<context.args.get[4]>]]>
     script:
     - if <context.args.size> <= 4:
         - choose <context.args.size>:
