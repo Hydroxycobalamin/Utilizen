@@ -1311,3 +1311,31 @@ UtilizenItemDBCommand:
         - foreach <[item].nbt>:
             - define "nbtlist:->:<&b><[value].before[/]><&3>/<&r><[value].after[/]>"
     - narrate "<&3>===================<&b>[<&3>ItemDB<&b>]<&3>===================<&nl><&3>Item: <&f><[item].material.name> <&3>Display: <tern[<[item].has_display>].pass[<&r><[item].display>].fail[<&f>NONE]><&nl><&3>dItem: <&b><tern[<[item].has_script>].pass[<&b>true <&3>Script: <&b><[item].script>].fail[<&b>false]><&nl><&3>Repairable: <tern[<[item].repairable>].pass[<&b>true <&3>Durability: <&b><[item].max_durability.sub[<[item].durability>]><&f>/<&b><[item].max_durability>].fail[<&b>false]><&nl><&3>Enchantments: <tern[<[item].is_enchanted>].pass[<[enchlist].separated_by[<&3>, ]>].fail[<&f>NONE]><&nl><&3>Lore: <tern[<[item].has_lore>].pass[<&r><[item].lore.separated_by[<&r> ]>].fail[<&f>NONE]><&nl><&3>dNBT: <tern[<[item].nbt.size.is[<&gt>].than[0]>].pass[<&r><[nbtlist].separated_by[<&3>, ]>].fail[<&f>NONE]>"
+UtilizenSeenCommand:
+    type: command
+    debug: false
+    name: seen
+    description: Shows last login from a player
+    usage: /seen [Player]
+    permission: utilizen.seen
+    permission message: <&3>You need the permission <&b><permission>
+    tab complete:
+    - if <context.args.is_empty>:
+        - determine <server.list_offline_players.parse[name]>
+    - else if <context.args.size> == 1 && "!<context.raw_args.ends_with[ ]>":
+        - determine <server.list_offline_players.parse[name].filter[starts_with[<context.args.first>]]>
+    script:
+    - if <context.args.size> == 1:
+        - if <server.player_is_valid[<context.args.first>]>:
+            - if !<server.match_offline_player[<context.args.first>].is_online>:
+                - ~yaml load:../Utilizen/data/players/<server.match_offline_player[<context.args.first>].uuid>.yml id:Utilizen_<server.match_offline_player[<context.args.first>].uuid>
+            - if !<yaml[Utilizen_<server.match_offline_player[<context.args.first>].uuid>].contains[lastlogin]>:
+                - narrate <yaml[UtilizenLang].read[seennever].parsed>
+                - stop
+            - narrate <yaml[UtilizenLang].read[seenplayer].parsed>
+            - if !<server.match_offline_player[<context.args.first>].is_online>:
+                - yaml unload id:Utilizen_<server.match_offline_player[<context.args.first>].uuid>
+        - else:
+            - narrate <yaml[UtilizenLang].read[seennever].parsed>
+    - else:
+        - narrate <yaml[UtilizenLang].read[seensyntax].parsed>

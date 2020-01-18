@@ -52,6 +52,7 @@ To make Utilizen work, you need the following plugins
 | **utilizen.mute** | Mute Evil players |
 | **utilizen.nick** | Nick yourself or other players |
 | **utilizen.spawn** | Teleport to worldspawn |
+| **utilizen.seen** | Shows last login from a player |
 | **utilizen.setwarp** | Creates a Warp |
 | **utilizen.setjail** | Creates a Jail |
 | **utilizen.sethome** | Creates a home |

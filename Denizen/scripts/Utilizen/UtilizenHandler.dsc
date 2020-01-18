@@ -162,3 +162,11 @@ UtilizenJailHandler:
                 - yaml id:Utilizen_<player.uuid> set jail:!
                 - run UtilizenSavePlayerTask def:<player.uuid>
                 - narrate <yaml[UtilizenLang].read[jailexit].parsed>
+UtilizenSeenHandler:
+    type: world
+    debug: false
+    events:
+        on player joins:
+        - waituntil rate:1t <yaml[Utilizen_<player.uuid>].list_keys[]||null> != null
+        - yaml id:Utilizen_<player.uuid> set "lastlogin:!|:<util.date.format[EEE, MMM d, yyyy K:mm a]>|<util.date.time.duration>"
+        - run UtilizenSavePlayerTask def:<player.uuid>
