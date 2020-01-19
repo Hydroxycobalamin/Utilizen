@@ -146,6 +146,9 @@ UtilizenMeCommand:
     - if !<context.server>:
         - stop
     script:
+    - if <player.has_flag[mute]>:
+        - narrate <yaml[UtilizenLang].read[muteyouremuted].parsed]>
+        - stop
     - if !<context.args.is_empty>:
         - narrate <yaml[UtilizenLang].read[me].parsed> targets:<server.list_online_players>
     - else:
