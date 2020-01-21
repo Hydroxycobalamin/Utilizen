@@ -1347,7 +1347,7 @@ UtilizenNoteCommand:
     debug: false
     name: note
     description: Add a note to a player
-    usage: /note [Player] [add/remove] (Text/ID)
+    usage: /note [Player] (add/remove) (Text/ID)
     permission: utilizen.note
     permission message: <&3>You need the permission <&b><permission>
     tab complete:
@@ -1391,3 +1391,7 @@ UtilizenNoteCommand:
                     - narrate "<yaml[UtilizenLang].read[notelist].parsed><&nl><[notelist].separated_by[<&nl>]||No Notes yet>"
                     - if !<server.match_offline_player[<context.args.first>].is_online>:
                         - yaml unload id:Utilizen_<[uuid]>
+        - else:
+            - narrate <yaml[UtilizenLang].read[noteplnotexist].parsed>
+    - else:
+        - narrate <yaml[UtilizenLang].read[notesyntax].parsed>
