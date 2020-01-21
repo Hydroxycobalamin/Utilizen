@@ -1342,3 +1342,52 @@ UtilizenSeenCommand:
             - narrate <yaml[UtilizenLang].read[seennever].parsed>
     - else:
         - narrate <yaml[UtilizenLang].read[seensyntax].parsed>
+UtilizenNoteCommand:
+    type: command
+    debug: false
+    name: note
+    description: Add a note to a player
+    usage: /note [Player] [add/remove] (Text/ID)
+    permission: utilizen.note
+    permission message: <&3>You need the permission <&b><permission>
+    tab complete:
+    - choose <context.args.size>:
+        - case 0:
+            - determine <server.list_players.parse[name]>
+        - case 1:
+            - if "!<context.raw_args.ends_with[ ]>":
+                - determine <server.list_players.parse[name].filter[starts_with[<context.args.first>]]>
+            - else:
+                - determine <list[add|remove]>
+        - case 2:
+            - if "!<context.raw_args.ends_with[ ]>":
+                - determine <list[add|remove].filter[starts_with[<context.args.get[2]>]]>
+    script:
+    - if !<context.args.is_empty>:
+        - if <server.player_is_valid[<context.args.first>]>:
+            - define uuid:<server.match_offline_player[<context.args.first>].uuid>
+            - if !<server.match_offline_player[<context.args.first>].is_online>:
+                - ~yaml load:../Utilizen/data/players/<[uuid]>.yml id:Utilizen_<[uuid]>
+            - choose <context.args.get[2]||default>:
+                - case add:
+                    - narrate <yaml[UtilizenLang].read[noteadded].parsed>
+                    - yaml id:Utilizen_<[uuid]> set noteid:++
+                    - yaml id:Utilizen_<[uuid]> set "notes:->:<yaml[Utilizen_<[uuid]>].read[noteid]||1>/<player.name> - <context.args.remove[1|2].space_separated.parse_color><&r>"
+                    - ~yaml savefile:../Utilizen/data/players/<[uuid]>.yml id:Utilizen_<[uuid]>
+                    - if !<server.match_offline_player[<context.args.first>].is_online>:
+                        - yaml unload id:Utilizen_<[uuid]>
+                - case remove:
+                    - if <context.args.size> == 3:
+                        - narrate <yaml[UtilizenLang].read[noteremoved].parsed>
+                        - if <yaml[Utilizen_<[uuid]>].read[notes].get_sub_items[1].contains[<context.args.last>]>:
+                            - define entry:<yaml[Utilizen_<[uuid]>].read[notes].get_sub_items[1].find[<context.args.last>]>
+                            - yaml id:Utilizen_<[uuid]> set notes:<-:<yaml[Utilizen_<[uuid]>].read[notes].get[<[entry]>]>
+                        - ~yaml savefile:../Utilizen/data/players/<[uuid]>.yml id:Utilizen_<[uuid]>
+                        - if !<server.match_offline_player[<context.args.first>].is_online>:
+                            - yaml unload id:Utilizen_<[uuid]>
+                - default:
+                    - foreach <yaml[Utilizen_<[uuid]>].read[notes]>:
+                        - define "notelist:->:[<[value].before[/]>] <[value].after[/]>"
+                    - narrate "<yaml[UtilizenLang].read[notelist].parsed><&nl><[notelist].separated_by[<&nl>]||No Notes yet>"
+                    - if !<server.match_offline_player[<context.args.first>].is_online>:
+                        - yaml unload id:Utilizen_<[uuid]>

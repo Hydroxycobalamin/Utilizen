@@ -176,3 +176,6 @@ setspawnnewbie: '<&3>[Setspawn] Worldspawn for new players is now <&f><player.lo
 seenplayer: '<&3>[Seen] <&b><context.args.first> <&3>was last seen on <&f><yaml[Utilizen_<server.match_offline_player[<context.args.first>].uuid>].read[lastlogin].first><&3>. (<&b><tern[<server.match_offline_player[<context.args.first>].is_online>].pass[Still Online].fail[<util.date.time.duration.sub[<yaml[Utilizen_<server.match_offline_player[<context.args.first>].uuid>].read[lastlogin].last>].formatted> <&3>ago]><&3>)'
 seennever: '<&3>[Seen] This player has never been seen before!'
 seensyntax: '<&3>[Seen] Syntax: <&b>/seen [Player]'
+notelist: '<&3>Notelist <&r><yaml[Utilizen_<[uuid]>].read[nick]||<player[<[uuid]>].name>>'
+noteadded: '<&3>[Note] You added note <&r><context.args.remove[1|2].space_separated.parse_color><&r><&3> to <&b><server.match_offline_player[<context.args.first>].name>'
+noteremoved: '<&3>[Note] You removed note <&f><context.args.last><&3> from player <&b><server.match_offline_player[<context.args.first>].name>'

@@ -51,6 +51,7 @@ To make Utilizen work, you need the following plugins
 | **utilizen.msg** | Send private messages to players |
 | **utilizen.mute** | Mute Evil players |
 | **utilizen.nick** | Nick yourself or other players |
+| **utilizen.note** | Add Notes to players |
 | **utilizen.spawn** | Teleport to worldspawn |
 | **utilizen.seen** | Shows last login from a player |
 | **utilizen.setwarp** | Creates a Warp |
