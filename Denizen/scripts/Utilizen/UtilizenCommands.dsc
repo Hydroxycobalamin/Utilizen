@@ -1141,7 +1141,7 @@ UtilizenTphereCommand:
     tab complete:
     - if <context.args.is_empty>:
         - determine <server.list_online_players.parse[name]>
-    - if <context.args.size> == 1 && "!<context.raw_args.ends_with[ ]>":
+    - else if <context.args.size> == 1 && "!<context.raw_args.ends_with[ ]>":
         - determine <server.list_online_players.parse[name].filter[starts_with[<context.args.first>]]>
     script:
     - if <context.server>:
