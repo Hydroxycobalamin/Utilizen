@@ -1344,7 +1344,7 @@ UtilizenSeenCommand:
         - narrate <yaml[UtilizenLang].read[seensyntax].parsed>
 UtilizenNoteCommand:
     type: command
-    debug: false
+    debug: true
     name: note
     description: Add a note to a player
     usage: /note [Player] (add/remove) (Text/ID)
@@ -1371,6 +1371,7 @@ UtilizenNoteCommand:
             - choose <context.args.get[2]||default>:
                 - case add:
                     - narrate <yaml[UtilizenLang].read[noteadded].parsed>
+                    - narrate <yaml[UtilizenLang].read[noteaddedadmin].parsed> targets:<server.list_online_players.filter[has_permission[utilizen.note]]>
                     - yaml id:Utilizen_<[uuid]> set noteid:++
                     - yaml id:Utilizen_<[uuid]> set "notes:->:<yaml[Utilizen_<[uuid]>].read[noteid]||1>/<player.name> - <context.args.remove[1|2].space_separated.parse_color><&r>"
                     - ~yaml savefile:../Utilizen/data/players/<[uuid]>.yml id:Utilizen_<[uuid]>
@@ -1379,6 +1380,7 @@ UtilizenNoteCommand:
                 - case remove:
                     - if <context.args.size> == 3:
                         - narrate <yaml[UtilizenLang].read[noteremoved].parsed>
+                        - narrate <yaml[UtilizenLang].read[noteremovedadmin].parsed> targets:<server.list_online_players.filter[has_permission[utilizen.note]]>
                         - if <yaml[Utilizen_<[uuid]>].read[notes].get_sub_items[1].contains[<context.args.last>]>:
                             - define entry:<yaml[Utilizen_<[uuid]>].read[notes].get_sub_items[1].find[<context.args.last>]>
                             - yaml id:Utilizen_<[uuid]> set notes:<-:<yaml[Utilizen_<[uuid]>].read[notes].get[<[entry]>]>
