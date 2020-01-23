@@ -1344,7 +1344,7 @@ UtilizenSeenCommand:
         - narrate <yaml[UtilizenLang].read[seensyntax].parsed>
 UtilizenNoteCommand:
     type: command
-    debug: true
+    debug: false
     name: note
     description: Add a note to a player
     usage: /note [Player] (add/remove) (Text/ID)
