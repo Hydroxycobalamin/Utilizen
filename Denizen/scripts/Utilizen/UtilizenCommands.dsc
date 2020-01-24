@@ -1310,10 +1310,9 @@ UtilizenItemDBCommand:
     - if <[item].is_enchanted>:
         - foreach <[item].enchantments.with_levels>:
             - define "enchlist:->:<&b><&translate[enchantment.minecraft.<[value].before[,]>]> <&f><[value].after[,]>"
-    - if <[item].nbt.size> > 0:
-        - foreach <[item].nbt>:
-            - define "nbtlist:->:<&b><[value].before[/]><&3>/<&r><[value].after[/]>"
-    - narrate "<&3>===================<&b>[<&3>ItemDB<&b>]<&3>===================<&nl><&3>Item: <&f><[item].material.name> <&3>Display: <tern[<[item].has_display>].pass[<&r><[item].display>].fail[<&f>NONE]><&nl><&3>dItem: <&b><tern[<[item].has_script>].pass[<&b>true <&3>Script: <&b><[item].script>].fail[<&b>false]><&nl><&3>Repairable: <tern[<[item].repairable>].pass[<&b>true <&3>Durability: <&b><[item].max_durability.sub[<[item].durability>]><&f>/<&b><[item].max_durability>].fail[<&b>false]><&nl><&3>Enchantments: <tern[<[item].is_enchanted>].pass[<[enchlist].separated_by[<&3>, ]>].fail[<&f>NONE]><&nl><&3>Lore: <tern[<[item].has_lore>].pass[<&r><[item].lore.separated_by[<&r> ]>].fail[<&f>NONE]><&nl><&3>dNBT: <tern[<[item].nbt.size.is[<&gt>].than[0]>].pass[<&r><[nbtlist].separated_by[<&3>, ]>].fail[<&f>NONE]>"
+    - foreach <[item].nbt_keys>:
+        - define "nbtlist:->:<&b><[value].before[/]><&3>/<&r><[value].after[/]>"
+    - narrate "<&3>===================<&b>[<&3>ItemDB<&b>]<&3>===================<&nl><&3>Item: <&f><[item].material.name> <&3>Display: <tern[<[item].has_display>].pass[<&r><[item].display>].fail[<&f>NONE]><&nl><&3>dItem: <&b><tern[<[item].has_script>].pass[<&b>true <&3>Script: <&b><[item].script>].fail[<&b>false]><&nl><&3>Repairable: <tern[<[item].repairable>].pass[<&b>true <&3>Durability: <&b><[item].max_durability.sub[<[item].durability>]><&f>/<&b><[item].max_durability>].fail[<&b>false]><&nl><&3>Enchantments: <tern[<[item].is_enchanted>].pass[<[enchlist].separated_by[<&3>, ]>].fail[<&f>NONE]><&nl><&3>Lore: <tern[<[item].has_lore>].pass[<&r><[item].lore.separated_by[<&r> ]>].fail[<&f>NONE]><&nl><&3>dNBT: <tern[<[item].nbt_keys.is_empty.not>].pass[<&r><[nbtlist].separated_by[<&3>, ]>].fail[<&f>NONE]>"
 UtilizenSeenCommand:
     type: command
     debug: false
