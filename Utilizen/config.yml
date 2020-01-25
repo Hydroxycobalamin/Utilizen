@@ -6,12 +6,14 @@ lang: 'en_US'
 #Allow bedspawn?
 allow-bed: 'true'
 
-#Allow compass pointing to bedspawn
+#Compass pointing to bedspawn
 allow-compass-bed: 'false'
 
 #Allow max homes, define a list here. The player will need the permission "utilizen.group.[groupname]"
-#to be allowed to set homes. The Number after : determines the allowed number of homes
-#Your group name MUST be exactly the same as the group name of your permission plugin
+#to be allowed to set homes. The number after : determines the allowed number of homes.
+#Your group name MUST be exactly the same as the group name of your permission plugin.
+#This list will be used to determine the group orders (e.g. when applying a chat prefix)
+#The first item in the list should be the highest group, the last one should be the lowest
 #You need that also for other parts of Utilizen which needs this group system (example: prefixes & suffixes). 
 #So you should fill it up.
 homes:
@@ -19,10 +21,10 @@ homes:
   - 'moderator:5'
   - 'member:4'
 
-#If the player doesnt have the permission, set default homes here
+#Default home limit if the player does not have any of the above groups
 default: '3'
 
-#Set the max homes allowed for OP's
+#Set the home limit for operators
 op-homes: '5'
 
 #Set the standard ban reason, if no reason is specified
@@ -31,7 +33,7 @@ banreason: 'You were banned'
 #Set the standard kick reason, if no reason is specified
 kickreason: 'You were kicked'
 
-#Should OP's be kicked on /kickall?
+#Kick operators on /kickall?
 kickops: 'false'
 
 #Enable enchantments over the vanilla max level
@@ -45,7 +47,7 @@ tablist: 'false'
 #<player.name> returns player's Minecraft name
 #<player.display_name> returns the player's nickname (if nicked)
 #<server.list_online_players.size> returns the number of online players
-#<server.max_players> returns the number of max players allowed on this server
+#<server.max_players> returns the total number of player slots for this server
 motd:
   - "<&3>Welcome <&b><player.list_name><&3>!"
   - "<&3>You are looking good today!"
