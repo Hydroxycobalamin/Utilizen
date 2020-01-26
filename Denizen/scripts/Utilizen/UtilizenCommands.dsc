@@ -1137,13 +1137,13 @@ UtilizenTPPOSCommand:
     - if <context.args.size> <= 4:
         - choose <context.args.size>:
             - case 3:
-                - if <context.args.first.is_integer> && <context.args.get[2].is_integer> && <context.args.get[3].is_integer>:
+                - if <context.args.first.is_decimal> && <context.args.get[2].is_decimal> && <context.args.get[3].is_decimal>:
                     - teleport <location[<context.args.first>,<context.args.get[2]>,<context.args.get[3]>,<player.location.world.name>]>
                     - narrate <yaml[UtilizenLang].read[teleporttopos].parsed>
                 - else:
                     - narrate <yaml[UtilizenLang].read[teleportwrongsyntax3].parsed>
             - case 4:
-                - if <context.args.first.is_integer> && <context.args.get[2].is_integer> && <context.args.get[3].is_integer> && <list[<server.list_worlds>].contains_text[<context.args.get[4]>]>:
+                - if <context.args.first.is_decimal> && <context.args.get[2].is_decimal> && <context.args.get[3].is_decimal> && <list[<server.list_worlds>].contains_text[<context.args.get[4]>]>:
                     - teleport <location[<context.args.first>,<context.args.get[2]>,<context.args.get[3]>,<context.args.get[4]>]>
                     - narrate <yaml[UtilizenLang].read[teleporttoworld].parsed>
                 - else:
