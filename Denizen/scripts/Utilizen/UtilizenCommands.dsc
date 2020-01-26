@@ -1096,13 +1096,13 @@ UtilizenGetPosCommand:
         - determine <server.list_online_players.parse[name].filter[starts_with[<context.args.first>]]>
     script:
     - if <context.args.is_empty>:
-        - narrate "<&3>[Getpos] Your position: <&b><player.location.simple>"
+        - narrate <yaml[UtilizenLang].read[getposyourpos].parsed>
     - else if <context.args.size> == 1 && <server.player_is_valid[<context.args.first>]>:
         - define pl:<server.match_player[<context.args.first>]>
         - define plpos:<[pl].location>
-        - narrate "<&3>[Getpos] <[pl].name><&3>s position is <&b><[plpos].simple>"
+        - narrate <yaml[UtilizenLang].read[getposplpos].parsed>
         - if <player.has_permission[utilizen.tp]>:
-            - narrate "<&3>[Getpos] Do you want to teleport to that location? Click: <&f><element[Yes].on_click[/tppos <[plpos].x> <[plpos].y> <[plpos].z> <[plpos].world>]>
+            - narrate <yaml[UtilizenLang].read[getpostppos].parsed>
 UtilizenTPPOSCommand:
     type: command
     debug: false
