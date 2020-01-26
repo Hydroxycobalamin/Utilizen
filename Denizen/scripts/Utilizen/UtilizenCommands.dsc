@@ -1098,9 +1098,15 @@ UtilizenGetPosCommand:
     - if <context.args.is_empty>:
         - narrate <yaml[UtilizenLang].read[getposyourpos].parsed>
     - else if <context.args.size> == 1 && <server.player_is_valid[<context.args.first>]>:
-        - define pl:<server.match_player[<context.args.first>]>
-        - define plpos:<[pl].location>
-        - narrate <yaml[UtilizenLang].read[getposplpos].parsed>
+        - define pl:<server.match_offline_player[<context.args.first>]>
+        - if !<[pl].is_online>:
+            - ~yaml load:../Utilizen/data/players/<[pl].uuid>.yml id:Utilizen_<[pl].uuid>
+            - define plpos:<yaml[Utilizen_<[pl].uuid>].read[lastlocation]>
+            - yaml unload id:Utilizen_<[pl].uuid>
+            - narrate <yaml[UtilizenLang].read[getposplpos].parsed>
+        - else:
+            - define plpos:<[pl].location>
+            - narrate <yaml[UtilizenLang].read[getposplpos].parsed>
         - if <player.has_permission[utilizen.tp]>:
             - narrate <yaml[UtilizenLang].read[getpostppos].parsed>
 UtilizenTPPOSCommand:

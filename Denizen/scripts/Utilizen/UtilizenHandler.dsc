@@ -103,6 +103,8 @@ UtilizenBackHandler:
         on player dies:
         - yaml id:Utilizen_<player.uuid> set lastlocation:<context.entity.location>
         - run UtilizenSavePlayerTask def:<player.uuid>
+        on player quits:
+        - yaml id:Utilizen_<player.uuid> set lastlocation:<player.location>
 UtilizenMuteHandler:
     type: world
     debug: false

@@ -30,7 +30,7 @@ UtilizenYamlLoad:
             - ~yaml savefile:../Utilizen/data/players/<player.uuid>.yml id:Utilizen_<player.uuid>
         - else:
             - ~yaml load:../Utilizen/data/players/<player.uuid>.yml id:Utilizen_<player.uuid>
-        on player quits:
+        on player quits priority:1:
         - ~yaml savefile:../Utilizen/data/players/<player.uuid>.yml id:Utilizen_<player.uuid>
         - yaml unload id:Utilizen_<player.uuid>
 UtilizenSavePlayerTask:
