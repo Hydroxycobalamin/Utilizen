@@ -65,11 +65,19 @@ UtilizenCommandMail:
         - case 1:
             - if "!<context.raw_args.ends_with[ ]>":
                 - determine <list[send|read|remove|<tern[<player.has_permission[utilizen.mail.sendall]>].pass[sendall].fail[]>].filter[starts_with[<context.args.first>]]>
-            - else if <context.args.first> == send:
-                - determine <server.list_online_players.parse[name]>
+            - else:
+                - choose <context.args.first>:
+                    - case send:
+                        - determine <server.list_online_players.parse[name]>
+                    - case remove:
+                        - determine <yaml[Utilizen_<player.uuid>].list_keys[mailbox]||>
         - case 2:
             - if "!<context.raw_args.ends_with[ ]>":
-                - determine <server.list_online_players.parse[name].filter[starts_with[<context.args.get[2]>]]>
+                - choose <context.args.first>:
+                    - case send:
+                        - determine <server.list_online_players.parse[name].filter[starts_with[<context.args.get[2]>]]>
+                    - case remove:
+                        - determine <yaml[Utilizen_<player.uuid>].list_keys[mailbox].filter[starts_with[<context.args.get[2]>]]||>
     script:
     - choose <context.args.first>:
         - case send:
@@ -78,7 +86,7 @@ UtilizenCommandMail:
                     - if <context.args.size> > 2:
                         - yaml id:UtilizenServerdata set msgcount:++
                         - run UtilizenSaveServerTask
-                        - run UtilizenPlayerTask def:<server.match_offline_player[<context.args.get[2]>]>|mailbox.<yaml[UtilizenServerdata].read[msgcount]||0>|!&pipe:<player>&pipe<context.args.remove[1|2].space_separated>
+                        - run UtilizenPlayerTask def:<server.match_offline_player[<context.args.get[2]>].uuid>|mailbox.<yaml[UtilizenServerdata].read[msgcount]||0>|!&pipe:<player>&pipe<context.args.remove[1|2].space_separated>
                         - narrate <yaml[UtilizenLang].read[mailsend].parsed>
                     - else:
                         - narrate <yaml[UtilizenLang].read[mailempty].parsed>
@@ -87,14 +95,19 @@ UtilizenCommandMail:
             - else:
                 - narrate <yaml[UtilizenLang].read[mailneedplayer].parsed>
         - case read:
-            - if <yaml[Utilizen_<player.uuid>].list_keys[mailbox]||true>:
-                - narrate <yaml[UtilizenLang].read[mailboxempty].parsed>
-                - stop
-            - foreach <yaml[Utilizen_<player.uuid>].list_keys[mailbox]>:
-                - narrate <yaml[UtilizenLang].read[mailread].parsed>
+            - foreach <yaml[Utilizen_<player.uuid>].list_keys[mailbox].numerical||>:
+                - define list:->:<yaml[UtilizenLang].read[mailread].parsed>
+            - narrate <[list].separated_by[<&nl>]||<yaml[UtilizenLang].read[mailboxempty].parsed>>
         - case remove:
-            - run UtilizenPlayerTask def:<player.uuid>|mailbox|!
-            - narrate <yaml[UtilizenLang].read[maildelete].parsed>
+            - if <context.args.size> == 2:
+                - if <context.args.last.is_integer> && <yaml[Utilizen_<player.uuid>].list_keys[mailbox].contains[<context.args.last>]||false>:
+                    - run UtilizenPlayerTask def:<player.uuid>|mailbox.<context.args.last>|!
+                    - narrate <yaml[UtilizenLang].read[mailiddelete].parsed>
+                - else:
+                    - narrate <yaml[UtilizenLang].read[mailidnotvalid].parsed>
+            - else:
+                - run UtilizenPlayerTask def:<player.uuid>|mailbox|!
+                - narrate <yaml[UtilizenLang].read[maildelete].parsed>
         - case sendall:
             - if <player.has_permission[utilizen.mail.sendall]>:
                 - if <context.args.size> > 1:
@@ -102,10 +115,9 @@ UtilizenCommandMail:
                     - foreach <server.list_players.parse[uuid]>:
                         - yaml id:UtilizenServerdata set msgcount:++
                         - run UtilizenPlayerTask def:<[value]>|mailbox.<yaml[UtilizenServerdata].read[msgcount]||0>|!&pipe:<player>&pipe<context.args.remove[1].space_separated>
-                        - narrate <[loop_index]>
-                        - wait 1t
+                        - if <[loop_index].mod[3]> == 0:
+                            - wait 1t
                     - run UtilizenSaveServerTask
-                    - narrate <queue.time_ran.in_milliseconds>
         - default:
             - narrate <yaml[UtilizenLang].read[mailallarguments].parsed>
 UtilizenMeCommand:
