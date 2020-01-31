@@ -16,14 +16,16 @@ UtilizenYamlLoad:
         - if !<server.has_file[../Utilizen/data/serverdata.yml]>:
             - yaml create id:UtilizenServerdata
             - ~yaml savefile:../Utilizen/data/serverdata.yml id:UtilizenServerdata
+        - ~yaml load:../Utilizen/data/serverdata.yml id:UtilizenServerdata
         - ~yaml load:../Utilizen/config.yml id:UtilizenConfig
         - ~yaml load:../Utilizen/lang/<yaml[UtilizenConfig].read[lang]>.yml id:UtilizenLang
-        - ~yaml load:../Utilizen/data/serverdata.yml id:UtilizenServerdata
         on reload scripts:
+        - announce to_console "[Utilizen] Reloading.."
         - ~yaml load:../Utilizen/config.yml id:UtilizenConfig
         - ~yaml load:../Utilizen/lang/<yaml[UtilizenConfig].read[lang]>.yml id:UtilizenLang
         - ~yaml savefile:../Utilizen/data/serverdata.yml id:UtilizenServerdata
         - ~yaml load:../Utilizen/data/serverdata.yml id:UtilizenServerdata
+        - announce to_console "[Utilizen] Reload complete!"
         on player joins priority:-1:
         - if !<server.has_file[../Utilizen/data/players/<player.uuid>.yml]>:
             - yaml create id:Utilizen_<player.uuid>
@@ -33,12 +35,23 @@ UtilizenYamlLoad:
         on player quits priority:1:
         - ~yaml savefile:../Utilizen/data/players/<player.uuid>.yml id:Utilizen_<player.uuid>
         - yaml unload id:Utilizen_<player.uuid>
-UtilizenSavePlayerTask:
+UtilizenPlayerTask:
     type: task
     debug: false
-    definitions: uuid
+    definitions: uuid|key|value
     script:
-    - ~yaml savefile:../Utilizen/data/players/<[uuid]>.yml id:Utilizen_<[uuid]>
+    - if !<server.has_file[../Utilizen/data/players/<[uuid]>.yml]>:
+        - announce to_console "[Utilizen-WARN] UUID <[value]> does not have a database yet, creating one.."
+        - yaml create id:<[uuid]>
+        - ~yaml savefile:../Utilizen/data/players/<[uuid]>.yml id:Utilizen_<[uuid]>
+    - if <player[<[uuid]>].is_online>:
+        - yaml id:Utilizen_<[uuid]> set <[key]>:<[value].unescaped>
+        - ~yaml savefile:../Utilizen/data/players/<[uuid]>.yml id:Utilizen_<[uuid]>
+    - else:
+        - ~yaml load:../Utilizen/data/players/<[uuid]>.yml id:Utilizen_<[uuid]>
+        - yaml id:Utilizen_<[uuid]> set <[key]>:<[value].unescaped>
+        - ~yaml savefile:../Utilizen/data/players/<[uuid]>.yml id:Utilizen_<[uuid]>
+        - yaml unload id:Utilizen_<[uuid]>
 UtilizenSaveServerTask:
     type: task
     debug: false
