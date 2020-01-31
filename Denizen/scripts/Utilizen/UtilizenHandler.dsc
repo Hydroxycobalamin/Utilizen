@@ -163,4 +163,4 @@ UtilizenSeenHandler:
     events:
         on player joins:
         - waituntil rate:1t <yaml[Utilizen_<player.uuid>].list_keys[]||null> != null
-        - run UtilizenPlayerTask def:<player.uuid>|lastlogin|!<&pipe>:"<util.date.format[EEE, MMM d, yyyy K:mm a]>|<util.date.time.duration>"
+        - run UtilizenPlayerTask "def:<player.uuid>|lastlogin|<util.date.format[EEE, MMM d, yyyy K:mm a]>"

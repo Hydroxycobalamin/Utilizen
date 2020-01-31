@@ -175,7 +175,7 @@ enchantadd: '<&3>[Enchant] Your item was enchanted with <&b><context.args.first>
 enchantremove: '<&3>[Enchant] The enchantment <&b><context.args.first> <&3>has been removed from your item'
 setspawnworld: '<&3>[Setspawn] Worldspawn for <&b><player.world.name> <&3>is now <&b><player.location.simple>'
 setspawnnewbie: '<&3>[Setspawn] Worldspawn for new players is now <&f><player.location.simple>'
-seenplayer: '<&3>[Seen] <&b><context.args.first> <&3>was last seen on <&f><yaml[Utilizen_<server.match_offline_player[<context.args.first>].uuid>].read[lastlogin].first><&3>. (<&b><tern[<server.match_offline_player[<context.args.first>].is_online>].pass[Still Online].fail[<util.date.time.duration.sub[<yaml[Utilizen_<server.match_offline_player[<context.args.first>].uuid>].read[lastlogin].last>].formatted> <&3>ago]><&3>)'
+seenplayer: '<&3>[Seen] <&b><context.args.first> <&3>was last seen on <&f><yaml[Utilizen_<server.match_offline_player[<context.args.first>].uuid>].read[lastlogin]><&3>. (<&b><tern[<server.match_offline_player[<context.args.first>].is_online>].pass[Still Online].fail[<[lastplayed]> <&3>ago]><&3>)'
 seennever: '<&3>[Seen] This player has never been seen before!'
 seensyntax: '<&3>[Seen] Syntax: <&b>/seen [Player]'
 notelist: '<&3>Notelist <&r><yaml[Utilizen_<[uuid]>].read[nick]||<player[<[uuid]>].name>>'

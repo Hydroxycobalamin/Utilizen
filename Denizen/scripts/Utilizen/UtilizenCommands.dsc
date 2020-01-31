@@ -1335,14 +1335,11 @@ UtilizenSeenCommand:
     script:
     - if <context.args.size> == 1:
         - if <server.player_is_valid[<context.args.first>]>:
-            - if !<server.match_offline_player[<context.args.first>].is_online>:
-                - ~yaml load:../Utilizen/data/players/<server.match_offline_player[<context.args.first>].uuid>.yml id:Utilizen_<server.match_offline_player[<context.args.first>].uuid>
-            - if !<yaml[Utilizen_<server.match_offline_player[<context.args.first>].uuid>].contains[lastlogin]>:
+            - if <yaml[Utilizen_<server.match_offline_player[<context.args.first>].uuid>].contains[lastlogin]>:
+                - define lastplayed:<util.date.time.duration.sub[<server.match_offline_player[<context.args.first>].last_played>].formatted>
+                - narrate <yaml[UtilizenLang].read[seenplayer].parsed>
+            - else:
                 - narrate <yaml[UtilizenLang].read[seennever].parsed>
-                - stop
-            - narrate <yaml[UtilizenLang].read[seenplayer].parsed>
-            - if !<server.match_offline_player[<context.args.first>].is_online>:
-                - yaml unload id:Utilizen_<server.match_offline_player[<context.args.first>].uuid>
         - else:
             - narrate <yaml[UtilizenLang].read[seennever].parsed>
     - else:
