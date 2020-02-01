@@ -11,6 +11,15 @@ To make Utilizen work, you need the following plugins
 2. Drag the Utilizen and Denizen folder into your /plugins/ folder.
 3. Turn on your server & have fun :)
 
+## Updating
+Note: Updating might be messy, especially if database or config entries change. But be aware that Utilizen is still in development.
+
+1. So before you update, you should do a backup.
+2. Delete your Utilizen folder in /Denizen/scripts/ (you have your backup)
+3. If config entries are added, you should delete your config.yml (inside /plugins/Utilizen/) and UtilizenChatConfig.yml (already deleted in step 2) also (you have your backup).
+4. Drag the Utilizen and Denizen folder into your /plugins/ folder, like you installed it.
+5. Reconfigure Utilizen (don't just replace the new files by your old ones)
+
 ## Permissions
 | Permission | Description |
 | ------------- | ------------- |
