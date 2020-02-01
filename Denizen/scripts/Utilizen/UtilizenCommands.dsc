@@ -323,16 +323,20 @@ UtilizenJailCommand:
     permission: utilizen.jail
     permission message: <&3>[Permission] You need the permission <&b><permission>
     tab complete:
-    - if <context.args.size> < 1:
-        - determine <server.list_online_players.parse[name]>
-    - if <context.args.size> == 1 && "!<context.raw_args.ends_with[ ]>":
-        - determine <server.list_online_players.parse[name].filter[starts_with[<context.args.first>]]>
-    - if <context.args.size> < 2:
-        - determine <yaml[UtilizenServerdata].list_keys[jailname]||Create_a_Jail_first>
-    - if <context.args.size> == 2 && "!<context.raw_args.ends_with[ ]>":
-        - determine <yaml[UtilizenServerdata].list_keys[jailname].filter[starts_with[<context.args.get[2]>]]||Create_a_Jail_first>
-    - if <context.args.size> == 3 && "!<context.raw_args.ends_with[ ]>" && !<context.args.get[3].to_list.contains_any[s|m|h|d]>:
-        - determine <list[<context.args.get[3]>s|<context.args.get[3]>m|<context.args.get[3]>h|<context.args.get[3]>d]>
+    - choose <context.args.size>:
+        - case 0:
+            - determine <server.list_online_players.parse[name]>
+        - case 1:
+            - if "!<context.raw_args.ends_with[ ]>":
+                - determine <server.list_online_players.parse[name].filter[starts_with[<context.args.first>]]>
+            - else:
+                - determine <yaml[UtilizenServerdata].list_keys[jailname]||Create_a_Jail_first>
+        - case 2:
+            - if "!<context.raw_args.ends_with[ ]>":
+                - determine <yaml[UtilizenServerdata].list_keys[jailname].filter[starts_with[<context.args.get[2]>]]||Create_a_Jail_first>
+        - case 3:
+            - if "!<context.raw_args.ends_with[ ]>" && !<context.args.last.to_list.contains_any[s|m|h|d]>:
+                - determine <list[<context.args.get[3]>s|<context.args.get[3]>m|<context.args.get[3]>h|<context.args.get[3]>d]>
     script:
     - if <context.args.size> >= 1:
         - if <server.player_is_valid[<context.args.first>]>:

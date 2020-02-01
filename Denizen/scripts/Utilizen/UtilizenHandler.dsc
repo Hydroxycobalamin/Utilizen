@@ -131,6 +131,7 @@ UtilizenJailHandler:
         - ratelimit <player> 1t
         - run UtilizenPlayerTask def:<player.uuid>|jail.duration|<player.flag[jailed].expiration>
         - flag player jailed:!
+        - wait 1t
         - teleport <context.origin>
         - flag player jailed d:<yaml[Utilizen_<player.uuid>].read[jail.duration]>
         - narrate <yaml[UtilizenLang].read[jailnopermission].parsed>
@@ -145,7 +146,7 @@ UtilizenJailHandler:
         - narrate <yaml[UtilizenLang].read[jailnopermission].parsed>
         on player joins:
         - waituntil rate:1t <yaml[Utilizen_<player.uuid>].list_keys[]||null> != null
-        - if <yaml[Utilizen_<player.uuid>].contains[<player.uuid>.jail.duration]||false>:
+        - if <yaml[Utilizen_<player.uuid>].contains[jail.duration]||false>:
             - teleport <player> <yaml[UtilizenServerdata].read[jailname.<yaml[UtilizenServerdata].list_keys[jailname].random>]>
             - wait 1t
             - flag player jailed d:<yaml[Utilizen_<player.uuid>].read[jail.duration]>
