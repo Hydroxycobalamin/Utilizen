@@ -41,8 +41,8 @@ UtilizenPlayerTask:
     definitions: uuid|key|value
     script:
     - if !<server.has_file[../Utilizen/data/players/<[uuid]>.yml]>:
-        - announce to_console "[Utilizen-WARN] UUID <[value]> does not have a database yet, creating one.."
-        - yaml create id:<[uuid]>
+        - announce to_console "[Utilizen-WARN] UUID <[uuid]> does not have a database yet, creating one.."
+        - yaml create id:Utilizen_<[uuid]>
         - ~yaml savefile:../Utilizen/data/players/<[uuid]>.yml id:Utilizen_<[uuid]>
     - if <player[<[uuid]>].is_online>:
         - yaml id:Utilizen_<[uuid]> set <[key]>:<[value].unescaped>
