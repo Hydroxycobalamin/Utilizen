@@ -8,7 +8,7 @@
 #version read the LICENSE-Terms here:
 #https://github.com/Hydroxycobalamin/Utilizen
 ##############################################
-UtilizenCommandAFK:
+UtilizenAFKCommand:
     type: command
     debug: false
     name: afk
@@ -50,7 +50,7 @@ UtilizenCommandAFK:
         - narrate <yaml[UtilizenLang].read[afkback].parsed> targets:<server.list_online_players>
         - flag player afk:!
         - permission remove smoothsleep.ignore
-UtilizenCommandMail:
+UtilizenMailCommand:
     type: command
     debug: false
     name: mail
