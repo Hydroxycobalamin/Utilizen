@@ -25,7 +25,7 @@ UtilizenMOTD:
     debug: false
     events:
         on player joins:
-        - narrate <yaml[UtilizenConfig].read[motd].separated_by[<&nl>].parsed>:
+        - narrate <yaml[UtilizenConfig].read[motd].separated_by[<&nl>].parsed>
 UtilizenSpawnHandler:
     type: world
     debug: false
