@@ -451,7 +451,7 @@ UtlizenSetHomeCommand:
     - if <context.args.is_empty>:
         - narrate <yaml[UtilizenLang].read[sethomenoargs].parsed>
     - else if <context.args.size> == 1:
-        - if !<yaml[Utilizen_<player.uuid>].read[homes].get_sub_items[1].contains[<context.args.first>]>:
+        - if !<yaml[Utilizen_<player.uuid>].read[homes].get_sub_items[1].contains[<context.args.first>]||true>:
             - if <player.is_op>:
                 - if <yaml[Utilizen_<player.uuid>].read[homes].size||0> <= <yaml[UtilizenConfig].read[op-homes]>:
                         - narrate <yaml[UtilizenLang].read[sethomeset].parsed>
