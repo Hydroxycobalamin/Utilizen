@@ -1,4 +1,5 @@
 # Utilizen
+**Still in Progress, not recommended for live servers**
 Utilizen is a Denizen Script which provides you with several commands and options for your own Minecraft Server.
 ## Requirements
 To make Utilizen work, you need the following plugins 
